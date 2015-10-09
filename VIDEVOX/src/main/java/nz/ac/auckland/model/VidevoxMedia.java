@@ -15,7 +15,7 @@ import javafx.scene.media.MediaPlayer;
  * @author Fraser
  *
  */
-public class VidevoxMedia implements Playable {
+public abstract class VidevoxMedia implements Playable {
 
 	/**
 	 * A media object for the Playable. Should be a JavaFX supported format
