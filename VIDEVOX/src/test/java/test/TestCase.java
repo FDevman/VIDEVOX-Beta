@@ -1,4 +1,4 @@
-package src.test.java.test;
+package test;
 
 public class TestCase {
 
