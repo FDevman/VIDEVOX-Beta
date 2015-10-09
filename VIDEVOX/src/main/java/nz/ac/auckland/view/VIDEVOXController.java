@@ -1,16 +1,23 @@
 package nz.ac.auckland.view;
 
+import nz.ac.auckland.application.VidevoxApplication;
 import nz.ac.auckland.model.VidevoxModel;
 
 public abstract class VIDEVOXController {
 
+	/**
+	 * Reference to current model instance
+	 */
 	protected VidevoxModel _model;
-	// main app reference
-	
-//	public void setMainApp(mainApp) {
-//		set main app method
-//	}
-	
+	/**
+	 * Reference to application class
+	 */
+	protected VidevoxApplication _application;
+
+	public void setMainApp(VidevoxApplication app) {
+		_application = app;
+	}
+
 	public void setModel(VidevoxModel model) {
 		_model = model;
 	}
