@@ -3,6 +3,7 @@ package nz.ac.auckland.model;
 import java.net.URISyntaxException;
 
 import javafx.scene.media.MediaPlayer;
+import javafx.util.Duration;
 
 public interface Playable {
 
@@ -19,5 +20,17 @@ public interface Playable {
 	public String getAbsolutePath() throws URISyntaxException;
 
 	public MediaPlayer getMediaPlayer();
+	
+	public void play();
+	
+	public void pause();
+	
+	public void stop();
+	
+	public void skipAhead();
+	
+	public void skipBack();
+	
+	public void seek(Duration position);
 
 }

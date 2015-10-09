@@ -6,6 +6,7 @@ import java.net.URISyntaxException;
 
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javafx.util.Duration;
 
 /**
  * This class was really just supposed to extend javafx.scene.Media or
@@ -86,6 +87,42 @@ public abstract class VidevoxMedia implements Playable {
 	private String basename(String fullName) {
 		// Get basename
 		return null;
+	}
+
+	@Override
+	public void play() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void pause() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void stop() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void skipAhead() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void skipBack() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void seek(Duration position) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
