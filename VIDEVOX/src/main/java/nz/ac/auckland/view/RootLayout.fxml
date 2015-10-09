@@ -16,6 +16,7 @@
                   <MenuItem mnemonicParsing="false" text="New Project" />
                   <MenuItem mnemonicParsing="false" text="Open Project" />
                   <MenuItem mnemonicParsing="false" text="Save Project" />
+                  <MenuItem mnemonicParsing="false" text="Save Project As..." />
 						<MenuItem mnemonicParsing="false" text="Select Video" />
 						<MenuItem mnemonicParsing="false" text="Close" />
 					</items>
@@ -59,4 +60,24 @@
 			</padding>
 		</HBox>
 	</bottom>
+   <center>
+      <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+         <children>
+            <HBox>
+               <children>
+                  <Button mnemonicParsing="false" prefWidth="800.0" text="Preview" HBox.hgrow="ALWAYS">
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                  </Button>
+                  <Button layoutX="10.0" layoutY="10.0" mnemonicParsing="false" prefWidth="800.0" text="Edit" HBox.hgrow="ALWAYS">
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                  </Button>
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </center>
 </BorderPane>
