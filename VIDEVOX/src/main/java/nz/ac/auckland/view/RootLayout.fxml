@@ -18,7 +18,7 @@
                   <MenuItem mnemonicParsing="false" text="Save Project" />
                   <MenuItem mnemonicParsing="false" text="Save Project As..." />
 						<MenuItem mnemonicParsing="false" text="Select Video" />
-						<MenuItem mnemonicParsing="false" text="Close" />
+						<MenuItem mnemonicParsing="false" onAction="#close" text="Close" />
 					</items>
 				</Menu>
 				<Menu mnemonicParsing="false" text="Edit">
