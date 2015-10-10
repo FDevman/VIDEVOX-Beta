@@ -11,6 +11,8 @@ public interface Playable {
 
 	final String DEFAULT_PATH = "/tmp/";
 
+	public String getBasename();
+
 	public int getStartOffset();
 
 	public void setStartOffset(int offset);
@@ -20,17 +22,17 @@ public interface Playable {
 	public String getAbsolutePath() throws URISyntaxException;
 
 	public MediaPlayer getMediaPlayer();
-	
+
 	public void play();
-	
+
 	public void pause();
-	
+
 	public void stop();
-	
+
 	public void skipAhead();
-	
+
 	public void skipBack();
-	
+
 	public void seek(Duration position);
 
 }

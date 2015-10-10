@@ -16,7 +16,7 @@ import javafx.util.Duration;
  * @author Fraser
  *
  */
-public abstract class VidevoxMedia implements Playable {
+public class VidevoxMedia implements Playable {
 
 	/**
 	 * A media object for the Playable. Should be a JavaFX supported format
@@ -84,45 +84,46 @@ public abstract class VidevoxMedia implements Playable {
 		return new MediaPlayer(_media);
 	}
 
-	private String basename(String fullName) {
-		// Get basename
-		return null;
-	}
-
 	@Override
 	public void play() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void pause() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void stop() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void skipAhead() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void skipBack() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void seek(Duration position) {
 		// TODO Auto-generated method stub
-		
+
+	}
+
+	@Override
+	public String getBasename() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
