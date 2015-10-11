@@ -65,12 +65,12 @@
          <children>
             <HBox>
                <children>
-                  <Button mnemonicParsing="false" prefWidth="800.0" text="Preview" HBox.hgrow="ALWAYS">
+                  <Button mnemonicParsing="false" prefWidth="2000.0" text="Preview" HBox.hgrow="ALWAYS">
                      <HBox.margin>
                         <Insets />
                      </HBox.margin>
                   </Button>
-                  <Button layoutX="10.0" layoutY="10.0" mnemonicParsing="false" prefWidth="800.0" text="Edit" HBox.hgrow="ALWAYS">
+                  <Button layoutX="10.0" layoutY="10.0" mnemonicParsing="false" prefWidth="2000.0" text="Edit" HBox.hgrow="ALWAYS">
                      <HBox.margin>
                         <Insets />
                      </HBox.margin>

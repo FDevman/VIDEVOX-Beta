@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.media.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane minHeight="400.0" minWidth="600.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nz.ac.auckland.view.PlayerViewController">
+   <children>
+      <VBox prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <SplitPane dividerPositions="0.5" VBox.vgrow="ALWAYS">
+              <items>
+                  <VBox prefWidth="400.0">
+                     <children>
+                        <Region VBox.vgrow="ALWAYS" />
+                        <HBox>
+                           <children>
+                              <MediaView fx:id="_mainPlayerView" fitHeight="200.0" fitWidth="400.0" HBox.hgrow="ALWAYS" />
+                           </children>
+                        </HBox>
+                        <Region VBox.vgrow="ALWAYS" />
+                     </children>
+                  </VBox>
+                  <ScrollPane fitToHeight="true" fitToWidth="true" prefWidth="200.0">
+                     <content>
+                        <VBox fx:id="_scrollBox" />
+                     </content>
+                  </ScrollPane>
+              </items>
+            </SplitPane>
+            <HBox spacing="5.0" VBox.vgrow="NEVER">
+               <children>
+                  <Button fx:id="_skipBackButton" mnemonicParsing="false" text="Skip Back" />
+                  <Button fx:id="_playPauseButton" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" text="Play/Pause" />
+                  <Button fx:id="_skipForwardButton" layoutX="62.0" layoutY="10.0" mnemonicParsing="false" text="Skip Forward" />
+               </children>
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding>
+            </HBox>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>
