@@ -14,12 +14,12 @@
          <children>
             <SplitPane dividerPositions="0.5" VBox.vgrow="ALWAYS">
               <items>
-                  <VBox prefWidth="400.0">
+                  <VBox minWidth="500.0">
                      <children>
                         <Region VBox.vgrow="ALWAYS" />
                         <HBox>
                            <children>
-                              <MediaView fx:id="_mainPlayerView" fitHeight="200.0" fitWidth="400.0" HBox.hgrow="ALWAYS" />
+                              <MediaView fx:id="_mainPlayerView" fitHeight="200.0" fitWidth="500.0" HBox.hgrow="ALWAYS" />
                            </children>
                         </HBox>
                         <Region VBox.vgrow="ALWAYS" />
