@@ -22,10 +22,19 @@
 	</build>
 
 	<dependencies>
+		<!-- A resource for a JavaFX skin -->
 		<dependency>
 			<groupId>com.guigarage</groupId>
 			<artifactId>flatter</artifactId>
 			<version>0.7</version>
+		</dependency>
+
+		<!-- Junit 4 dependency -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.11</version>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 </project>
