@@ -45,15 +45,21 @@ public class VidevoxMedia implements Playable {
 
 	/**
 	 * Represents the most basic constructor for
-	 * 
+	 *
 	 * @param fileName
 	 * @throws VidevoxException
+	 * @throws URISyntaxException
 	 */
 	VidevoxMedia(String fileName) throws VidevoxException {
-		// Extract the base name of the file
-		NAME = (new File(fileName)).getName();
 		try {
-			_media = new MediaPlayer(new Media(fileName));
+			// Convert the string to a URI
+			URI uri = new URI(fileName);
+			// Use the File class to extract the basename of the file
+			NAME = new File(uri).getName();
+			// Use the URI to construct a MediaPlayer
+			_media = new MediaPlayer(new Media(uri.toString()));
+		} catch (URISyntaxException e) {
+			throw new VidevoxException("Invalid URI Syntax");
 		} catch (MediaException e) {
 			throw new VidevoxException("Invalid file type or format");
 		}
@@ -67,9 +73,10 @@ public class VidevoxMedia implements Playable {
 	 * @throws VidevoxException
 	 */
 	VidevoxMedia(File mediaFile) throws VidevoxException {
+		// Extract the basename of the file
 		NAME = mediaFile.getName();
 		try {
-			_media = new MediaPlayer(new Media(mediaFile.getAbsolutePath()));
+			_media = new MediaPlayer(new Media(mediaFile.toURI().toString()));
 		} catch (MediaException e) {
 			throw new VidevoxException("Invalid file type or format");
 		}
@@ -83,11 +90,6 @@ public class VidevoxMedia implements Playable {
 	@Override
 	public void setStartOffset(Duration offset) {
 		_startOffset = offset;
-	}
-
-	@Override
-	public String getName() {
-		return NAME;
 	}
 
 	@Override
@@ -133,13 +135,12 @@ public class VidevoxMedia implements Playable {
 
 	@Override
 	public String getBasename() {
-
-		return null;
+		return NAME;
 	}
 
 	/**
 	 * To be called to que the starting of the media
-	 * 
+	 *
 	 * @param time
 	 */
 	@Override
@@ -148,9 +149,19 @@ public class VidevoxMedia implements Playable {
 		seek(time);
 	}
 
+	/**
+	 * Converts the current media item into a string representation,
+	 */
 	@Override
 	public String toString() {
-		return null;
+		try {
+			return new URI(_media.getMedia().getSource()).toString();
+		} catch (URISyntaxException e) {
+			// Should never happen since URI is validated when MediaPlayer is
+			// created
+			return null;
+		}
+
 	}
 
 }

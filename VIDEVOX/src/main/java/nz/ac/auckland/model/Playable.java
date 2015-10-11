@@ -7,11 +7,9 @@ import javafx.util.Duration;
 
 public interface Playable {
 
-	final String FILE_SEPARATOR = System.getProperty("file.separator");
+	public final String FILE_SEPARATOR = System.getProperty("file.separator");
 
-	final String DEFAULT_PATH = "/tmp/";
-
-	public String getBasename();
+	public final String DEFAULT_PATH = "/tmp/";
 
 	public void start(Duration time);
 
@@ -19,7 +17,7 @@ public interface Playable {
 
 	public void setStartOffset(Duration offset);
 
-	public String getName();
+	public String getBasename();
 
 	public String getAbsolutePath() throws URISyntaxException;
 
