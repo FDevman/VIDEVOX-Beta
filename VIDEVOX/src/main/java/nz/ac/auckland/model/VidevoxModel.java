@@ -115,19 +115,22 @@ public class VidevoxModel {
 		return _mainVideo;
 	}
 
-	@Override
-	public String toString() {
-		StringBuilder b = new StringBuilder(_name);
-		b.append(NEW_LINE + "audio:");
-		return null;
-	}
-
 	/**
 	 *
 	 * @param videoView
 	 */
 	public void setVideoView(MediaView videoView) {
 		videoView.setMediaPlayer(_mainVideo);
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder b = new StringBuilder("project-name:" + _name);
+		for (Entry<String, Playable> e : _audio.entrySet()) {
+			Playable p = e.getValue();
+			b.append(NEW_LINE + "audio:" + p.toString());
+		}
+		return b.toString();
 	}
 
 }

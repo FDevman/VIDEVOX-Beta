@@ -1,5 +1,7 @@
 package nz.ac.auckland.model;
 
+import org.apache.log4j.Logger;
+
 import java.io.File;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -17,6 +19,8 @@ import javafx.util.Duration;
  *
  */
 public class VidevoxMedia implements Playable {
+
+	private static final Logger logger = Logger.getLogger(VidevoxMedia.class);
 
 	/**
 	 * A MediaPlayer object for the Playable. Should be a JavaFX supported
@@ -154,14 +158,16 @@ public class VidevoxMedia implements Playable {
 	 */
 	@Override
 	public String toString() {
+		StringBuilder b = new StringBuilder();
 		try {
-			return new URI(_media.getMedia().getSource()).toString();
+			b.append(new URI(_media.getMedia().getSource()).toString());
 		} catch (URISyntaxException e) {
 			// Should never happen since URI is validated when MediaPlayer is
 			// created
-			return null;
+			logger.debug("URI Syntax error ???");
 		}
-
+		b.append(":" + _startOffset.toMillis());
+		return b.toString();
 	}
 
 }
