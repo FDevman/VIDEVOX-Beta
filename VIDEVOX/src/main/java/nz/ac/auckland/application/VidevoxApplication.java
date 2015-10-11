@@ -1,10 +1,12 @@
 package nz.ac.auckland.application;
 
 import java.io.File;
+import java.io.IOException;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import nz.ac.auckland.model.VidevoxModel;
@@ -25,7 +27,23 @@ public class VidevoxApplication extends Application {
 	 */
 	private BorderPane _rootLayout;
 
-	public void initRootView() {
+	public void showPlayerView() {
+		try {
+			// Load PlayerView
+			FXMLLoader loader = new FXMLLoader();
+			loader.setLocation(VidevoxApplication.class.getResource("view/PlayerView.fxml"));
+
+			// Place it inside the root layout
+			AnchorPane playerView = (AnchorPane) loader.load();
+			_rootLayout.setCenter(playerView);
+		} catch (IOException e) {
+			// At this point, there is not much use trying to recover at this
+			// point
+			e.printStackTrace();
+		}
+	}
+
+	private void initRootLayout() {
 		// Load RootLayout
 		FXMLLoader loader = new FXMLLoader();
 		loader.setLocation(VidevoxApplication.class.getResource("view/RootLayout.fxml"));
@@ -43,8 +61,13 @@ public class VidevoxApplication extends Application {
 
 	@Override
 	public void start(Stage primaryStage) {
+		// Set the primaryStage as the window for the application
 		this._primaryStage = primaryStage;
+		// Set a title to appear on the window
 		this._primaryStage.setTitle("VIDEVOX - video editor");
+
+		// Initiate the root layout of the application
+		initRootLayout();
 	}
 
 	public static void main(String[] args) {
