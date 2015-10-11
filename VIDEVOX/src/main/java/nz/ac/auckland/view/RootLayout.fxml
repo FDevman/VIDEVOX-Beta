@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.media.*?>
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane minHeight="478.0" minWidth="600.0" prefHeight="500.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nz.ac.auckland.view.RootLayoutController">
+	<top>
+      <VBox>
+         <children>
+      		<MenuBar>
+      			<menus>
+      				<Menu mnemonicParsing="false" text="File">
+      					<items>
+                        <MenuItem mnemonicParsing="false" text="New Project" />
+                        <MenuItem mnemonicParsing="false" text="Open Project" />
+                        <MenuItem mnemonicParsing="false" text="Save Project" />
+                        <MenuItem mnemonicParsing="false" text="Save Project As..." />
+      						<MenuItem mnemonicParsing="false" text="Select Video" />
+      						<MenuItem mnemonicParsing="false" onAction="#close" text="Close" />
+      					</items>
+      				</Menu>
+      				<Menu mnemonicParsing="false" text="Edit">
+      					<items>
+      						<MenuItem mnemonicParsing="false" text="Add Audio" />
+      						<MenuItem mnemonicParsing="false" text="Text to Speech" />
+      					</items>
+      				</Menu>
+                  <Menu mnemonicParsing="false" text="View">
+                    <items>
+                        <Menu mnemonicParsing="false" text="Select View">
+                          <items>
+                            <MenuItem mnemonicParsing="false" text="View 1" />
+                            <MenuItem mnemonicParsing="false" text="View 2" />
+                          </items>
+                        </Menu>
+                    </items>
+                  </Menu>
+      				<Menu mnemonicParsing="false" text="Help">
+      					<items>
+      						<MenuItem mnemonicParsing="false" text="About" />
+      					</items>
+      				</Menu>
+      			</menus>
+      		</MenuBar>
+            <HBox>
+               <children>
+                  <Button fx:id="_previewButton" mnemonicParsing="false" prefWidth="2000.0" text="Preview" HBox.hgrow="ALWAYS">
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                  </Button>
+                  <Button fx:id="_editorButton" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" prefWidth="2000.0" text="Editor" HBox.hgrow="ALWAYS">
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                  </Button>
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+	</top>
+	<bottom>
+		<HBox spacing="5.0" BorderPane.alignment="CENTER">
+			<children>
+				<Label text="VIDEVOX 0.2 BETA" />
+				<Region HBox.hgrow="ALWAYS" />
+				<Label text="Current Project.videvox" />
+			</children>
+			<BorderPane.margin>
+				<Insets />
+			</BorderPane.margin>
+			<padding>
+				<Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+			</padding>
+		</HBox>
+	</bottom>
+</BorderPane>
