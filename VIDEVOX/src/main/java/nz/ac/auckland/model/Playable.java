@@ -13,9 +13,11 @@ public interface Playable {
 
 	public String getBasename();
 
-	public int getStartOffset();
+	public void start(Duration time);
 
-	public void setStartOffset(int offset);
+	public Duration getStartOffset();
+
+	public void setStartOffset(Duration offset);
 
 	public String getName();
 
@@ -28,10 +30,6 @@ public interface Playable {
 	public void pause();
 
 	public void stop();
-
-	public void skipAhead();
-
-	public void skipBack();
 
 	public void seek(Duration position);
 

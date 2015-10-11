@@ -5,13 +5,13 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 import javafx.scene.media.Media;
+import javafx.scene.media.MediaException;
 import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
 
 /**
- * This class was really just supposed to extend javafx.scene.Media or
- * javafx.scene.MediaPlayer and add a start offset and a robust way to get the
- * basename of the media file.
+ * This class is a wrapper on the JavaFX MediaPlayer to support starting after
+ * an offset.
  *
  * @author Fraser
  *
@@ -19,13 +19,14 @@ import javafx.util.Duration;
 public class VidevoxMedia implements Playable {
 
 	/**
-	 * A media object for the Playable. Should be a JavaFX supported format
+	 * A MediaPlayer object for the Playable. Should be a JavaFX supported
+	 * format
 	 */
-	private Media _media;
+	private MediaPlayer _media;
 	/**
 	 * The start offset for the media in milliseconds
 	 */
-	private int _startOffset;
+	private Duration _startOffset;
 	/**
 	 * The base name of the media. Used to identify it
 	 */
@@ -35,14 +36,27 @@ public class VidevoxMedia implements Playable {
 		NAME = "Default";
 	}
 
+	private boolean _isActive = true;
+
+	/**
+	 * Default skip time set to 3 seconds
+	 */
+	public static final Duration DEFAULT_SKIP_TIME = new Duration(3000);
+
 	/**
 	 * Represents the most basic constructor for
+	 * 
 	 * @param fileName
+	 * @throws VidevoxException
 	 */
-	VidevoxMedia(String fileName) {
+	VidevoxMedia(String fileName) throws VidevoxException {
 		// Extract the base name of the file
 		NAME = (new File(fileName)).getName();
-		_media = new Media(fileName);
+		try {
+			_media = new MediaPlayer(new Media(fileName));
+		} catch (MediaException e) {
+			throw new VidevoxException("Invalid file type or format");
+		}
 	}
 
 	/**
@@ -50,19 +64,24 @@ public class VidevoxMedia implements Playable {
 	 * File rather than a String
 	 *
 	 * @param mediaFile
+	 * @throws VidevoxException
 	 */
-	VidevoxMedia(File mediaFile) {
+	VidevoxMedia(File mediaFile) throws VidevoxException {
 		NAME = mediaFile.getName();
-		_media = new Media(mediaFile.getAbsolutePath());
+		try {
+			_media = new MediaPlayer(new Media(mediaFile.getAbsolutePath()));
+		} catch (MediaException e) {
+			throw new VidevoxException("Invalid file type or format");
+		}
 	}
 
 	@Override
-	public int getStartOffset() {
+	public Duration getStartOffset() {
 		return _startOffset;
 	}
 
 	@Override
-	public void setStartOffset(int offset) {
+	public void setStartOffset(Duration offset) {
 		_startOffset = offset;
 	}
 
@@ -76,53 +95,61 @@ public class VidevoxMedia implements Playable {
 		// Extract the path as a string, not a URI. Bit of a workaround since
 		// Media will only give you a URI and _uri.toString puts in strange
 		// characters that FFMPEG doesn't like.
-		return (new File(new URI(_media.getSource()))).getAbsolutePath();
+		return (new File(new URI(_media.getMedia().getSource()))).getAbsolutePath();
 	}
 
 	@Override
 	public MediaPlayer getMediaPlayer() {
-		return new MediaPlayer(_media);
+		return _media;
 	}
 
 	@Override
 	public void play() {
-		// TODO Auto-generated method stub
-
+		if (_isActive && !_media.getStatus().equals(MediaPlayer.Status.PLAYING)) {
+			// Start playing if not already playing and it is set to active
+			_media.play();
+		}
 	}
 
 	@Override
 	public void pause() {
-		// TODO Auto-generated method stub
-
+		_media.pause();
 	}
 
 	@Override
 	public void stop() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void skipAhead() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void skipBack() {
-		// TODO Auto-generated method stub
-
+		_media.stop();
 	}
 
 	@Override
 	public void seek(Duration position) {
-		// TODO Auto-generated method stub
-
+		if (position.greaterThanOrEqualTo(_startOffset)) {
+			// If the media should have started already at the new position,
+			// start at that position minus the offset
+			_media.seek(position.subtract(_startOffset));
+			play();
+		}
 	}
 
 	@Override
 	public String getBasename() {
-		// TODO Auto-generated method stub
+
+		return null;
+	}
+
+	/**
+	 * To be called to que the starting of the media
+	 * 
+	 * @param time
+	 */
+	@Override
+	public void start(Duration time) {
+		// Current implementation is identical to seek
+		seek(time);
+	}
+
+	@Override
+	public String toString() {
 		return null;
 	}
 
