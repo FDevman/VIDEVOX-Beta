@@ -2,7 +2,7 @@ package test;
 
 import org.junit.Test;
 
-public class TestCase {
+public class TestModel {
 
 	@Test
 	public void dummyTest() {
