@@ -1,5 +1,7 @@
 package nz.ac.auckland.model;
 
+import org.apache.log4j.Logger;
+
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
@@ -43,6 +45,8 @@ import javafx.scene.media.MediaView;
  *
  */
 public class VidevoxModel {
+
+	private static final Logger logger = Logger.getLogger(VidevoxModel.class);
 
 	/**
 	 * The primary video used in the

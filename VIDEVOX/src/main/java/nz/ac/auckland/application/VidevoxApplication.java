@@ -1,5 +1,7 @@
 package nz.ac.auckland.application;
 
+import org.apache.log4j.Logger;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -20,6 +22,8 @@ import nz.ac.auckland.view.VIDEVOXController;
  *
  */
 public class VidevoxApplication extends Application {
+
+	private static final Logger logger = Logger.getLogger(VidevoxApplication.class);
 
 	/**
 	 * The current model instance for the application to work with
@@ -61,7 +65,7 @@ public class VidevoxApplication extends Application {
 		} catch (IOException e) {
 			// At this point, there is not much use trying to recover at this
 			// point
-			e.printStackTrace();
+			logger.error("showPlayerView()", e);
 		}
 	}
 
@@ -82,13 +86,15 @@ public class VidevoxApplication extends Application {
 			_controller.setMainApp(this);
 			_controller.setModel(_model);
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error("initRootLayout()", e);
 		}
 	}
 
 	@Override
 	public void stop() {
-		System.out.println("stopping!");
+		if (logger.isDebugEnabled()) {
+			logger.trace("stop() - stopping!");
+		}
 		return;
 	}
 
