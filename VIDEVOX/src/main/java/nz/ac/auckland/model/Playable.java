@@ -3,21 +3,32 @@ package nz.ac.auckland.model;
 import java.net.URISyntaxException;
 
 import javafx.scene.media.MediaPlayer;
+import javafx.util.Duration;
 
 public interface Playable {
 
-	final String FILE_SEPARATOR = System.getProperty("file.separator");
+	public final String FILE_SEPARATOR = System.getProperty("file.separator");
 
-	final String DEFAULT_PATH = "/tmp/";
+	public final String DEFAULT_PATH = "/tmp/";
 
-	public int getStartOffset();
+	public void start(Duration time);
 
-	public void setStartOffset(int offset);
+	public Duration getStartOffset();
 
-	public String getName();
+	public void setStartOffset(Duration offset);
+
+	public String getBasename();
 
 	public String getAbsolutePath() throws URISyntaxException;
 
 	public MediaPlayer getMediaPlayer();
+
+	public void play();
+
+	public void pause();
+
+	public void stop();
+
+	public void seek(Duration position);
 
 }
