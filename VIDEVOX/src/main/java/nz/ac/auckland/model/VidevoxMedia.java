@@ -54,19 +54,11 @@ public class VidevoxMedia implements Playable {
 	 * @throws VidevoxException
 	 * @throws URISyntaxException
 	 */
-	VidevoxMedia(String fileName) throws VidevoxException {
-		try {
-			// Convert the string to a URI
-			URI uri = new URI(fileName);
-			// Use the File class to extract the basename of the file
-			NAME = new File(uri).getName();
-			// Use the URI to construct a MediaPlayer
-			_media = new MediaPlayer(new Media(uri.toString()));
-		} catch (URISyntaxException e) {
-			throw new VidevoxException("Invalid URI Syntax");
-		} catch (MediaException e) {
-			throw new VidevoxException("Invalid file type or format");
-		}
+	VidevoxMedia(String str) {
+		String[] args = str.split(":");
+		_media = new MediaPlayer(new Media(args[0]));
+		NAME = new File(args[0]).getName();
+		_startOffset = new Duration(Double.parseDouble(args[1]));
 	}
 
 	/**
