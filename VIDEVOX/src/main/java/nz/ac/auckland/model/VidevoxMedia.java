@@ -35,12 +35,14 @@ public class VidevoxMedia implements Playable {
 	 * The base name of the media. Used to identify it
 	 */
 	private final String NAME;
+	/**
+	 * Switch to determine if the item is currently being included
+	 */
+	private boolean __active = true;
 
 	public VidevoxMedia() {
 		NAME = "Default";
 	}
-
-	private boolean _isActive = true;
 
 	/**
 	 * Default skip time set to 3 seconds
@@ -103,7 +105,7 @@ public class VidevoxMedia implements Playable {
 
 	@Override
 	public void play() {
-		if (_isActive && !_media.getStatus().equals(MediaPlayer.Status.PLAYING)) {
+		if (__active && !_media.getStatus().equals(MediaPlayer.Status.PLAYING)) {
 			// Start playing if not already playing and it is set to active
 			_media.play();
 		}
