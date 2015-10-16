@@ -29,15 +29,15 @@ public class VidevoxMedia implements Playable {
 	 * A MediaPlayer object for the Playable. Should be a JavaFX supported
 	 * format
 	 */
-	private MediaPlayer _media;
+	MediaPlayer _media;
 	/**
 	 * The start offset for the media in milliseconds
 	 */
-	private Duration _startOffset;
+	Duration _startOffset;
 	/**
 	 * The base name of the media. Used to identify it
 	 */
-	private final String NAME;
+	String _name;
 	/**
 	 * Switch to determine if the item is currently being included (default =
 	 * true)
@@ -45,7 +45,7 @@ public class VidevoxMedia implements Playable {
 	private boolean _active = true;
 
 	public VidevoxMedia() {
-		NAME = "Default";
+		_name = "Default";
 	}
 
 	/**
@@ -70,7 +70,7 @@ public class VidevoxMedia implements Playable {
 		_media = new MediaPlayer(new Media((String) obj.get("URI")));
 		// Extracts the basename of the file from the URI by using the
 		// java.io.File class
-		NAME = new File(new URI((String) obj.get("URI"))).getName();
+		_name = new File(new URI((String) obj.get("URI"))).getName();
 		// Parse the string from JSON as a double and use it to create a
 		// Duration
 		_startOffset = new Duration(Double.parseDouble((String) obj.get("startOffset")));
@@ -85,30 +85,6 @@ public class VidevoxMedia implements Playable {
 	}
 
 	/**
-	 * Converts the current media item into a JSON formatted string
-	 * representation.
-	 */
-	@Override
-	public String toString() {
-		JSONObject obj = new JSONObject();
-		obj.put("URI", _media.getMedia().getSource());
-		obj.put("startOffset", Double.toString(_startOffset.toMillis()));
-		obj.put("active", Boolean.toString(_active));
-		return obj.toString();
-
-		// StringBuilder b = new StringBuilder();
-		// try {
-		// b.append(new URI(_media.getMedia().getSource()).toString());
-		// } catch (URISyntaxException e) {
-		// // Should never happen since URI is validated when MediaPlayer is
-		// // created
-		// logger.debug("URI Syntax error ???");
-		// }
-		// b.append(":" + _startOffset.toMillis());
-		// return b.toString();
-	}
-
-	/**
 	 * Makes for one less line of code while using FileChooser which returns a
 	 * File rather than a String
 	 *
@@ -117,7 +93,7 @@ public class VidevoxMedia implements Playable {
 	 */
 	VidevoxMedia(File mediaFile) throws VidevoxException {
 		// Extract the basename of the file
-		NAME = mediaFile.getName();
+		_name = mediaFile.getName();
 		try {
 			_media = new MediaPlayer(new Media(mediaFile.toURI().toString()));
 		} catch (MediaException e) {
@@ -178,7 +154,7 @@ public class VidevoxMedia implements Playable {
 
 	@Override
 	public String getBasename() {
-		return NAME;
+		return _name;
 	}
 
 	/**
@@ -190,6 +166,31 @@ public class VidevoxMedia implements Playable {
 	public void start(Duration time) {
 		// Current implementation is identical to seek
 		seek(time);
+	}
+
+	/**
+	 * Converts the current media item into a JSON formatted string
+	 * representation.
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public String toString() {
+		JSONObject obj = new JSONObject();
+		obj.put("URI", _media.getMedia().getSource());
+		obj.put("startOffset", Double.toString(_startOffset.toMillis()));
+		obj.put("active", Boolean.toString(_active));
+		return obj.toJSONString();
+
+		// StringBuilder b = new StringBuilder();
+		// try {
+		// b.append(new URI(_media.getMedia().getSource()).toString());
+		// } catch (URISyntaxException e) {
+		// // Should never happen since URI is validated when MediaPlayer is
+		// // created
+		// logger.debug("URI Syntax error ???");
+		// }
+		// b.append(":" + _startOffset.toMillis());
+		// return b.toString();
 	}
 
 }

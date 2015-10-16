@@ -1,9 +1,11 @@
 package nz.ac.auckland.model;
 
 import org.apache.log4j.Logger;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import java.io.File;
+import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -14,6 +16,7 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaException;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
+import javafx.util.Duration;
 
 /**
  * <p>
@@ -45,24 +48,13 @@ import javafx.scene.media.MediaView;
  * @author Fraser
  *
  */
-public class VidevoxModel {
+public class VidevoxModel extends VidevoxMedia implements Playable {
 
 	private static final Logger logger = Logger.getLogger(VidevoxModel.class);
 
-	/**
-	 * The primary video used in the
-	 */
-	private MediaPlayer _mainVideo;
-
 	private Map<String, Playable> _audio;
 
-	private String _name;
-
-	public static final String NEW_LINE = System.getProperty("line.separator");
-
-	public static final String AUDIO_TO_FOLLOW = "AUDIO";
-
-	public static final String VIDEO_TO_FOLLOW = "VIDEO";
+	private String _path;
 
 	public VidevoxModel() {
 		_audio = new HashMap<String, Playable>();
@@ -86,21 +78,21 @@ public class VidevoxModel {
 	 * @throws VidevoxException
 	 */
 	public void setMainVideo(File file, MediaView view) throws VidevoxException {
-		if (_mainVideo != null) {
+		if (_media != null) {
 			// Dump the current video if there is one
-			_mainVideo.dispose();
+			_media.dispose();
 		}
 		// Load the file into the javaFX media player
 		try {
-			_mainVideo = new MediaPlayer(new Media(file.toURI().toString()));
+			_media = new MediaPlayer(new Media(file.toURI().toString()));
 		} catch (MediaException e) {
 			throw new VidevoxException("Invalid file type or format");
 		}
 		// Place the media player inside the supplied view
-		view.setMediaPlayer(_mainVideo);
+		view.setMediaPlayer(_media);
 		// Set a property listener on the current time of the video, use it to
 		// trigger other media players to start at the correct times
-		_mainVideo.currentTimeProperty().addListener(new InvalidationListener() {
+		_media.currentTimeProperty().addListener(new InvalidationListener() {
 
 			@Override
 			public void invalidated(Observable obs) {
@@ -110,14 +102,14 @@ public class VidevoxModel {
 					Playable p = e.getValue();
 					// Call the start method which will handle timings on each
 					// Playable
-					p.start(_mainVideo.getCurrentTime());
+					p.start(_media.getCurrentTime());
 				}
 			}
 		});
 	}
 
 	public MediaPlayer getMainVideo() {
-		return _mainVideo;
+		return _media;
 	}
 
 	/**
@@ -125,21 +117,82 @@ public class VidevoxModel {
 	 * @param videoView
 	 */
 	public void setVideoView(MediaView videoView) {
-		videoView.setMediaPlayer(_mainVideo);
+		videoView.setMediaPlayer(_media);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public String toString() {
 		JSONObject obj = new JSONObject();
 
-		obj.put("videoURI", _mainVideo.getMedia().getSource().toString());
+		obj.put("videoURI", _media.getMedia().getSource());
+		obj.put("name", _name);
 
-		StringBuilder b = new StringBuilder("project-name:" + _name);
+		JSONArray audioList = new JSONArray();
 		for (Entry<String, Playable> e : _audio.entrySet()) {
 			Playable p = e.getValue();
-			b.append(NEW_LINE + "audio:" + p.toString());
+			audioList.add("audio: " + p.toString());
 		}
-		return b.toString();
+
+		obj.put("audioList", audioList);
+
+		return obj.toJSONString();
+
+		// StringBuilder b = new StringBuilder("project-name:" + _name);
+		// for (Entry<String, Playable> e : _audio.entrySet()) {
+		// Playable p = e.getValue();
+		// b.append(NEW_LINE + "audio:" + p.toString());
+		// }
+		// return b.toString();
+	}
+
+	@Override
+	public void start(Duration time) {
+		super.start(time);
+		for (Entry<String, Playable> e: _audio.entrySet()) {
+			Playable p = e.getValue();
+			p.start(time);
+		}
+	}
+
+	@Override
+	public String getBasename() {
+		return super.getBasename();
+	}
+
+	@Override
+	public String getAbsolutePath() throws URISyntaxException {
+		return null;
+	}
+
+	@Override
+	public MediaPlayer getMediaPlayer() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void play() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void pause() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void stop() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void seek(Duration position) {
+		// TODO Auto-generated method stub
+
 	}
 
 }
