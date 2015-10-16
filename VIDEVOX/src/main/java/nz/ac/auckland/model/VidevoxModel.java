@@ -1,6 +1,7 @@
 package nz.ac.auckland.model;
 
 import org.apache.log4j.Logger;
+import org.json.simple.JSONObject;
 
 import java.io.File;
 import java.util.HashMap;
@@ -129,6 +130,10 @@ public class VidevoxModel {
 
 	@Override
 	public String toString() {
+		JSONObject obj = new JSONObject();
+
+		obj.put("videoURI", _mainVideo.getMedia().getSource().toString());
+
 		StringBuilder b = new StringBuilder("project-name:" + _name);
 		for (Entry<String, Playable> e : _audio.entrySet()) {
 			Playable p = e.getValue();

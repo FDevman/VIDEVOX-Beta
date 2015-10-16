@@ -1,6 +1,9 @@
 package nz.ac.auckland.model;
 
 import org.apache.log4j.Logger;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 import java.io.File;
 import java.net.URI;
@@ -36,9 +39,10 @@ public class VidevoxMedia implements Playable {
 	 */
 	private final String NAME;
 	/**
-	 * Switch to determine if the item is currently being included
+	 * Switch to determine if the item is currently being included (default =
+	 * true)
 	 */
-	private boolean __active = true;
+	private boolean _active = true;
 
 	public VidevoxMedia() {
 		NAME = "Default";
@@ -50,17 +54,58 @@ public class VidevoxMedia implements Playable {
 	public static final Duration DEFAULT_SKIP_TIME = new Duration(3000);
 
 	/**
-	 * Represents the most basic constructor for
+	 * Is the constructor called when recreating the object based on a JSON
+	 * formatted string
 	 *
 	 * @param fileName
+	 * @throws ParseException
 	 * @throws VidevoxException
 	 * @throws URISyntaxException
 	 */
-	VidevoxMedia(String str) {
-		String[] args = str.split(":");
-		_media = new MediaPlayer(new Media(args[0]));
-		NAME = new File(args[0]).getName();
-		_startOffset = new Duration(Double.parseDouble(args[1]));
+	VidevoxMedia(String str) throws ParseException, URISyntaxException {
+
+		// Create a JSON object from the string
+		JSONObject obj = (JSONObject) new JSONParser().parse(str);
+		// Extract the URL field to create the MediaPlayer object
+		_media = new MediaPlayer(new Media((String) obj.get("URI")));
+		// Extracts the basename of the file from the URI by using the
+		// java.io.File class
+		NAME = new File(new URI((String) obj.get("URI"))).getName();
+		// Parse the string from JSON as a double and use it to create a
+		// Duration
+		_startOffset = new Duration(Double.parseDouble((String) obj.get("startOffset")));
+		// Retrieve a boolean from the JSON string
+		_active = Boolean.parseBoolean((String) obj.get("active"));
+
+		// String[] args = str.split(":");
+		// _media = new MediaPlayer(new Media(args[0]));
+		// NAME = new File(args[0]).getName();
+		// _startOffset = new Duration(Double.parseDouble(args[1]));
+
+	}
+
+	/**
+	 * Converts the current media item into a JSON formatted string
+	 * representation.
+	 */
+	@Override
+	public String toString() {
+		JSONObject obj = new JSONObject();
+		obj.put("URI", _media.getMedia().getSource());
+		obj.put("startOffset", Double.toString(_startOffset.toMillis()));
+		obj.put("active", Boolean.toString(_active));
+		return obj.toString();
+
+		// StringBuilder b = new StringBuilder();
+		// try {
+		// b.append(new URI(_media.getMedia().getSource()).toString());
+		// } catch (URISyntaxException e) {
+		// // Should never happen since URI is validated when MediaPlayer is
+		// // created
+		// logger.debug("URI Syntax error ???");
+		// }
+		// b.append(":" + _startOffset.toMillis());
+		// return b.toString();
 	}
 
 	/**
@@ -105,7 +150,7 @@ public class VidevoxMedia implements Playable {
 
 	@Override
 	public void play() {
-		if (__active && !_media.getStatus().equals(MediaPlayer.Status.PLAYING)) {
+		if (_active && !_media.getStatus().equals(MediaPlayer.Status.PLAYING)) {
 			// Start playing if not already playing and it is set to active
 			_media.play();
 		}
@@ -145,23 +190,6 @@ public class VidevoxMedia implements Playable {
 	public void start(Duration time) {
 		// Current implementation is identical to seek
 		seek(time);
-	}
-
-	/**
-	 * Converts the current media item into a string representation,
-	 */
-	@Override
-	public String toString() {
-		StringBuilder b = new StringBuilder();
-		try {
-			b.append(new URI(_media.getMedia().getSource()).toString());
-		} catch (URISyntaxException e) {
-			// Should never happen since URI is validated when MediaPlayer is
-			// created
-			logger.debug("URI Syntax error ???");
-		}
-		b.append(":" + _startOffset.toMillis());
-		return b.toString();
 	}
 
 }
