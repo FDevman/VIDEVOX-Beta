@@ -33,7 +33,7 @@ public class VidevoxMedia implements Playable {
 	/**
 	 * The start offset for the media in milliseconds
 	 */
-	Duration _startOffset;
+	private Duration _startOffset;
 	/**
 	 * The base name of the media. Used to identify it
 	 */
@@ -44,8 +44,7 @@ public class VidevoxMedia implements Playable {
 	 */
 	boolean _active = true;
 
-	static String _defaultAudio = "resources" + FILE_SEPARATOR + "media" + FILE_SEPARATOR + "The Mercury Tale.mp3";
-//	static String _defaultAudio = "C:\\Users\\Fraser\\Documents\\UoA Papers\\SE-206\\Eclipse Projects\\VIDEVOX-Beta\\VIDEVOX\\src\\test\\resources\\media";
+	static String _defaultAudio = FILE_SEPARATOR + "media" + FILE_SEPARATOR + "The Mercury Tale.mp3";
 
 	/**
 	 * Create an instance containing the default media file and a start offset
@@ -61,37 +60,6 @@ public class VidevoxMedia implements Playable {
 	 * Default skip time set to 3 seconds
 	 */
 	public static final Duration DEFAULT_SKIP_TIME = new Duration(3000);
-
-	/**
-	 * Is the constructor called when recreating the object based on a JSON
-	 * formatted string
-	 *
-	 * @param fileName
-	 * @throws ParseException
-	 * @throws VidevoxException
-	 * @throws URISyntaxException
-	 */
-	public VidevoxMedia(String str) throws ParseException, URISyntaxException {
-
-		// Create a JSON object from the string
-		JSONObject obj = (JSONObject) new JSONParser().parse(str);
-		// Extract the URL field to create the MediaPlayer object
-		_media = new MediaPlayer(new Media((String) obj.get("URI")));
-		// Extracts the basename of the file from the URI by using the
-		// java.io.File class
-		_name = new File(new URI((String) obj.get("URI"))).getName();
-		// Parse the string from JSON as a double and use it to create a
-		// Duration
-		_startOffset = new Duration(Double.parseDouble((String) obj.get("startOffset")));
-		// Retrieve a boolean from the JSON string
-		_active = Boolean.parseBoolean((String) obj.get("active"));
-
-		// String[] args = str.split(":");
-		// _media = new MediaPlayer(new Media(args[0]));
-		// NAME = new File(args[0]).getName();
-		// _startOffset = new Duration(Double.parseDouble(args[1]));
-
-	}
 
 	/**
 	 * Makes for one less line of code while using FileChooser which returns a
@@ -183,13 +151,28 @@ public class VidevoxMedia implements Playable {
 	 * representation.
 	 */
 	@SuppressWarnings("unchecked")
-	@Override
-	public String toString() {
+	public String toJSONstring() {
 		JSONObject obj = new JSONObject();
 		obj.put("URI", _media.getMedia().getSource());
 		obj.put("startOffset", Double.toString(_startOffset.toMillis()));
 		obj.put("active", Boolean.toString(_active));
 		return obj.toJSONString();
+	}
+
+	public VidevoxMedia fromJSONstring(String str) throws VidevoxException {
+		// Parse string into JSONObject
+		JSONObject json;
+		try {
+			json = (JSONObject) new JSONParser().parse(str);
+		} catch (ParseException e) {
+			throw new VidevoxException("Error parsing JSON string: " + str);
+		}
+		File file = new File((String)json.get("URI"));
+		double startOffset = Double.parseDouble((String)json.get("startOffset"));
+		boolean active = Boolean.parseBoolean((String)json.get("active"));
+		VidevoxMedia media = new VidevoxMedia(file, startOffset);
+		media._active = active;
+		return media;
 	}
 
 	@Override

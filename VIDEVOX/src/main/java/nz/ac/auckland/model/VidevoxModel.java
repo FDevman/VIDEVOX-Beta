@@ -3,6 +3,8 @@ package nz.ac.auckland.model;
 import org.apache.log4j.Logger;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 import java.io.File;
 import java.net.URISyntaxException;
@@ -61,11 +63,6 @@ public class VidevoxModel extends VidevoxMedia implements Playable {
 		_name = "New Project";
 	}
 
-	public VidevoxModel(String savedModel) throws VidevoxException {
-		this(); // Initializes the
-		// Implement from string
-	}
-
 	/**
 	 * Sets the video file to be loaded into the supplied MediaView. This file
 	 * will serve as the primary video file which audio tracks can be overlayed
@@ -120,32 +117,6 @@ public class VidevoxModel extends VidevoxMedia implements Playable {
 		videoView.setMediaPlayer(_media);
 	}
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public String toString() {
-		JSONObject obj = new JSONObject();
-
-		obj.put("videoURI", _media.getMedia().getSource());
-		obj.put("name", _name);
-
-		JSONArray audioList = new JSONArray();
-		for (Entry<String, Playable> e : _audio.entrySet()) {
-			Playable p = e.getValue();
-			audioList.add("audio: " + p.toString());
-		}
-
-		obj.put("audioList", audioList);
-
-		return obj.toJSONString();
-
-		// StringBuilder b = new StringBuilder("project-name:" + _name);
-		// for (Entry<String, Playable> e : _audio.entrySet()) {
-		// Playable p = e.getValue();
-		// b.append(NEW_LINE + "audio:" + p.toString());
-		// }
-		// return b.toString();
-	}
-
 	@Override
 	public void start(Duration time) {
 		super.start(time);
@@ -193,6 +164,35 @@ public class VidevoxModel extends VidevoxMedia implements Playable {
 	public void seek(Duration position) {
 		// TODO Auto-generated method stub
 
+	}
+
+	@SuppressWarnings("unchecked")
+	public String toJSONstring() {
+		JSONObject obj = new JSONObject();
+
+		obj.put("videoURI", _media.getMedia().getSource());
+		obj.put("name", _name);
+
+		JSONArray audioList = new JSONArray();
+		for (Entry<String, Playable> e : _audio.entrySet()) {
+			Playable p = e.getValue();
+			audioList.add("audio: " + p.toString());
+		}
+
+		obj.put("audioList", audioList);
+
+		return obj.toJSONString();
+	}
+
+	public VidevoxModel fromJSONstring(String str) throws VidevoxException {
+		JSONObject json;
+		try {
+			json = (JSONObject) new JSONParser().parse(str);
+		} catch (ParseException e) {
+			throw new VidevoxException("Error parsing JSON string: " + str);
+		}
+		File file = new File((String)json.get("videoURI"));
+		return null;
 	}
 
 }
