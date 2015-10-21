@@ -56,12 +56,12 @@ public class VidevoxModel extends VidevoxMedia implements Playable {
 
 	private String _path;
 
-	public VidevoxModel() {
+	public VidevoxModel() throws VidevoxException {
 		_audio = new HashMap<String, Playable>();
 		_name = "New Project";
 	}
 
-	public VidevoxModel(String savedModel) {
+	public VidevoxModel(String savedModel) throws VidevoxException {
 		this(); // Initializes the
 		// Implement from string
 	}

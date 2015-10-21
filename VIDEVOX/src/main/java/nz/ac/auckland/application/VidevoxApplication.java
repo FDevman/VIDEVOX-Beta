@@ -11,6 +11,7 @@ import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
+import nz.ac.auckland.model.VidevoxException;
 import nz.ac.auckland.model.VidevoxModel;
 import nz.ac.auckland.view.PlayerViewController;
 import nz.ac.auckland.view.RootLayoutController;
@@ -105,7 +106,12 @@ public class VidevoxApplication extends Application {
 		this._primaryStage.setTitle("VIDEVOX - video editor");
 
 		// Create a blank project so that _model is not null
-		_model = new VidevoxModel();
+		try {
+			_model = new VidevoxModel();
+		} catch (VidevoxException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		// Initiate the root layout of the application
 		initRootLayout();

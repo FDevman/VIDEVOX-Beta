@@ -42,10 +42,19 @@ public class VidevoxMedia implements Playable {
 	 * Switch to determine if the item is currently being included (default =
 	 * true)
 	 */
-	private boolean _active = true;
+	boolean _active = true;
 
-	public VidevoxMedia() {
-		_name = "Default";
+	static String _defaultAudio = "resources" + FILE_SEPARATOR + "media" + FILE_SEPARATOR + "The Mercury Tale.mp3";
+//	static String _defaultAudio = "C:\\Users\\Fraser\\Documents\\UoA Papers\\SE-206\\Eclipse Projects\\VIDEVOX-Beta\\VIDEVOX\\src\\test\\resources\\media";
+
+	/**
+	 * Create an instance containing the default media file and a start offset
+	 * of 0 seconds
+	 *
+	 * @throws VidevoxException
+	 */
+	public VidevoxMedia() throws VidevoxException {
+		this(new File(_defaultAudio), 0.0);
 	}
 
 	/**
@@ -62,7 +71,7 @@ public class VidevoxMedia implements Playable {
 	 * @throws VidevoxException
 	 * @throws URISyntaxException
 	 */
-	VidevoxMedia(String str) throws ParseException, URISyntaxException {
+	public VidevoxMedia(String str) throws ParseException, URISyntaxException {
 
 		// Create a JSON object from the string
 		JSONObject obj = (JSONObject) new JSONParser().parse(str);
@@ -91,7 +100,7 @@ public class VidevoxMedia implements Playable {
 	 * @param mediaFile
 	 * @throws VidevoxException
 	 */
-	VidevoxMedia(File mediaFile) throws VidevoxException {
+	public VidevoxMedia(File mediaFile, double startOffset) throws VidevoxException {
 		// Extract the basename of the file
 		_name = mediaFile.getName();
 		try {
@@ -99,6 +108,7 @@ public class VidevoxMedia implements Playable {
 		} catch (MediaException e) {
 			throw new VidevoxException("Invalid file type or format");
 		}
+		_startOffset = new Duration(startOffset);
 	}
 
 	@Override
@@ -180,17 +190,29 @@ public class VidevoxMedia implements Playable {
 		obj.put("startOffset", Double.toString(_startOffset.toMillis()));
 		obj.put("active", Boolean.toString(_active));
 		return obj.toJSONString();
+	}
 
-		// StringBuilder b = new StringBuilder();
-		// try {
-		// b.append(new URI(_media.getMedia().getSource()).toString());
-		// } catch (URISyntaxException e) {
-		// // Should never happen since URI is validated when MediaPlayer is
-		// // created
-		// logger.debug("URI Syntax error ???");
-		// }
-		// b.append(":" + _startOffset.toMillis());
-		// return b.toString();
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == this) {
+			return true;
+		}
+		if (!(obj instanceof VidevoxMedia)) {
+			return false;
+		}
+		VidevoxMedia vm = (VidevoxMedia) obj;
+		try {
+			if (vm.getAbsolutePath().equals(this.getAbsolutePath())) {
+				if (vm._startOffset.equals(_startOffset)) {
+					if (vm._active == _active) {
+						return true;
+					}
+				}
+			}
+		} catch (URISyntaxException e) {
+			return false;
+		}
+		return false;
 	}
 
 }
