@@ -14,6 +14,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import nz.ac.auckland.model.Project;
+import nz.ac.auckland.model.VidevoxException;
 import nz.ac.auckland.view.PlayerViewController;
 import nz.ac.auckland.view.RootLayoutController;
 
@@ -33,7 +34,7 @@ public class VidevoxApplication extends Application {
 	/**
 	 * The current model instance for the application to work with
 	 */
-	private VidevoxPlayer _model;
+	private VidevoxPlayer _player;
 	/**
 	 * The window for the main part of the app to be loaded into
 	 */
