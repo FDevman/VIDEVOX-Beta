@@ -47,7 +47,7 @@ public class TestProject {
 
 	@AfterClass
 	public static void cleanUp() {
-		file.delete();
+		file.deleteOnExit();
 	}
 
 	@Before
