@@ -1,13 +1,16 @@
 package nz.ac.auckland.application;
 
-import org.apache.log4j.Logger;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
-
 import java.io.File;
 import java.net.URI;
 import java.net.URISyntaxException;
+
+/**
+ * <p>
+ * This class will handle the synchronizing of play-back between media files so
+ * that they behave as if they were all one file.
+ * </p>
+ */
+import org.apache.log4j.Logger;
 
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaException;
@@ -35,10 +38,6 @@ public class VidevoxMedia implements Playable {
 	 * The start offset for the media in milliseconds
 	 */
 	private Duration _startOffset;
-	/**
-	 * The base name of the media. Used to identify it
-	 */
-	String _name;
 	/**
 	 * Switch to determine if the item is currently being included (default =
 	 * true)
@@ -70,8 +69,6 @@ public class VidevoxMedia implements Playable {
 	 * @throws VidevoxException
 	 */
 	public VidevoxMedia(File mediaFile, double startOffset) throws VidevoxException {
-		// Extract the basename of the file
-		_name = mediaFile.getName();
 		try {
 			_media = new MediaPlayer(new Media(mediaFile.toURI().toString()));
 		} catch (MediaException e) {
@@ -80,17 +77,14 @@ public class VidevoxMedia implements Playable {
 		_startOffset = new Duration(startOffset);
 	}
 
-	@Override
 	public Duration getStartOffset() {
 		return _startOffset;
 	}
 
-	@Override
 	public void setStartOffset(Duration offset) {
 		_startOffset = offset;
 	}
 
-	@Override
 	public String getAbsolutePath() throws URISyntaxException {
 		// Extract the path as a string, not a URI. Bit of a workaround since
 		// Media will only give you a URI and _uri.toString puts in strange
@@ -98,12 +92,10 @@ public class VidevoxMedia implements Playable {
 		return (new File(new URI(_media.getMedia().getSource()))).getAbsolutePath();
 	}
 
-	@Override
 	public MediaPlayer getMediaPlayer() {
 		return _media;
 	}
 
-	@Override
 	public void play() {
 		if (_active && !_media.getStatus().equals(MediaPlayer.Status.PLAYING)) {
 			// Start playing if not already playing and it is set to active
@@ -123,80 +115,15 @@ public class VidevoxMedia implements Playable {
 
 	@Override
 	public void seek(Duration position) {
-		if (position.greaterThanOrEqualTo(_startOffset)) {
-			// If the media should have started already at the new position,
-			// start at that position minus the offset
+		if (_startOffset.greaterThan(position)) {
+			// Stop the play-back if the new position is before this media
+			// should
+			// start
+			_media.stop();
+		} else {
+			// Go to the relative position this media should be at
 			_media.seek(position.subtract(_startOffset));
-			play();
 		}
-	}
-
-	@Override
-	public String getBasename() {
-		return _name;
-	}
-
-	/**
-	 * To be called to que the starting of the media
-	 *
-	 * @param time
-	 */
-	@Override
-	public void start(Duration time) {
-		// Current implementation is identical to seek
-		seek(time);
-	}
-
-	/**
-	 * Converts the current media item into a JSON formatted string
-	 * representation.
-	 */
-	@SuppressWarnings("unchecked")
-	public String toJSONstring() {
-		JSONObject obj = new JSONObject();
-		obj.put("URI", _media.getMedia().getSource());
-		obj.put("startOffset", Double.toString(_startOffset.toMillis()));
-		obj.put("active", Boolean.toString(_active));
-		return obj.toJSONString();
-	}
-
-	public VidevoxMedia fromJSONstring(String str) throws VidevoxException {
-		// Parse string into JSONObject
-		JSONObject json;
-		try {
-			json = (JSONObject) new JSONParser().parse(str);
-		} catch (ParseException e) {
-			throw new VidevoxException("Error parsing JSON string: " + str);
-		}
-		File file = new File((String)json.get("URI"));
-		double startOffset = Double.parseDouble((String)json.get("startOffset"));
-		boolean active = Boolean.parseBoolean((String)json.get("active"));
-		VidevoxMedia media = new VidevoxMedia(file, startOffset);
-		media._active = active;
-		return media;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (obj == this) {
-			return true;
-		}
-		if (!(obj instanceof VidevoxMedia)) {
-			return false;
-		}
-		VidevoxMedia vm = (VidevoxMedia) obj;
-		try {
-			if (vm.getAbsolutePath().equals(this.getAbsolutePath())) {
-				if (vm._startOffset.equals(_startOffset)) {
-					if (vm._active == _active) {
-						return true;
-					}
-				}
-			}
-		} catch (URISyntaxException e) {
-			return false;
-		}
-		return false;
 	}
 
 }

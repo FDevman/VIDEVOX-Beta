@@ -17,8 +17,23 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 /**
+ * <p>
  * This is the primary model class, it contains all information required to save
  * a project to file and to reconstruct a project from a file.
+ * </p>
+ *
+ * <p>
+ * Each instance of this class represents a project in VIDEVOX. Each project
+ * contains a main video file which will dictate the length of the final
+ * product. Each project contains any number of audio files to be played
+ * alongside the video with a start offset. Audio clips must be in .mp3 format
+ * and video must be in .mp4 for the moment.
+ * </p>
+ *
+ * <p>
+ * This class has implementation for converting the object to a string format
+ * and building it back up from a string with the correct format.
+ * </p>
  *
  * @author Fraser
  *
@@ -245,6 +260,10 @@ public class Project {
 
 	public boolean isSaved() {
 		return _saved;
+	}
+
+	public File getVideo() {
+		return _videoFile;
 	}
 
 }

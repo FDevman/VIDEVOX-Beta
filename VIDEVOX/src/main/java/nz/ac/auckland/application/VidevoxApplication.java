@@ -2,16 +2,18 @@ package nz.ac.auckland.application;
 
 import org.apache.log4j.Logger;
 
-import java.io.File;
 import java.io.IOException;
 
 import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
-import nz.ac.auckland.model.VidevoxException;
+import javafx.stage.WindowEvent;
+import nz.ac.auckland.model.Project;
 import nz.ac.auckland.view.PlayerViewController;
 import nz.ac.auckland.view.RootLayoutController;
 
@@ -25,9 +27,13 @@ public class VidevoxApplication extends Application {
 	private static final Logger logger = Logger.getLogger(VidevoxApplication.class);
 
 	/**
+	 * On load, get a new default project
+	 */
+	Project _currentProject = Project.getProject();
+	/**
 	 * The current model instance for the application to work with
 	 */
-	private VidevoxModel _model;
+	private VidevoxPlayer _model;
 	/**
 	 * The window for the main part of the app to be loaded into
 	 */
@@ -37,7 +43,7 @@ public class VidevoxApplication extends Application {
 	 */
 	private BorderPane _rootLayout;
 	/**
-	 *
+	 * Controller for the root layout
 	 */
 	private RootLayoutController _controller;
 
@@ -57,7 +63,6 @@ public class VidevoxApplication extends Application {
 			// Give the controller class the references it wants
 			PlayerViewController controller = loader.getController();
 			controller.setMainApp(this);
-			controller.setModel(_model);
 
 			// Set view toggle buttons
 			_controller.setViewToggle(RootLayoutController.PREVIEW);
@@ -80,21 +85,31 @@ public class VidevoxApplication extends Application {
 			_primaryStage.setScene(scene);
 			_primaryStage.show();
 
+			// Set event handler on the window. Do not let it close without
+			// prompting to save if unsaved
+			scene.getWindow().setOnCloseRequest(new EventHandler<WindowEvent>() {
+				public void handle(WindowEvent ev) {
+					if (!_currentProject.isSaved()) {
+						ev.consume();
+						saveAndClose();
+					}
+				}
+			});
+
 			// Give controller access to main app
 			_controller = loader.getController();
 			_controller.setMainApp(this);
-			_controller.setModel(_model);
 		} catch (IOException e) {
 			logger.error("initRootLayout()", e);
 		}
 	}
 
-	@Override
-	public void stop() {
-		if (logger.isDebugEnabled()) {
-			logger.trace("stop() - stopping!");
+	public void saveAndClose() {
+		if (!_currentProject.isSaved()) {
+			// Ask to save, exit without saving, or cancel
+		} else {
+			Platform.exit();
 		}
-		return;
 	}
 
 	@Override
@@ -104,19 +119,12 @@ public class VidevoxApplication extends Application {
 		// Set a title to appear on the window
 		this._primaryStage.setTitle("VIDEVOX - video editor");
 
-		// Create a blank project so that _model is not null
-		try {
-			_model = new VidevoxModel();
-		} catch (VidevoxException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
 		// Initiate the root layout of the application
 		initRootLayout();
 
 		// Show the player view as default
 		showPlayerView();
+
 	}
 
 	public static void main(String[] args) {
@@ -124,18 +132,9 @@ public class VidevoxApplication extends Application {
 	}
 
 	/**
-	 *
+	 * Resets the entire GUI, mostly for after a new GUI is loaded
 	 */
-	public void findModel() {
-		// Display file chooser
-		// pass file to loadMoedl();
-	}
+	public void reset() {
 
-	/**
-	 * Loads a new project from file
-	 */
-	private void loadModel(File modelFile) {
-		// Implement reading from file to string and construct project from
-		// string
 	}
 }
