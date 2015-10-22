@@ -85,6 +85,8 @@ public class VidevoxApplication extends Application {
 			Scene scene = new Scene(_rootLayout);
 			_primaryStage.setScene(scene);
 			_primaryStage.show();
+			_primaryStage.setMinHeight(550);
+			_primaryStage.setMinWidth(750);
 
 			// Set event handler on the window. Do not let it close without
 			// prompting to save if unsaved

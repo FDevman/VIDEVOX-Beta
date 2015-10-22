@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.text.*?>
 <?import javafx.scene.media.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.geometry.*?>
@@ -20,7 +21,7 @@
                         <VBox minWidth="500.0" HBox.hgrow="ALWAYS">
                            <children>
                               <Region style="-fx-background-color: black;" VBox.vgrow="ALWAYS" />
-                              <HBox>
+                              <HBox style="-fx-background-color: black;">
                                  <children>
                                     <MediaView fx:id="_mainPlayerView" fitHeight="200.0" fitWidth="500.0" HBox.hgrow="ALWAYS" />
                                  </children>
@@ -31,11 +32,35 @@
                         <Region minWidth="10.0" style="-fx-background-color: black;" HBox.hgrow="NEVER" />
                      </children>
                   </HBox>
-                  <ScrollPane fitToHeight="true" fitToWidth="true" prefWidth="200.0">
-                     <content>
-                        <VBox fx:id="_scrollBox" />
-                     </content>
-                  </ScrollPane>
+                  <VBox>
+                     <children>
+                        <HBox>
+                           <children>
+                              <Region HBox.hgrow="ALWAYS" />
+                              <Label text="Audio Files">
+                                 <font>
+                                    <Font name="System Bold" size="20.0" />
+                                 </font>
+                              </Label>
+                              <Region layoutX="10.0" layoutY="10.0" HBox.hgrow="ALWAYS" />
+                           </children>
+                        </HBox>
+                        <ScrollPane fitToHeight="true" fitToWidth="true" VBox.vgrow="ALWAYS">
+                           <content>
+                              <VBox fx:id="_scrollBox" />
+                           </content>
+                        </ScrollPane>
+                        <HBox>
+                           <children>
+                              <Region HBox.hgrow="ALWAYS" />
+                              <Button minWidth="100.0" mnemonicParsing="false" text="Add Audio File" HBox.hgrow="ALWAYS" />
+                              <Region HBox.hgrow="ALWAYS" />
+                              <Button layoutX="10.0" layoutY="10.0" minWidth="100.0" mnemonicParsing="false" text="Text to Speech" HBox.hgrow="ALWAYS" />
+                              <Region HBox.hgrow="ALWAYS" />
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
               </items>
             </SplitPane>
             <HBox spacing="5.0" VBox.vgrow="NEVER">
