@@ -93,9 +93,24 @@ public class Project {
 
 	public void addAudio(File file, double offset) {
 		AudioFile audio = new AudioFile(file, offset);
-		if (!_audios.contains(audio)){
+		if (!_audios.contains(audio)) {
 			_audios.add(audio);
 		}
+	}
+
+	/**
+	 * Compiles all media files into one single video. Returns true when done.
+	 * If unsuccessful, will throw a VidevoxException with details in the
+	 * message. The return value may be useful for intentionally freezing the
+	 * GUI while working.
+	 *
+	 * @return true if completed successfully
+	 * @throws VidevoxException
+	 *             - Details of failure in message
+	 */
+	public boolean compile(File destination) throws VidevoxException {
+		// Implement
+		return true;
 	}
 
 	/**
