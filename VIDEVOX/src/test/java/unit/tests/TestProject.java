@@ -1,5 +1,6 @@
 package unit.tests;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 
 import org.json.simple.JSONObject;
@@ -18,6 +19,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import nz.ac.auckland.model.AudioFile;
 import nz.ac.auckland.model.Project;
 import nz.ac.auckland.model.VidevoxException;
 
@@ -56,6 +58,7 @@ public class TestProject {
 		try {
 			w = new FileWriter(file);
 			w.write("");
+			w.flush();
 			w.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -95,7 +98,28 @@ public class TestProject {
 
 	@Test
 	public void testAudioJSON() {
-
+		try {
+			AudioFile audio = new AudioFile();
+			logger.debug(audio.getName());
+			project.addAudio(audio);
+			project.toFile(file);
+			project.toFile(file);
+			String str1 = ((JSONObject) new JSONParser().parse(new FileReader(file))).toJSONString();
+			// This project was built from the first project's output file
+			Project.buildProject(file);
+			project.toFile(file);
+			String str2 = ((JSONObject) new JSONParser().parse(new FileReader(file))).toJSONString();
+			// If both the projects produce the same json doc, then it should be
+			// working fine
+			if (!str2.equals(str1)) {
+				logger.debug(str1);
+				logger.debug(str2);
+				fail("Strings were different");
+			}
+		} catch (VidevoxException | IOException | ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 }

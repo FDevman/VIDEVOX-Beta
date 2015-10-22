@@ -51,7 +51,7 @@ public class Project {
 	/**
 	 * A set of objects representing tts files to be created/included.
 	 */
-	Set<Object> _tts;
+	Set<AudioTTS> _tts;
 	/**
 	 * A switch to tell the application whether the video's audio should be
 	 * included
@@ -87,15 +87,17 @@ public class Project {
 	private Project() {
 		_name = "New Project";
 		_audios = new HashSet<AudioFile>();
-		_tts = new HashSet<Object>();
+		_tts = new HashSet<AudioTTS>();
 		_videoFile = new File("no video");
 	}
 
 	public void addAudio(File file, double offset) {
 		AudioFile audio = new AudioFile(file, offset);
-		if (!_audios.contains(audio)) {
-			_audios.add(audio);
-		}
+		_audios.add(audio);
+	}
+
+	public void addAudio(AudioFile audio) {
+		_audios.add(audio);
 	}
 
 	/**
@@ -135,7 +137,9 @@ public class Project {
 		JSONParser parser = new JSONParser();
 		Object obj;
 		try {
-			obj = parser.parse(new FileReader(file));
+			FileReader reader = new FileReader(file);
+			obj = parser.parse(reader);
+			reader.close();
 			// Messages in VidevoxException s will likely be shown to user
 		} catch (FileNotFoundException e) {
 			logger.error("Could not find file at: " + file.getAbsolutePath());
@@ -168,7 +172,8 @@ public class Project {
 		iterator = tts.iterator();
 		while (iterator.hasNext()) {
 			JSONObject next = (JSONObject) iterator.next();
-			// Construct the tts object
+			AudioTTS a = new AudioTTS(next);
+			p._tts.add(a);
 		}
 
 		// If all went well set the file location
@@ -208,22 +213,20 @@ public class Project {
 
 		// Iterate over tts objects
 		JSONArray tts = new JSONArray();
-		for (Object o : _tts) {
-			tts.add(o);
+		for (AudioTTS t : _tts) {
+			tts.add(t);
 		}
 		json.put(TTS, tts);
 
 		// Write to file
-		FileWriter writer = new FileWriter(destination);
 		try {
+			FileWriter writer = new FileWriter(destination);
 			writer.write(json.toJSONString());
+			writer.close();
 			logger.debug("JSON: " + json.toJSONString());
 		} catch (IOException e) {
 			logger.error("IOException writing JSON to: " + destination.getAbsolutePath());
 			throw new VidevoxException("Unknown IOException writing json to file");
-		} finally {
-			writer.flush();
-			writer.close();
 		}
 
 		_saved = true;

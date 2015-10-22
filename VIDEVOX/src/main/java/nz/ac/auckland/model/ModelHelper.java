@@ -1,6 +1,10 @@
 package nz.ac.auckland.model;
 
 import java.io.File;
+import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLDecoder;
 
 /**
  * Class containing static helper methods that are used in multiple locations
@@ -22,6 +26,22 @@ public class ModelHelper {
 	 */
 	public static void ensureFileExtension(File file, String extension) {
 
+	}
+
+	/**
+	 * Converts any file with URL/URI characters in its path to a regular path
+	 * name.
+	 *
+	 * @param file
+	 */
+	public static void decodeURL(File file) {
+		try {
+			String path = new URL(file.getAbsolutePath()).getPath();
+			path = URLDecoder.decode(path, "UTF-8");
+			file.renameTo(new File(path));
+		} catch (MalformedURLException | UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
 	}
 
 }

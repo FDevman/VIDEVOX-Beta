@@ -1,23 +1,32 @@
 package nz.ac.auckland.model;
 
 import java.io.File;
+import java.io.UnsupportedEncodingException;
 
 import org.json.simple.JSONObject;
 
 public class AudioFile {
 
-	File _audioFile = new File("Default");
+	File _audioFile;
 	double _startOffset = 0.0;
 	boolean _active = true;
 
-	final String FILE = "FILE";
-	final String START = "START";
-	final String ACTIVE = "ACTIVE";
+	final String DEFAULT_AUDIO = "media"+FILE_SEP+"The Mercury Tale.mp3";
+	final static String FILE_SEP = System.getProperty("file.separator");
+	final static String FILE = "FILE";
+	final static String START = "START";
+	final static String ACTIVE = "ACTIVE";
 
 	/**
 	 * Default constructor leaves default values
 	 */
 	public AudioFile() {
+		try {
+			_audioFile = new File(java.net.URLDecoder
+					.decode(this.getClass().getClassLoader().getResource(DEFAULT_AUDIO).getPath(), "UTF-8"));
+		} catch (UnsupportedEncodingException e) {
+
+		}
 	}
 
 	/**
@@ -49,7 +58,7 @@ public class AudioFile {
 	 *
 	 * @return
 	 */
-//	@Override
+// @Override
 	@SuppressWarnings("unchecked")
 	public JSONObject toJSON() {
 		JSONObject json = new JSONObject();
@@ -60,32 +69,32 @@ public class AudioFile {
 		return json;
 	}
 
-//	@Override
+// @Override
 	public boolean isActive() {
 		return _active;
 	}
 
-//	@Override
+// @Override
 	public void setActive(boolean active) {
 		_active = active;
 	}
 
-//	@Override
+// @Override
 	public void setStartOffset(double startOffset) {
 		_startOffset = startOffset;
 	}
 
-//	@Override
+// @Override
 	public double getStartOffset() {
 		return _startOffset;
 	}
 
-//	@Override
+// @Override
 	public String getName() {
 		return _audioFile.getName();
 	}
 
-//	@Override
+// @Override
 	public File getFile() {
 		return _audioFile;
 	}

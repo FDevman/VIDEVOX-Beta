@@ -3,6 +3,8 @@ package nz.ac.auckland.model;
 import java.io.File;
 import java.io.IOException;
 
+import org.json.simple.JSONObject;
+
 /**
  * This class represents an audio clip that has been created "on-the-fly". Upon
  * creation, it will actually create a temporary file with the TTS audio in it,
@@ -26,8 +28,14 @@ public class AudioTTS extends AudioFile {
 	 */
 	String _name;
 
-	final String SPEECH = "SPEECH";
-	final String FILE_SEP = System.getProperty("file.separator");
+	final static String SPEECH = "SPEECH";
+	final static String NAME = "NAME";
+
+	public AudioTTS(JSONObject json) throws VidevoxException {
+		//
+		this((String) json.get(NAME), (String) json.get(SPEECH), (double) json.get(START));
+		_active = (boolean) json.get(ACTIVE);
+	}
 
 	public AudioTTS(String name, String speech, double offset) throws VidevoxException {
 		// Initialize fields
@@ -40,6 +48,15 @@ public class AudioTTS extends AudioFile {
 		textToMP3(_audioFile, speech);
 	}
 
+	/**
+	 * Creates wav and mp3 files to be used from the temp directory. Any name
+	 * conflicts will be overwritten without prompt.
+	 *
+	 * @param destination
+	 * @param speech
+	 * @return
+	 * @throws VidevoxException
+	 */
 	private boolean textToMP3(File destination, String speech) throws VidevoxException {
 		// Create a pointer to a temporary wav file
 		File tempWAV = new File(System.getProperty("java.io.tmpdir") + destination.getName());
@@ -64,8 +81,8 @@ public class AudioTTS extends AudioFile {
 			throw new VidevoxException("Festival thread interrupted: Unknown source");
 		}
 		// Convert the wav to mp3
-		cmd = "ffmpeg -i " + "\"" + tempWAV.getAbsolutePath() + "\"" + " -y -f mp3 " + "\"" + destination.getAbsolutePath()
-				+ "\"";
+		cmd = "ffmpeg -i " + "\"" + tempWAV.getAbsolutePath() + "\"" + " -y -f mp3 " + "\""
+				+ destination.getAbsolutePath() + "\"";
 		builder = new ProcessBuilder("/bin/bash", "-c", cmd);
 		try {
 			Process process = builder.start();
@@ -81,6 +98,18 @@ public class AudioTTS extends AudioFile {
 		// Delete the temporary file
 		tempWAV.delete();
 		return true;
+	}
+
+	@SuppressWarnings("unchecked")
+	public JSONObject toJSON() {
+		JSONObject json = new JSONObject();
+		// Insert values
+		json.put(FILE, _audioFile.getAbsolutePath());
+		json.put(START, _startOffset);
+		json.put(ACTIVE, _active);
+		json.put(SPEECH, _speech);
+		json.put(NAME, _name);
+		return json;
 	}
 
 	@Override

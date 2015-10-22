@@ -22,6 +22,13 @@
 	</build>
 
 	<dependencies>
+		<!-- Utilities for IO and File manipulation -->
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>2.4</version>
+		</dependency>
+
 		<!-- A resource for a JavaFX skin -->
 		<dependency>
 			<groupId>com.guigarage</groupId>
