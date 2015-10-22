@@ -2,13 +2,19 @@ package nz.ac.auckland.application;
 
 import org.apache.log4j.Logger;
 
+import java.io.File;
 import java.io.IOException;
+import java.util.Optional;
 
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonBar.ButtonData;
+import javafx.scene.control.ButtonType;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
@@ -94,7 +100,13 @@ public class VidevoxApplication extends Application {
 				public void handle(WindowEvent ev) {
 					if (!_currentProject.isSaved()) {
 						ev.consume();
-						saveAndClose();
+						try {
+							saveAndClose();
+						} catch (VidevoxException | IOException e) {
+							// If it could not be saved just kill the thread and
+							// return an error code 1
+							System.exit(1);
+						}
 					}
 				}
 			});
@@ -107,12 +119,51 @@ public class VidevoxApplication extends Application {
 		}
 	}
 
-	public void saveAndClose() {
+	/**
+	 * Prompts for a decision on whether to save, discard, or cancel the closing
+	 * of the application
+	 *
+	 * @throws IOException
+	 * @throws VidevoxException
+	 */
+	public void saveAndClose() throws VidevoxException, IOException {
 		if (!_currentProject.isSaved()) {
-			// Ask to save, exit without saving, or cancel
+			Alert alert = new Alert(AlertType.WARNING);
+			alert.setTitle("Save Changes Before Exit");
+			alert.setHeaderText("You Have Unsaved Changes");
+			alert.setContentText("You have unsaved changes, do you want to save them now?");
+			ButtonType saveButton = new ButtonType("Save Changes");
+			ButtonType discardButton = new ButtonType("Discard Changes");
+			ButtonType cancel = new ButtonType("Cancel", ButtonData.CANCEL_CLOSE);
+			alert.getButtonTypes().setAll(saveButton, discardButton, cancel);
+			Optional<ButtonType> result = alert.showAndWait();
+			if (result.get() == saveButton) {
+				save();
+			} else if (result.get() == discardButton) {
+				Platform.exit();
+			} else {
+				return;
+			}
 		} else {
 			Platform.exit();
 		}
+	}
+
+	public boolean saveAs() {
+		// Implement
+		return false;
+	}
+
+	public boolean save() throws VidevoxException, IOException {
+		if (_currentProject.getLocation() == null) {
+			if (saveAs()) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+		_currentProject.toFile(_currentProject.getLocation());
+		return true;
 	}
 
 	@Override
@@ -138,6 +189,31 @@ public class VidevoxApplication extends Application {
 	 * Resets the entire GUI, mostly for after a new GUI is loaded
 	 */
 	public void reset() {
+		initRootLayout();
 
+		showPlayerView();
+	}
+
+	public Stage getStage() {
+		return _primaryStage;
+	}
+
+	public void setVideo(File file) {
+		_currentProject.setVideo(file);
+		try {
+			_player.setVideo(file);
+		} catch (VidevoxException e) {
+			// Show an alert box
+			Alert alert = new Alert(AlertType.ERROR);
+			alert.setTitle("Error While Loading Video");
+			alert.setHeaderText("There wat an error while loading a new video file");
+			alert.setContentText(e.getMessage());
+			alert.showAndWait();
+		}
+		// The views will need resetting
+		reset();
+	}
+
+	public void showEditView() {
 	}
 }
