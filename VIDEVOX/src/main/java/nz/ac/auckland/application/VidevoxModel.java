@@ -1,4 +1,4 @@
-package nz.ac.auckland.model;
+package nz.ac.auckland.application;
 
 import org.apache.log4j.Logger;
 import org.json.simple.JSONArray;
@@ -19,6 +19,7 @@ import javafx.scene.media.MediaException;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
 import javafx.util.Duration;
+import nz.ac.auckland.model.VidevoxException;
 
 /**
  * <p>

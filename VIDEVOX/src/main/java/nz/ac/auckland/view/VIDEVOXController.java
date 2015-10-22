@@ -1,7 +1,7 @@
 package nz.ac.auckland.view;
 
 import nz.ac.auckland.application.VidevoxApplication;
-import nz.ac.auckland.model.VidevoxModel;
+import nz.ac.auckland.application.VidevoxModel;
 
 public abstract class VIDEVOXController {
 

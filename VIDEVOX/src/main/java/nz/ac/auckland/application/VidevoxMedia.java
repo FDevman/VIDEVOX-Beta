@@ -1,4 +1,4 @@
-package nz.ac.auckland.model;
+package nz.ac.auckland.application;
 
 import org.apache.log4j.Logger;
 import org.json.simple.JSONObject;
@@ -13,6 +13,7 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaException;
 import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
+import nz.ac.auckland.model.VidevoxException;
 
 /**
  * This class is a wrapper on the JavaFX MediaPlayer to support starting after

@@ -4,7 +4,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.MediaView;
-import nz.ac.auckland.model.VidevoxModel;
+import nz.ac.auckland.application.VidevoxModel;
 
 /**
  *

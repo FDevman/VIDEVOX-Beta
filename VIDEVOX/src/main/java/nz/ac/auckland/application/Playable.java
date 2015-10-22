@@ -1,4 +1,4 @@
-package nz.ac.auckland.model;
+package nz.ac.auckland.application;
 
 import java.net.URISyntaxException;
 

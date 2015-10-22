@@ -12,7 +12,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import nz.ac.auckland.model.VidevoxException;
-import nz.ac.auckland.model.VidevoxModel;
 import nz.ac.auckland.view.PlayerViewController;
 import nz.ac.auckland.view.RootLayoutController;
 
