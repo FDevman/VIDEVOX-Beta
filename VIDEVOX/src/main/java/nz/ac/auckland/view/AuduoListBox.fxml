@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.BorderPane?>
+
+<VBox maxHeight="200.0" maxWidth="-Infinity" minHeight="100.0" minWidth="200.0" prefHeight="100.0" prefWidth="200.0" spacing="5.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nz.ac.auckland.view.AudioListBoxController">
+	<children>
+		<HBox>
+			<children>
+				<Region HBox.hgrow="ALWAYS" />
+				<Label fx:id="nameLabel" text="Audio Name" />
+				<Region HBox.hgrow="ALWAYS" />
+			</children>
+		</HBox>
+		<Region VBox.vgrow="ALWAYS" />
+		<HBox spacing="10.0">
+			<children>
+				<Label prefHeight="17.0" prefWidth="56.0" text="Volume:" HBox.hgrow="ALWAYS" />
+				<VBox HBox.hgrow="ALWAYS">
+					<children>
+						<Region VBox.vgrow="ALWAYS" />
+						<Slider fx:id="volSlider" />
+						<Region VBox.vgrow="ALWAYS" />
+					</children>
+				</VBox>
+			</children>
+		</HBox>
+		<Region layoutX="15.0" layoutY="37.0" VBox.vgrow="ALWAYS" />
+		<HBox>
+			<children>
+				<VBox>
+					<children>
+						<Region VBox.vgrow="ALWAYS" />
+						<CheckBox fx:id="activeBox" mnemonicParsing="false" text="Active" />
+						<Region VBox.vgrow="ALWAYS" />
+					</children>
+				</VBox>
+				<Region HBox.hgrow="ALWAYS" />
+				<VBox layoutX="10.0" layoutY="10.0">
+					<children>
+						<Region VBox.vgrow="ALWAYS" />
+						<Label text="Start Offset " />
+						<Region VBox.vgrow="ALWAYS" />
+					</children>
+				</VBox>
+				<TextField fx:id="offsetField" prefWidth="50.0" promptText="00.00" HBox.hgrow="NEVER" />
+			</children>
+		</HBox>
+	</children>
+	<padding>
+		<Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+	</padding>
+</VBox>

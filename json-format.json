@@ -1,0 +1,16 @@
+{
+	"projectName": String,
+	"mainVideoLocation": URI,
+	"media": [
+		{
+			"location": URI,
+			"startOffset": double,
+			"isActive": true
+		},
+		{
+			"location": URI,
+			"startOffset": double,
+			"isActive": false
+		}
+	]
+}
