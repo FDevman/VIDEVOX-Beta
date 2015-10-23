@@ -1,5 +1,7 @@
 package nz.ac.auckland.view;
 
+import java.io.IOException;
+
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 
@@ -27,7 +29,7 @@ public class RootLayoutController extends VIDEVOXController {
 
 	@FXML
 	private void close() {
-
+		_application.saveAndClose();
 	}
 
 	public void setViewToggle(String option) {

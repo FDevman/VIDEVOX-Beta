@@ -100,12 +100,7 @@ public class VidevoxApplication extends Application {
 				public void handle(WindowEvent ev) {
 					if (!_currentProject.isSaved()) {
 						ev.consume();
-						try {
-							saveAndClose();
-						} catch (IOException e) {
-							// Can't save it now
-							System.exit(1);
-						}
+						saveAndClose();
 					}
 				}
 			});
@@ -118,7 +113,7 @@ public class VidevoxApplication extends Application {
 		}
 	}
 
-	public void saveAndClose() throws IOException {
+	public void saveAndClose() {
 		if (!_currentProject.isSaved()) {
 			// Ask to save, exit without saving, or cancel
 			Alert alert = new Alert(AlertType.WARNING);
@@ -131,7 +126,11 @@ public class VidevoxApplication extends Application {
 			alert.getButtonTypes().setAll(saveButton, discardButton, cancel);
 			Optional<ButtonType> result = alert.showAndWait();
 			if (result.get() == saveButton) {
-				save();
+				try {
+					save();
+				} catch (IOException e) {
+					System.exit(1);
+				}
 			} else if (result.get() == discardButton) {
 				Platform.exit();
 			} else {
