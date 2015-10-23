@@ -27,8 +27,6 @@ import nz.ac.auckland.model.VidevoxException;
  */
 public class VidevoxMedia implements Playable {
 
-	private static final Logger logger = Logger.getLogger(VidevoxMedia.class);
-
 	/**
 	 * A MediaPlayer object for the Playable. Should be a JavaFX supported
 	 * format
