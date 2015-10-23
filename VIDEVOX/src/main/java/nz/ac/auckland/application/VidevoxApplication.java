@@ -142,7 +142,7 @@ public class VidevoxApplication extends Application {
 		}
 	}
 
-	private void showExceptionDialog(VidevoxException e) {
+	public static void showExceptionDialog(VidevoxException e) {
 		// Show a generic dialog with the exception message
 	}
 

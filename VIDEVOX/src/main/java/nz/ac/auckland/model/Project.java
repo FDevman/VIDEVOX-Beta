@@ -281,4 +281,10 @@ public class Project {
 		}
 	}
 
+	public HashSet<Audible> getAudios() {
+		HashSet<Audible> audios = new HashSet<Audible>();
+//		for (Entry)
+		return null;
+	}
+
 }

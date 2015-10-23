@@ -92,10 +92,6 @@ public class VidevoxMedia implements Playable {
 		return (new File(new URI(_media.getMedia().getSource()))).getAbsolutePath();
 	}
 
-	public MediaPlayer getMediaPlayer() {
-		return _media;
-	}
-
 	public void play() {
 		if (_active && !_media.getStatus().equals(MediaPlayer.Status.PLAYING)) {
 			// Start playing if not already playing and it is set to active
@@ -124,6 +120,11 @@ public class VidevoxMedia implements Playable {
 			// Go to the relative position this media should be at
 			_media.seek(position.subtract(_startOffset));
 		}
+	}
+
+	@Override
+	public MediaPlayer getMediaPlayer() {
+		return _media;
 	}
 
 }

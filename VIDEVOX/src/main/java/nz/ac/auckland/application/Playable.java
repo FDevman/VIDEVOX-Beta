@@ -1,5 +1,6 @@
 package nz.ac.auckland.application;
 
+import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
 
 public interface Playable {
@@ -15,5 +16,7 @@ public interface Playable {
 	public void seek(Duration position);
 
 	public Duration getStartOffset();
+
+	public MediaPlayer getMediaPlayer();
 
 }
