@@ -205,14 +205,4 @@ public class VidevoxApplication extends Application {
 		}
 	}
 
-	public void setVideo(File file) {
-		_currentProject.setVideo(file);
-		try {
-			_player.setVideo(file);
-		} catch (VidevoxException e) {
-			showExceptionDialog(e);
-			return;
-		}
-		reset();
-	}
 }
