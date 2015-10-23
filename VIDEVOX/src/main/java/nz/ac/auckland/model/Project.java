@@ -103,7 +103,6 @@ public class Project {
 		_name = "New Project";
 		_audios = new HashSet<AudioFile>();
 		_tts = new HashSet<AudioTTS>();
-		_videoFile = new File("no video");
 	}
 
 	public void addAudio(File file, double offset) {
@@ -272,6 +271,14 @@ public class Project {
 
 	public void setVideo(File file) {
 		_videoFile = file;
+	}
+
+	public String getVideoName() {
+		if (_videoFile == null) {
+			return "No Video";
+		} else {
+			return _videoFile.getName();
+		}
 	}
 
 }

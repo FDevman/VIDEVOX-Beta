@@ -22,6 +22,8 @@ public class VidevoxPlayer implements Playable {
 
 	private static final Logger logger = Logger.getLogger(VidevoxPlayer.class);
 
+	private static VidevoxPlayer INSTANCE;
+
 	private Map<String, Playable> _audio;
 
 	private final ObservableMap<String, Duration> _markers;
@@ -30,7 +32,14 @@ public class VidevoxPlayer implements Playable {
 
 	String _videoName;
 
-	public VidevoxPlayer() throws VidevoxException {
+	public VidevoxPlayer getPlayer() {
+		if (INSTANCE == null) {
+			INSTANCE = new VidevoxPlayer();
+		}
+		return INSTANCE;
+	}
+
+	public VidevoxPlayer() {
 		Project project = Project.getProject();
 		_videoName = project.getVideo().getName();
 		_video = new MediaPlayer(new Media(project.getVideo().toURI().toString()));

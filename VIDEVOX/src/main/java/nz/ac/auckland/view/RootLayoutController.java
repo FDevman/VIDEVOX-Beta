@@ -1,9 +1,8 @@
 package nz.ac.auckland.view;
 
-import org.apache.log4j.Logger;
-
 import java.io.File;
-import java.io.IOException;
+
+import org.apache.log4j.Logger;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
