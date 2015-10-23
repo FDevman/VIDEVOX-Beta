@@ -55,7 +55,7 @@
             <Region HBox.hgrow="ALWAYS" />
             <HBox fx:id="_buttonBox" disable="true" spacing="10.0">
                <children>
-                  <Button mnemonicParsing="false" onAction="#preview" text="Preview">
+                  <Button fx:id="_previewButton" mnemonicParsing="false" onAction="#preview" text="Preview">
                      <tooltip>
                         <Tooltip text="Have Festival speak to you now" />
                      </tooltip>

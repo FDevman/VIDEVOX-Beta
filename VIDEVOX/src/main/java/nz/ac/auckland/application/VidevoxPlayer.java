@@ -17,7 +17,6 @@ import javafx.scene.media.MediaMarkerEvent;
 import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
 import nz.ac.auckland.model.Audible;
-import nz.ac.auckland.model.AudioFile;
 import nz.ac.auckland.model.Project;
 import nz.ac.auckland.model.VidevoxException;
 
@@ -80,7 +79,7 @@ public class VidevoxPlayer implements Playable {
 			String name = a.getName();
 			Playable player;
 			try {
-				player = new VidevoxMedia(a.getFile(), a.getStartOffset());
+				player = new VidevoxMedia(a);
 				_audio.put(name, player);
 			} catch (VidevoxException e) {
 				// Do nothing right now can stop crash but can't recover error
@@ -161,39 +160,56 @@ public class VidevoxPlayer implements Playable {
 		logger.trace("Done adding action listeners");
 	}
 
+// /**
+// * Only place on application side that should be used to add audio files to
+// * the project.
+// *
+// * @param audioFile
+// * @param startOffset
+// */
+// public void addAudio(File audioFile, double startOffset) {
+// Audible a = new AudioFile(audioFile, startOffset);
+// Project.getProject().addAudio(audioFile, startOffset);
+// VidevoxMedia m;
+// try {
+// m = new VidevoxMedia(audioFile, startOffset);
+// _audio.put(a.getName(), m);
+// _markers.put(a.getName(), m.getStartOffset());
+// } catch (VidevoxException e) {
+// VidevoxApplication.showExceptionDialog(e);
+// }
+// }
+
 	/**
 	 * Only place on application side that should be used to add audio files to
 	 * the project.
 	 *
-	 * @param audioFile
-	 * @param startOffset
+	 * @param Audible
 	 */
-	public void addAudio(File audioFile, double startOffset) {
-		Audible a = new AudioFile(audioFile, startOffset);
-		Project.getProject().addAudio(audioFile, startOffset);
+	public void addAudio(Audible audio) {
 		VidevoxMedia m;
 		try {
-			m = new VidevoxMedia(audioFile, startOffset);
-			_audio.put(a.getName(), m);
-			_markers.put(a.getName(), m.getStartOffset());
+			m = new VidevoxMedia(audio);
+			_audio.put(audio.getName(), m);
+			_markers.put(audio.getName(), m.getStartOffset());
 		} catch (VidevoxException e) {
 			VidevoxApplication.showExceptionDialog(e);
 		}
 	}
 
 	/**
-	 * Only place on application side that should be used to add TTS components
-	 * to the project.
+	 * Adds a tts component to both the Project and the player.
 	 *
 	 * @param name
 	 * @param text
 	 * @param offset
+	 * @throws VidevoxException
 	 */
-	public void addTTS(String name, String text, double offset) {
+	public void addTTS(String name, String text, double offset) throws VidevoxException {
 		Audible a = Project.getProject().addTTS(name, text, offset);
 		VidevoxMedia m;
 		try {
-			m = new VidevoxMedia(a.getFile(), a.getStartOffset());
+			m = new VidevoxMedia(a);
 			_audio.put(name, m);
 			_markers.put(name, m.getStartOffset());
 		} catch (VidevoxException e) {

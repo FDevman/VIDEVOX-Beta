@@ -105,9 +105,10 @@ public class Project {
 		_tts = new HashSet<AudioFile>();
 	}
 
-	public void addAudio(File file, double offset) {
+	public AudioFile addAudio(File file, double offset) {
 		AudioFile audio = new AudioFile(file, offset);
 		_audios.add(audio);
+		return audio;
 	}
 
 	public void addAudio(AudioFile audio) {
@@ -297,9 +298,10 @@ public class Project {
 		return audios;
 	}
 
-	public Audible addTTS(String name, String text, double offset) {
-
-		return null;
+	public Audible addTTS(String name, String text, double offset) throws VidevoxException {
+		AudioTTS tts = new AudioTTS(name, text, offset);
+		_tts.add(tts);
+		return tts;
 	}
 
 }

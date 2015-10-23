@@ -1,16 +1,14 @@
 package nz.ac.auckland.view;
 
-import org.apache.log4j.Logger;
-
 import java.io.File;
-import java.text.DecimalFormat;
+
+import org.apache.log4j.Logger;
 
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.NumberBinding;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -19,13 +17,22 @@ import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import nz.ac.auckland.application.VidevoxApplication;
+import nz.ac.auckland.application.VidevoxPlayer;
+import nz.ac.auckland.model.Audible;
+import nz.ac.auckland.model.AudioFile;
+import nz.ac.auckland.model.AudioTTS;
 import nz.ac.auckland.model.ModelHelper;
+import nz.ac.auckland.model.Project;
+import nz.ac.auckland.model.VidevoxException;
 
 public class TTSViewController extends VIDEVOXController {
 	/**
-	* Logger for this class
-	*/
+	 * Logger for this class
+	 */
 	private static final Logger logger = Logger.getLogger(TTSViewController.class);
+
+	@FXML
+	private Button _previewButton;
 
 	@FXML
 	private VBox _container;
@@ -52,7 +59,14 @@ public class TTSViewController extends VIDEVOXController {
 
 	@FXML
 	private void preview() {
-
+		_previewButton.setDisable(true);
+		try {
+			AudioTTS.preview(_content.getText());
+		} catch (VidevoxException e) {
+			VidevoxApplication.showExceptionDialog(e);
+		} finally {
+			_previewButton.setDisable(false);
+		}
 	}
 
 	@FXML
@@ -68,11 +82,32 @@ public class TTSViewController extends VIDEVOXController {
 			return;
 		}
 		ModelHelper.enforceFileExtension(file, ".mp3");
+
+		try {
+			AudioTTS.textToMP3(file, _content.getText());
+		} catch (VidevoxException e) {
+			VidevoxApplication.showExceptionDialog(e);
+			return;
+		}
+		AudioFile audio = Project.getProject().addAudio(file, Double.parseDouble(_offset.getText()));
+		VidevoxPlayer.getPlayer().addAudio(audio);
+
+		cancel();
 	}
 
 	@FXML
 	private void use() {
+		try {
+			Audible audio = Project.getProject().addTTS(_nameField.getText(), _content.getText(),
+					Double.parseDouble(_offset.getText()));
+			VidevoxPlayer.getPlayer().addAudio(audio);
+		} catch (NumberFormatException e) {
+			logger.error(_offset.getText() + " : not valid double : " + e.getMessage());
+		} catch (VidevoxException e) {
+			VidevoxApplication.showExceptionDialog(e);
+		}
 
+		cancel();
 	}
 
 	@Override

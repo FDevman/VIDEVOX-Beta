@@ -8,6 +8,8 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaException;
 import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
+import nz.ac.auckland.model.Audible;
+import nz.ac.auckland.model.AudioFile;
 import nz.ac.auckland.model.VidevoxException;
 
 /**
@@ -43,7 +45,7 @@ public class VidevoxMedia implements Playable {
 	 * @throws VidevoxException
 	 */
 	public VidevoxMedia() throws VidevoxException {
-		this(new File(_defaultAudio), 0.0);
+		this(new AudioFile(new File(_defaultAudio), 0.0));
 	}
 
 	/**
@@ -55,17 +57,33 @@ public class VidevoxMedia implements Playable {
 	 * Makes for one less line of code while using FileChooser which returns a
 	 * File rather than a String
 	 *
-	 * @param mediaFile
+	 * @param Audible
 	 * @throws VidevoxException
 	 */
-	public VidevoxMedia(File mediaFile, double startOffset) throws VidevoxException {
+	public VidevoxMedia(Audible a) throws VidevoxException {
 		try {
-			_media = new MediaPlayer(new Media(mediaFile.toURI().toString()));
+			_media = new MediaPlayer(new Media(a.getFile().toURI().toString()));
 		} catch (MediaException e) {
 			throw new VidevoxException("Invalid file type or format");
 		}
-		_startOffset = new Duration(startOffset);
+		_startOffset = new Duration(a.getStartOffset());
 	}
+
+//	/**
+//	 * Makes for one less line of code while using FileChooser which returns a
+//	 * File rather than a String
+//	 *
+//	 * @param mediaFile
+//	 * @throws VidevoxException
+//	 */
+//	public VidevoxMedia(File mediaFile, double startOffset) throws VidevoxException {
+//		try {
+//			_media = new MediaPlayer(new Media(mediaFile.toURI().toString()));
+//		} catch (MediaException e) {
+//			throw new VidevoxException("Invalid file type or format");
+//		}
+//		_startOffset = new Duration(startOffset);
+//	}
 
 	public Duration getStartOffset() {
 		return _startOffset;
