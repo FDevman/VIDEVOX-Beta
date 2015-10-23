@@ -270,4 +270,8 @@ public class Project {
 		return _location;
 	}
 
+	public void setVideo(File file) {
+		_videoFile = file;
+	}
+
 }
