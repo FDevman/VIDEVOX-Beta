@@ -32,7 +32,12 @@ public class RootLayoutController extends VIDEVOXController {
 		// Set visible extensions
 		FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Video Files ", "*.mp4");
 		fileChooser.getExtensionFilters().add(extFilter);
-		File file = fileChooser.showOpenDialog(_application.getStage());
+		File file;
+		file = fileChooser.showOpenDialog(_application.getStage());
+		if (file == null) {
+			// User canceled selecting video
+			return;
+		}
 		logger.debug("Video name: " + file.getName());
 		// set the video
 	}
