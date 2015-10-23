@@ -58,6 +58,7 @@ public class RootLayoutController extends VIDEVOXController {
 		} catch (VidevoxException e) {
 			VidevoxApplication.showExceptionDialog(e);
 		}
+		_application.reset();
 	}
 
 	@FXML

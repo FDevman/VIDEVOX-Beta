@@ -29,6 +29,8 @@ public class VidevoxPlayer implements Playable {
 	 * The singleton instance of VidevoxPlayer.
 	 */
 	private static VidevoxPlayer INSTANCE;
+	private static final Duration _skipInterval = new Duration(3000);
+
 	/**
 	 * A hash map linking Playables to their human readable names. Names should
 	 * be unique.
@@ -69,8 +71,7 @@ public class VidevoxPlayer implements Playable {
 		// Retrieve audio files
 		_audio = new HashMap<String, Playable>();
 		// Add the video as an audio
-		_audio.put(_videoName, INSTANCE);
-
+		_audio.put("Video", INSTANCE);
 		logger.trace("Done adding video to _audios");
 
 		HashSet<Audible> audios = project.getAudios();
@@ -123,12 +124,15 @@ public class VidevoxPlayer implements Playable {
 		} catch (MediaException e) {
 			throw new VidevoxException("Invalid file type or format");
 		}
+		// Change video name and project
+		Project.getProject().setVideo(file);
+		_videoName = file.getName();
 		// Set markers to trigger audio play back
 		_markers = _video.getMedia().getMarkers();
 		for (Entry<String, Playable> e : _audio.entrySet()) {
 			String key = e.getKey();
 			logger.debug(key);
-			if (!key.equals(_videoName)) {
+			if (!key.equals("Video")) {
 				Duration value = e.getValue().getStartOffset();
 				_markers.put(key, value);
 			}
@@ -200,9 +204,13 @@ public class VidevoxPlayer implements Playable {
 	@Override
 	public void seek(Duration time) {
 		// Go to required time
+		_video.seek(time);
 		for (Entry<String, Playable> e : _audio.entrySet()) {
-			Playable p = e.getValue();
-			p.seek(time);
+			if (!e.getKey().equals("Video")) {
+				Playable p = e.getValue();
+				p.seek(time);
+			}
+
 		}
 		// If the video was playing before, set everything playing
 		if (_video.getStatus().equals(MediaPlayer.Status.PLAYING)) {
@@ -212,12 +220,20 @@ public class VidevoxPlayer implements Playable {
 
 	@Override
 	public void play() {
+		if (_video == null) {
+			return;
+		}
 		_video.play();
 		for (Entry<String, Playable> e : _audio.entrySet()) {
-			Playable m = e.getValue();
-			if (_video.getCurrentTime().greaterThan(m.getStartOffset())) {
-				m.play();
+			if (!e.getKey().equals("Video")) {
+				Playable m = e.getValue();
+				logger.debug(e.getKey());
+				if (_video.getCurrentTime().greaterThan(m.getStartOffset())) {
+					m.seek(_video.getCurrentTime());
+					m.play();
+				}
 			}
+
 		}
 	}
 
@@ -225,7 +241,7 @@ public class VidevoxPlayer implements Playable {
 	public void pause() {
 		_video.pause();
 		for (Entry<String, Playable> e : _audio.entrySet()) {
-			if (!e.getKey().equals(_videoName)) {
+			if (!e.getKey().equals("Video")) {
 				Playable m = e.getValue();
 				m.pause();
 			}
@@ -236,8 +252,11 @@ public class VidevoxPlayer implements Playable {
 	public void stop() {
 		_video.stop();
 		for (Entry<String, Playable> e : _audio.entrySet()) {
-			Playable m = e.getValue();
-			m.stop();
+			if (!e.getKey().equals("Video")) {
+				Playable m = e.getValue();
+				m.stop();
+			}
+
 		}
 	}
 
@@ -257,6 +276,15 @@ public class VidevoxPlayer implements Playable {
 	@Override
 	public MediaPlayer getMediaPlayer() {
 		return _video;
+	}
+
+	public void skipForward() {
+		seek(_video.getCurrentTime().add(_skipInterval));
+		logger.debug("Skipping to: " + _video.getCurrentTime().add(_skipInterval).toSeconds());
+	}
+
+	public void skipBack() {
+		seek(_video.getCurrentTime().add(_skipInterval));
 	}
 
 }

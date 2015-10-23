@@ -55,6 +55,12 @@ public class VidevoxApplication extends Application {
 	 */
 	private RootLayoutController _controller;
 
+	private ViewType _viewOnShow = ViewType.PREVIEW;
+
+	public enum ViewType {
+		PREVIEW, EDIT
+	}
+
 	/**
 	 *
 	 */
@@ -173,12 +179,8 @@ public class VidevoxApplication extends Application {
 		// Set a title to appear on the window
 		this._primaryStage.setTitle("VIDEVOX - video editor");
 
-		// Initiate the root layout of the application
-		initRootLayout();
-
-		// Show the player view as default
-		showPlayerView();
-
+		// Set/reset the views
+		reset();
 	}
 
 	public static void main(String[] args) {
@@ -189,7 +191,18 @@ public class VidevoxApplication extends Application {
 	 * Resets the entire GUI, mostly for after a new GUI is loaded
 	 */
 	public void reset() {
+		// Initiate the root layout of the application
+		initRootLayout();
 
+		// Decide which view to show
+		switch (_viewOnShow) {
+			case PREVIEW:
+				showPlayerView();
+				break;
+			default:
+				showPlayerView();
+				break;
+		}
 	}
 
 	public void setVideo(File file) {
