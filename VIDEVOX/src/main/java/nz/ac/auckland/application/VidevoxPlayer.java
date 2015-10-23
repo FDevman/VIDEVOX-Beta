@@ -1,16 +1,14 @@
 package nz.ac.auckland.application;
 
-import org.apache.log4j.Logger;
-
 import java.io.File;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.apache.log4j.Logger;
+
 import javafx.application.Platform;
-import javafx.beans.InvalidationListener;
-import javafx.beans.Observable;
 import javafx.collections.ObservableMap;
 import javafx.event.EventHandler;
 import javafx.scene.media.Media;
@@ -20,6 +18,7 @@ import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
 import javafx.util.Duration;
 import nz.ac.auckland.model.Audible;
+import nz.ac.auckland.model.AudioFile;
 import nz.ac.auckland.model.Project;
 import nz.ac.auckland.model.VidevoxException;
 
@@ -50,7 +49,27 @@ public class VidevoxPlayer implements Playable {
 		File video = project.getVideo();
 		// Retrieve audio files
 		_audio = new HashMap<String, Playable>();
+		// Add the video as an audio
+		_audio.put(_videoName, INSTANCE);
+
+		logger.trace("Done adding video to _audios");
+
 		HashSet<Audible> audios = project.getAudios();
+		// Add each audio file to the list of Playables
+		for (Audible a : audios) {
+			String name = a.getName();
+			Playable player;
+			try {
+				player = new VidevoxMedia(a.getFile(), a.getStartOffset());
+				_audio.put(name, player);
+			} catch (VidevoxException e) {
+				// Do nothing right now can stop crash but can't recover error
+				VidevoxApplication.showExceptionDialog(e);
+			}
+		}
+
+		logger.trace("Done adding audios");
+
 		if (video != null) {
 			// Only set up video if it exists
 			try {
@@ -77,6 +96,7 @@ public class VidevoxPlayer implements Playable {
 		if (_video != null) {
 			// Dump the current video if there is one
 			_video.dispose();
+			logger.trace("Got rid of old video");
 		}
 		// Load the file into the javaFX media player
 		try {
@@ -110,12 +130,47 @@ public class VidevoxPlayer implements Playable {
 				});
 			}
 		});
+		logger.trace("Done adding action listeners");
 	}
 
-	public void addAudio(File audioFile, double startOffset, String name) throws VidevoxException {
-		VidevoxMedia m = new VidevoxMedia(audioFile, startOffset);
-		_audio.put(name, m);
-		_markers.put(name, m.getStartOffset());
+	/**
+	 * Only place on application side that should be used to add audio files to
+	 * the project.
+	 *
+	 * @param audioFile
+	 * @param startOffset
+	 */
+	public void addAudio(File audioFile, double startOffset) {
+		Audible a = new AudioFile(audioFile, startOffset);
+		Project.getProject().addAudio(audioFile, startOffset);
+		VidevoxMedia m;
+		try {
+			m = new VidevoxMedia(audioFile, startOffset);
+			_audio.put(a.getName(), m);
+			_markers.put(a.getName(), m.getStartOffset());
+		} catch (VidevoxException e) {
+			VidevoxApplication.showExceptionDialog(e);
+		}
+	}
+
+	/**
+	 * Only place on application side that should be used to add TTS components
+	 * to the project.
+	 *
+	 * @param name
+	 * @param text
+	 * @param offset
+	 */
+	public void addTTS(String name, String text, double offset) {
+		Audible a = Project.getProject().addTTS(name, text, offset);
+		VidevoxMedia m;
+		try {
+			m = new VidevoxMedia(a.getFile(), a.getStartOffset());
+			_audio.put(name, m);
+			_markers.put(name, m.getStartOffset());
+		} catch (VidevoxException e) {
+			VidevoxApplication.showExceptionDialog(e);
+		}
 	}
 
 	public MediaPlayer getMainVideo() {

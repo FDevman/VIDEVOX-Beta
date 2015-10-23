@@ -297,4 +297,9 @@ public class Project {
 		return audios;
 	}
 
+	public Audible addTTS(String name, String text, double offset) {
+
+		return null;
+	}
+
 }
