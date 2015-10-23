@@ -1,6 +1,5 @@
 package nz.ac.auckland.application;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.Optional;
 
@@ -19,7 +18,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-
 import nz.ac.auckland.model.Project;
 import nz.ac.auckland.model.VidevoxException;
 import nz.ac.auckland.view.PlayerViewController;
@@ -38,10 +36,6 @@ public class VidevoxApplication extends Application {
 	 * On load, get a new default project
 	 */
 	Project _currentProject = Project.getProject();
-	/**
-	 * The current model instance for the application to work with
-	 */
-	private VidevoxPlayer _player;
 	/**
 	 * The window for the main part of the app to be loaded into
 	 */

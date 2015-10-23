@@ -1,23 +1,18 @@
 package nz.ac.auckland.view;
 
-import java.io.File;
-
 import org.apache.log4j.Logger;
 
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
 import nz.ac.auckland.application.VidevoxApplication;
 import nz.ac.auckland.application.VidevoxPlayer;
-import nz.ac.auckland.model.Project;
 
 /**
  *
