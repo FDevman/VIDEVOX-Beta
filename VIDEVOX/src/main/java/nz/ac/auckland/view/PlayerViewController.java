@@ -4,10 +4,13 @@ import java.io.File;
 
 import org.apache.log4j.Logger;
 
+import javafx.beans.InvalidationListener;
+import javafx.beans.Observable;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.MediaPlayer;
@@ -23,8 +26,8 @@ import nz.ac.auckland.model.Project;
  */
 public class PlayerViewController extends VIDEVOXController {
 	/**
-	* Logger for this class
-	*/
+	 * Logger for this class
+	 */
 	private static final Logger logger = Logger.getLogger(PlayerViewController.class);
 
 	@FXML
@@ -48,9 +51,10 @@ public class PlayerViewController extends VIDEVOXController {
 	@FXML
 	private HBox _mediaControls;
 
-	@FXML
-	private HBox _videoContainer;
-
+	/**
+	 * At this point, everything else should be ready to go so it can be used as
+	 * trigger for setting up the view.
+	 */
 	@Override
 	public void setMainApp(VidevoxApplication app) {
 		super.setMainApp(app);
@@ -58,25 +62,50 @@ public class PlayerViewController extends VIDEVOXController {
 		// Set images for buttons
 		_playButton.setImage(new Image(getClass().getClassLoader().getResource("icons/play-icon.png").toString()));
 		_pauseButton.setImage(new Image(getClass().getClassLoader().getResource("icons/pause-icon.png").toString()));
-		_skipForwardButton.setImage(new Image(getClass().getClassLoader().getResource("icons/last-track-icon.png").toString()));
-		_skipBackButton.setImage(new Image(getClass().getClassLoader().getResource("icons/first-track-icon.png").toString()));
+		_skipForwardButton
+				.setImage(new Image(getClass().getClassLoader().getResource("icons/last-track-icon.png").toString()));
+		_skipBackButton
+				.setImage(new Image(getClass().getClassLoader().getResource("icons/first-track-icon.png").toString()));
 		MediaPlayer p = VidevoxPlayer.getPlayer().getMediaPlayer();
 		if (p != null) {
 			_mainPlayerView.setMediaPlayer(p);
-			// Figure out scale
-			double mediaHeight = _mainPlayerView.getFitHeight();
-			double mediaWidth = _mainPlayerView.getFitWidth();
-			double fitHeight = _videoContainer.getHeight();
-			double fitWidth = _videoContainer.getWidth();
-			if (true) {
-
-			}
-			double scale = 1.0;
-			_mainPlayerView.setScaleX(scale);
-			_mainPlayerView.setScaleY(scale);
+			resize();
+			// Add listeners for window size
+			_application.getStage().heightProperty().addListener(new InvalidationListener() {
+				@Override public void invalidated(Observable o) {
+					resize();
+				}
+			});
+			_application.getStage().widthProperty().addListener(new InvalidationListener() {
+				@Override public void invalidated(Observable o) {
+					resize();
+				}
+			});
 		} else {
 			_mediaControls.setDisable(true);
 		}
+	}
+
+	private void resize() {
+		// Figure out scale
+		double mediaHeight = _mainPlayerView.getFitHeight();
+		double mediaWidth = _mainPlayerView.getFitWidth();
+		double fitHeight = _application.getStage().getHeight() - 160;
+		double fitWidth = _application.getStage().getWidth() - 15;
+		double scale;
+		if (fitHeight / mediaHeight < fitWidth / mediaWidth) {
+			scale = fitHeight / mediaHeight;
+		} else {
+			scale = fitWidth / mediaWidth;
+		}
+		logger.debug("Height scale = " + fitHeight / mediaHeight + ", fitHeight = " + fitHeight + ", mediaHeight"
+				+ mediaHeight);
+		logger.debug(
+				"Width scale = " + fitWidth / mediaWidth + ", fitWidth = " + fitWidth + ", mediaWidth" + mediaWidth);
+
+//		_mainPlayerView.heigh
+		_mainPlayerView.setScaleX(scale);
+		_mainPlayerView.setScaleY(scale);
 	}
 
 	@FXML

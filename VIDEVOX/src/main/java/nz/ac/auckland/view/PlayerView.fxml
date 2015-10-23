@@ -15,10 +15,10 @@
          <children>
             <SplitPane dividerPositions="0.5" VBox.vgrow="ALWAYS">
               <items>
-                  <HBox fx:id="_videoContainer" style="-fx-background-color: black;">
+                  <HBox prefHeight="363.0" style="-fx-background-color: black;">
                      <children>
                         <Region minWidth="10.0" HBox.hgrow="ALWAYS" />
-                        <VBox HBox.hgrow="ALWAYS">
+                        <VBox>
                            <children>
                               <Region VBox.vgrow="ALWAYS" />
                               <MediaView fx:id="_mainPlayerView" fitHeight="200.0" fitWidth="500.0" />
@@ -28,7 +28,7 @@
                         <Region minWidth="10.0" HBox.hgrow="ALWAYS" />
                      </children>
                   </HBox>
-                  <VBox>
+                  <VBox maxWidth="200.0" minWidth="200.0" prefWidth="200.0">
                      <children>
                         <HBox>
                            <children>
@@ -100,6 +100,24 @@
                         </ImageView>
                      </graphic>
                   </Button>
+                  <VBox HBox.hgrow="ALWAYS">
+                     <children>
+                        <Region VBox.vgrow="ALWAYS" />
+                        <HBox spacing="5.0">
+                           <children>
+                              <Slider HBox.hgrow="ALWAYS" />
+                           </children>
+                        </HBox>
+                        <Region layoutX="10.0" layoutY="10.0" VBox.vgrow="ALWAYS" />
+                     </children>
+                  </VBox>
+                  <VBox>
+                     <children>
+                        <Region VBox.vgrow="ALWAYS" />
+                        <Label prefHeight="17.0" prefWidth="103.0" text="00:00.00/00:00.00" />
+                        <Region layoutX="10.0" layoutY="10.0" VBox.vgrow="ALWAYS" />
+                     </children>
+                  </VBox>
                </children>
                <padding>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
