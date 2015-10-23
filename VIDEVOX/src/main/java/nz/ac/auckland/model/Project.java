@@ -75,7 +75,7 @@ public class Project {
 	/**
 	 * A switch to say if the project has been modified since the last save/load
 	 */
-	boolean _saved = false;
+	boolean _saved = true;
 
 	// Keys to be used in JSON document
 	public static final String NAME = "NAME";
