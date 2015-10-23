@@ -1,20 +1,25 @@
 package nz.ac.auckland.application;
 
-import org.apache.log4j.Logger;
-
 import java.io.IOException;
+import java.util.Optional;
+
+import org.apache.log4j.Logger;
 
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonBar.ButtonData;
+import javafx.scene.control.ButtonType;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+
 import nz.ac.auckland.model.Project;
-import nz.ac.auckland.model.VidevoxException;
 import nz.ac.auckland.view.PlayerViewController;
 import nz.ac.auckland.view.RootLayoutController;
 
@@ -110,6 +115,22 @@ public class VidevoxApplication extends Application {
 	public void saveAndClose() {
 		if (!_currentProject.isSaved()) {
 			// Ask to save, exit without saving, or cancel
+			Alert alert = new Alert(AlertType.WARNING);
+			alert.setTitle("Save Changes Before Exit");
+			alert.setHeaderText("You Have Unsaved Changes");
+			alert.setContentText("You have unsaved changes, do you want to save them now?");
+			ButtonType saveButton = new ButtonType("Save Changes");
+			ButtonType discardButton = new ButtonType("Discard Changes");
+			ButtonType cancel = new ButtonType("Cancel", ButtonData.CANCEL_CLOSE);
+			alert.getButtonTypes().setAll(saveButton, discardButton, cancel);
+			Optional<ButtonType> result = alert.showAndWait();
+			if (result.get() == saveButton) {
+// save();
+			} else if (result.get() == discardButton) {
+				Platform.exit();
+			} else {
+				return;
+			}
 		} else {
 			Platform.exit();
 		}
