@@ -162,6 +162,10 @@ public class VidevoxApplication extends Application {
 		// Implement
 	}
 
+	public Stage getStage() {
+		return _primaryStage;
+	}
+
 	@Override
 	public void start(Stage primaryStage) {
 		// Set the primaryStage as the window for the application
