@@ -19,7 +19,7 @@
                         <MenuItem mnemonicParsing="false" text="Open Project" />
                         <MenuItem mnemonicParsing="false" text="Save Project" />
                         <MenuItem mnemonicParsing="false" text="Save Project As..." />
-      						<MenuItem mnemonicParsing="false" onAction="#setVideo" text="Select Video" />
+      						<MenuItem mnemonicParsing="false" text="Select Video" />
       						<MenuItem mnemonicParsing="false" onAction="#close" text="Close" />
       					</items>
       				</Menu>
@@ -48,12 +48,12 @@
       		</MenuBar>
             <HBox>
                <children>
-                  <Button fx:id="_previewButton" mnemonicParsing="false" onAction="#previewButtonAction" prefWidth="2000.0" text="Preview" HBox.hgrow="ALWAYS">
+                  <Button fx:id="_previewButton" mnemonicParsing="false" prefWidth="2000.0" text="Preview" HBox.hgrow="ALWAYS">
                      <HBox.margin>
                         <Insets />
                      </HBox.margin>
                   </Button>
-                  <Button fx:id="_editorButton" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#editorButtonAction" prefWidth="2000.0" text="Editor" HBox.hgrow="ALWAYS">
+                  <Button fx:id="_editorButton" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" prefWidth="2000.0" text="Editor" HBox.hgrow="ALWAYS">
                      <HBox.margin>
                         <Insets />
                      </HBox.margin>

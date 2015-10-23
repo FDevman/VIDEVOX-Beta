@@ -75,7 +75,7 @@ public class Project {
 	/**
 	 * A switch to say if the project has been modified since the last save/load
 	 */
-	boolean _saved = true;
+	boolean _saved = false;
 
 	// Keys to be used in JSON document
 	public static final String NAME = "NAME";
@@ -264,14 +264,6 @@ public class Project {
 
 	public File getVideo() {
 		return _videoFile;
-	}
-
-	public File getLocation() {
-		return _location;
-	}
-
-	public void setVideo(File file) {
-		_videoFile = file;
 	}
 
 }
