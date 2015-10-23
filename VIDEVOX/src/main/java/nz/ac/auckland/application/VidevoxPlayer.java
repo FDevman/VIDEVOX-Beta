@@ -126,7 +126,12 @@ public class VidevoxPlayer implements Playable {
 		// Set markers to trigger audio play back
 		_markers = _video.getMedia().getMarkers();
 		for (Entry<String, Playable> e : _audio.entrySet()) {
-			_markers.put(e.getKey(), e.getValue().getStartOffset());
+			String key = e.getKey();
+			logger.debug(key);
+			if (!key.equals(_videoName)) {
+				Duration value = e.getValue().getStartOffset();
+				_markers.put(key, value);
+			}
 		}
 		// Set event handlers on marker events
 		_video.setOnMarker(new EventHandler<MediaMarkerEvent>() {

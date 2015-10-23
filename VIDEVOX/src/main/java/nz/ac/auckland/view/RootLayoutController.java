@@ -9,7 +9,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.stage.FileChooser;
 import nz.ac.auckland.application.VidevoxApplication;
+import nz.ac.auckland.application.VidevoxPlayer;
 import nz.ac.auckland.model.Project;
+import nz.ac.auckland.model.VidevoxException;
 
 public class RootLayoutController extends VIDEVOXController {
 	/**
@@ -51,6 +53,11 @@ public class RootLayoutController extends VIDEVOXController {
 		}
 		logger.debug("Video name: " + file.getName());
 		// set the video
+		try {
+			VidevoxPlayer.getPlayer().setVideo(file);
+		} catch (VidevoxException e) {
+			VidevoxApplication.showExceptionDialog(e);
+		}
 	}
 
 	@FXML
