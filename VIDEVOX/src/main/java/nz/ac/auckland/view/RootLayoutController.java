@@ -6,12 +6,15 @@ import org.apache.log4j.Logger;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.stage.FileChooser;
+import nz.ac.auckland.application.VidevoxApplication;
+import nz.ac.auckland.model.Project;
 
 public class RootLayoutController extends VIDEVOXController {
 	/**
-	* Logger for this class
-	*/
+	 * Logger for this class
+	 */
 	private static final Logger logger = Logger.getLogger(RootLayoutController.class);
 
 	public static final String PREVIEW = "preview";
@@ -23,6 +26,15 @@ public class RootLayoutController extends VIDEVOXController {
 
 	@FXML
 	private Button _editorButton;
+
+	@FXML
+	private Label _projectName;
+
+	@Override
+	public void setMainApp(VidevoxApplication app) {
+		super.setMainApp(app);
+		_projectName.setText(Project.getProject().getName());
+	}
 
 	@FXML
 	private void selectVideo() {

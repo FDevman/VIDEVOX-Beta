@@ -68,7 +68,7 @@
 			<children>
 				<Label text="VIDEVOX 0.2 BETA" />
 				<Region HBox.hgrow="ALWAYS" />
-				<Label text="Current Project.videvox" />
+				<Label fx:id="_projectName" text="Current Project.videvox" />
 			</children>
 			<BorderPane.margin>
 				<Insets />
