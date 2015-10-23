@@ -51,7 +51,7 @@
                               <Region HBox.hgrow="ALWAYS" />
                               <Button minWidth="100.0" mnemonicParsing="false" text="Add Audio File" HBox.hgrow="ALWAYS" />
                               <Region HBox.hgrow="ALWAYS" />
-                              <Button layoutX="10.0" layoutY="10.0" minWidth="100.0" mnemonicParsing="false" text="Text to Speech" HBox.hgrow="ALWAYS" />
+                              <Button layoutX="10.0" layoutY="10.0" minWidth="100.0" mnemonicParsing="false" onAction="#tts" text="Text to Speech" HBox.hgrow="ALWAYS" />
                               <Region HBox.hgrow="ALWAYS" />
                            </children>
                         </HBox>

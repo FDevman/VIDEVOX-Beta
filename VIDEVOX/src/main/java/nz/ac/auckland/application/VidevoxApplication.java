@@ -85,7 +85,7 @@ public class VidevoxApplication extends Application {
 		try {
 			// Load RootLayout
 			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(VidevoxApplication.class.getResource("/nz/ac/auckland/view/RootLayout.fxml"));
+			loader.setLocation(this.getClass().getClassLoader().getResource("nz/ac/auckland/view/RootLayout.fxml"));
 			_rootLayout = (BorderPane) loader.load();
 
 			// Show on stage
