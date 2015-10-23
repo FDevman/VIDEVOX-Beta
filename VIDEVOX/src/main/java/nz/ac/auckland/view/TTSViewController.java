@@ -1,13 +1,34 @@
 package nz.ac.auckland.view;
 
+import org.apache.log4j.Logger;
+
+import java.io.File;
+import java.text.DecimalFormat;
+
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.NumberBinding;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import nz.ac.auckland.application.VidevoxApplication;
+import nz.ac.auckland.model.ModelHelper;
 
 public class TTSViewController extends VIDEVOXController {
+	/**
+	* Logger for this class
+	*/
+	private static final Logger logger = Logger.getLogger(TTSViewController.class);
+
+	@FXML
+	private VBox _container;
 
 	@FXML
 	private HBox _buttonBox;
@@ -25,13 +46,8 @@ public class TTSViewController extends VIDEVOXController {
 	private Button _cancelButton;
 
 	@FXML
-	private void validateTime() {
-
-	}
-
-	@FXML
 	private void cancel() {
-
+		((Stage) _container.getScene().getWindow()).close();
 	}
 
 	@FXML
@@ -41,7 +57,17 @@ public class TTSViewController extends VIDEVOXController {
 
 	@FXML
 	private void save() {
-
+		FileChooser fileChooser = new FileChooser();
+		fileChooser.setTitle("Save Text-to-Speech as mp3");
+		// Set extension filter to only see .mp4 files
+		FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("MP3 Audio", "*.mp3");
+		fileChooser.getExtensionFilters().add(extFilter);
+		File file = fileChooser.showSaveDialog((Stage) _container.getScene().getWindow());
+		// If no file was made (user canceled) then return
+		if (file == null) {
+			return;
+		}
+		ModelHelper.enforceFileExtension(file, ".mp3");
 	}
 
 	@FXML
@@ -52,8 +78,37 @@ public class TTSViewController extends VIDEVOXController {
 	@Override
 	public void setMainApp(VidevoxApplication app) {
 		super.setMainApp(app);
-		// Anything else?
-		_cancelButton.requestFocus();
+		// Add a change listener to the combined number of chars in the name and
+		// text fields
+		NumberBinding buttonsActive = Bindings.add(_nameField.lengthProperty(), _content.lengthProperty());
+		buttonsActive.addListener(new ChangeListener<Object>() {
+			@Override
+			public void changed(ObservableValue<?> observable, Object oldValue, Object newValue) {
+				// If either field is null, disable the buttons
+				if (_content.getLength() == 0 || _nameField.getLength() == 0) {
+					_buttonBox.setDisable(true);
+				} else {
+					_buttonBox.setDisable(false);
+				}
+			}
+		});
+		// Enforce offset field to be a valid double
+		_offset.textProperty().addListener(new ChangeListener<String>() {
+			@Override
+			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+				logger.debug("Offset text changed");
+				// Check format, if invalid set it back to the old value
+				if (newValue.equals("")) {
+					_offset.setText("0");
+					return;
+				}
+				try {
+					Double.parseDouble(newValue);
+				} catch (NumberFormatException e) {
+					_offset.setText(oldValue);
+				}
+			}
+		});
 	}
 
 }

@@ -43,7 +43,7 @@ public class AudioTTS extends AudioFile {
 		_startOffset = offset;
 		_speech = speech;
 		_audioFile = new File(System.getProperty("java.io.tmpdir") + FILE_SEP + name);
-		ModelHelper.ensureFileExtension(_audioFile, ".mp3");
+		ModelHelper.enforceFileExtension(_audioFile, ".mp3");
 
 		textToMP3(_audioFile, speech);
 	}
@@ -60,10 +60,10 @@ public class AudioTTS extends AudioFile {
 	private boolean textToMP3(File destination, String speech) throws VidevoxException {
 		// Create a pointer to a temporary wav file
 		File tempWAV = new File(System.getProperty("java.io.tmpdir") + destination.getName());
-		ModelHelper.ensureFileExtension(tempWAV, ".wav");
+		ModelHelper.enforceFileExtension(tempWAV, ".wav");
 
 		// Make sure the destination is a .mp3 file
-		ModelHelper.ensureFileExtension(destination, ".mp3");
+		ModelHelper.enforceFileExtension(destination, ".mp3");
 
 		// Create the audio file at designated location (surround file names
 		// with quotes in case of spaces)

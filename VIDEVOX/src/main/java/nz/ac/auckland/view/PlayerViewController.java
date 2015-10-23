@@ -159,13 +159,14 @@ public class PlayerViewController extends VIDEVOXController {
 					return null;
 				}
 			});
-			stage.showAndWait();
-			_application.getStage().setEventDispatcher(ev);
 
 			logger.trace("Showing ttsView");
 
 			TTSViewController controller = loader.getController();
 			controller.setMainApp(_application);
+
+			stage.showAndWait();
+			_application.getStage().setEventDispatcher(ev);
 
 			_application.reset();
 

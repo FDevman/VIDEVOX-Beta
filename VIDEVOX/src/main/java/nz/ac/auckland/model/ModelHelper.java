@@ -24,7 +24,7 @@ public class ModelHelper {
 	 * @param extension
 	 *            - The extension you want to enforce e.g. ".mp4"
 	 */
-	public static void ensureFileExtension(File file, String extension) {
+	public static void enforceFileExtension(File file, String extension) {
 
 	}
 
