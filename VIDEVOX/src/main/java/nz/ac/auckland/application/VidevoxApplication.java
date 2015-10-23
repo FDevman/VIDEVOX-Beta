@@ -1,5 +1,6 @@
 package nz.ac.auckland.application;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Optional;
 
@@ -189,5 +190,16 @@ public class VidevoxApplication extends Application {
 	 */
 	public void reset() {
 
+	}
+
+	public void setVideo(File file) {
+		_currentProject.setVideo(file);
+		try {
+			_player.setVideo(file);
+		} catch (VidevoxException e) {
+			showExceptionDialog(e);
+			return;
+		}
+		reset();
 	}
 }
