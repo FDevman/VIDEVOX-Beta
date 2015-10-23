@@ -20,6 +20,7 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
 import nz.ac.auckland.model.Project;
+import nz.ac.auckland.model.VidevoxException;
 import nz.ac.auckland.view.PlayerViewController;
 import nz.ac.auckland.view.RootLayoutController;
 
@@ -99,7 +100,12 @@ public class VidevoxApplication extends Application {
 				public void handle(WindowEvent ev) {
 					if (!_currentProject.isSaved()) {
 						ev.consume();
-						saveAndClose();
+						try {
+							saveAndClose();
+						} catch (IOException e) {
+							// Can't save it now
+							System.exit(1);
+						}
 					}
 				}
 			});
@@ -112,7 +118,7 @@ public class VidevoxApplication extends Application {
 		}
 	}
 
-	public void saveAndClose() {
+	public void saveAndClose() throws IOException {
 		if (!_currentProject.isSaved()) {
 			// Ask to save, exit without saving, or cancel
 			Alert alert = new Alert(AlertType.WARNING);
@@ -125,7 +131,7 @@ public class VidevoxApplication extends Application {
 			alert.getButtonTypes().setAll(saveButton, discardButton, cancel);
 			Optional<ButtonType> result = alert.showAndWait();
 			if (result.get() == saveButton) {
-// save();
+				save();
 			} else if (result.get() == discardButton) {
 				Platform.exit();
 			} else {
@@ -134,6 +140,26 @@ public class VidevoxApplication extends Application {
 		} else {
 			Platform.exit();
 		}
+	}
+
+	private void showExceptionDialog(VidevoxException e) {
+		// Show a generic dialog with the exception message
+	}
+
+	public void save() throws IOException {
+		if (_currentProject.getLocation() != null) {
+			try {
+				_currentProject.toFile(_currentProject.getLocation());
+			} catch (VidevoxException e) {
+				showExceptionDialog(e);
+			}
+		} else {
+			saveAs();
+		}
+	}
+
+	public void saveAs() {
+		// Implement
 	}
 
 	@Override

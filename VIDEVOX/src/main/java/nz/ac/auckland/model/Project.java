@@ -266,4 +266,8 @@ public class Project {
 		return _videoFile;
 	}
 
+	public File getLocation() {
+		return _location;
+	}
+
 }
