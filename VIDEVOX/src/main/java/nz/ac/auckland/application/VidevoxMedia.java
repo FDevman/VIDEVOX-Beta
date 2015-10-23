@@ -4,14 +4,6 @@ import java.io.File;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-/**
- * <p>
- * This class will handle the synchronizing of play-back between media files so
- * that they behave as if they were all one file.
- * </p>
- */
-import org.apache.log4j.Logger;
-
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaException;
 import javafx.scene.media.MediaPlayer;
