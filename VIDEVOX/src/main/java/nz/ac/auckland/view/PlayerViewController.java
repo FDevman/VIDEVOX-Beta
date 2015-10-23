@@ -6,6 +6,9 @@ import org.apache.log4j.Logger;
 
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
+import javafx.event.Event;
+import javafx.event.EventDispatchChain;
+import javafx.event.EventDispatcher;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -146,7 +149,18 @@ public class PlayerViewController extends VIDEVOXController {
 			Stage stage = new Stage();
 			stage.setTitle("VIDEVOX Text-to-Speech");
 			stage.setScene(new Scene(ttsView));
-			stage.show();
+			stage.setAlwaysOnTop(true);
+			EventDispatcher ev = _application.getStage().getEventDispatcher();
+
+			_application.getStage().setEventDispatcher(new EventDispatcher() {
+				@Override
+				public Event dispatchEvent(Event event, EventDispatchChain tail) {
+					stage.requestFocus();
+					return null;
+				}
+			});
+			stage.showAndWait();
+			_application.getStage().setEventDispatcher(ev);
 
 			logger.trace("Showing ttsView");
 
@@ -157,6 +171,7 @@ public class PlayerViewController extends VIDEVOXController {
 
 		} catch (IOException e) {
 			logger.debug("error: " + e.getMessage());
+			e.printStackTrace();
 			VidevoxApplication.showExceptionDialog(new VidevoxException(e.getMessage()));
 		}
 	}
