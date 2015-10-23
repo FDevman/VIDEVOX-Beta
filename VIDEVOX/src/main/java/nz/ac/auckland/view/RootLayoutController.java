@@ -16,14 +16,20 @@ public class RootLayoutController extends VIDEVOXController {
 	private Button _editorButton;
 
 	@FXML
+	private void editorButtonAction() {
+		setViewToggle(EDITOR);
+	}
+
+	@FXML
+	private void previewButtonAction() {
+		setViewToggle(PREVIEW);
+	}
+
+	@FXML
 	private void close() {
 
 	}
 
-	/**
-	 *
-	 * @param option
-	 */
 	public void setViewToggle(String option) {
 		switch (option) {
 		case PREVIEW:
