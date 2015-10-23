@@ -66,7 +66,7 @@ public class Project {
 	/**
 	 * A set of objects representing tts files to be created/included.
 	 */
-	Set<AudioTTS> _tts;
+	Set<AudioFile> _tts;
 	/**
 	 * A switch to tell the application whether the video's audio should be
 	 * included
@@ -102,7 +102,7 @@ public class Project {
 	private Project() {
 		_name = "New Project";
 		_audios = new HashSet<AudioFile>();
-		_tts = new HashSet<AudioTTS>();
+		_tts = new HashSet<AudioFile>();
 	}
 
 	public void addAudio(File file, double offset) {
@@ -227,8 +227,8 @@ public class Project {
 
 		// Iterate over tts objects
 		JSONArray tts = new JSONArray();
-		for (AudioTTS t : _tts) {
-			tts.add(t);
+		for (AudioFile t : _tts) {
+			tts.add(t.toJSON());
 		}
 		json.put(TTS, tts);
 
@@ -281,10 +281,20 @@ public class Project {
 		}
 	}
 
+	/**
+	 * Returns all audio files and temporary tts files ready to be played
+	 *
+	 * @return
+	 */
 	public HashSet<Audible> getAudios() {
 		HashSet<Audible> audios = new HashSet<Audible>();
-//		for (Entry)
-		return null;
+		for (Audible a : _audios) {
+			audios.add(a);
+		}
+		for (Audible a : _tts) {
+			audios.add(a);
+		}
+		return audios;
 	}
 
 }

@@ -5,7 +5,7 @@ import java.io.UnsupportedEncodingException;
 
 import org.json.simple.JSONObject;
 
-public class AudioFile {
+public class AudioFile implements Audible {
 
 	File _audioFile;
 	double _startOffset = 0.0;
