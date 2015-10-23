@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.BorderPane?>
+
+<VBox fx:id="_container" spacing="10.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nz.ac.auckland.view.TTSViewController">
+   <children>
+      <HBox spacing="10.0">
+         <children>
+            <Region HBox.hgrow="ALWAYS">
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
+            </Region>
+            <VBox>
+               <children>
+                  <Region VBox.vgrow="ALWAYS" />
+                  <Label text="Segment Name:" textAlignment="RIGHT" />
+                  <Region VBox.vgrow="ALWAYS" />
+               </children>
+            </VBox>
+            <TextField fx:id="_nameField" prefWidth="173.0" promptText="Type a unique name for this clip." HBox.hgrow="ALWAYS" />
+            <VBox>
+               <children>
+                  <Region VBox.vgrow="ALWAYS" />
+                  <Label text="Start Offset (seconds):" />
+                  <Region layoutX="10.0" layoutY="10.0" VBox.vgrow="ALWAYS" />
+               </children>
+            </VBox>
+            <TextField fx:id="_offset" prefWidth="45.0" promptText="00.00" text="00.00" />
+         </children>
+         <VBox.margin>
+            <Insets left="5.0" right="5.0" />
+         </VBox.margin>
+      </HBox>
+      <HBox layoutX="10.0" layoutY="10.0" spacing="10.0">
+         <children>
+            <Region HBox.hgrow="ALWAYS">
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
+            </Region>
+            <Label text="Text-to-Speech Content:" textAlignment="RIGHT" />
+            <TextArea fx:id="_content" maxWidth="400.0" minWidth="400.0" prefWidth="400.0" promptText="Type something for festival to say." HBox.hgrow="ALWAYS" />
+         </children>
+         <VBox.margin>
+            <Insets left="5.0" right="5.0" />
+         </VBox.margin>
+      </HBox>
+      <HBox spacing="10.0">
+         <children>
+            <Region HBox.hgrow="ALWAYS" />
+            <HBox fx:id="_buttonBox" disable="true" spacing="10.0">
+               <children>
+                  <Button fx:id="_previewButton" mnemonicParsing="false" onAction="#preview" text="Preview">
+                     <tooltip>
+                        <Tooltip text="Have Festival speak to you now" />
+                     </tooltip>
+                  </Button>
+                  <Region maxWidth="10.0" minWidth="10.0" prefWidth="10.0" />
+                  <Button mnemonicParsing="false" onAction="#save" text="Save as mp3">
+                     <tooltip>
+                        <Tooltip text="Save for later - will still be added to the project" />
+                     </tooltip>
+                  </Button>
+                  <Button mnemonicParsing="false" onAction="#use" text="Use in Project">
+                     <tooltip>
+                        <Tooltip text="Use this speech segment in your project" />
+                     </tooltip>
+                  </Button>
+               </children>
+            </HBox>
+            <Button fx:id="_cancelButton" cancelButton="true" mnemonicParsing="false" onAction="#cancel" text="Cancel">
+               <tooltip>
+                  <Tooltip text="Cancel Text-to-Speech" />
+               </tooltip>
+            </Button>
+         </children>
+         <VBox.margin>
+            <Insets left="5.0" right="5.0" />
+         </VBox.margin>
+      </HBox>
+   </children>
+   <padding>
+      <Insets bottom="5.0" top="5.0" />
+   </padding>
+</VBox>

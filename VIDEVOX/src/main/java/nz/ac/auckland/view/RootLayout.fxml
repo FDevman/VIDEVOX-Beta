@@ -66,9 +66,9 @@
 	<bottom>
 		<HBox spacing="5.0" BorderPane.alignment="CENTER">
 			<children>
-				<Label text="VIDEVOX 0.2 BETA" />
+				<Label text="VIDEVOX 0.6 BETA" />
 				<Region HBox.hgrow="ALWAYS" />
-				<Label text="Current Project.videvox" />
+				<Label fx:id="_projectName" text="Current Project.videvox" />
 			</children>
 			<BorderPane.margin>
 				<Insets />

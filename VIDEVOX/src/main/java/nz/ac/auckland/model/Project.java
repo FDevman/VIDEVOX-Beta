@@ -66,7 +66,7 @@ public class Project {
 	/**
 	 * A set of objects representing tts files to be created/included.
 	 */
-	Set<AudioTTS> _tts;
+	Set<AudioFile> _tts;
 	/**
 	 * A switch to tell the application whether the video's audio should be
 	 * included
@@ -102,13 +102,13 @@ public class Project {
 	private Project() {
 		_name = "New Project";
 		_audios = new HashSet<AudioFile>();
-		_tts = new HashSet<AudioTTS>();
-		_videoFile = new File("no video");
+		_tts = new HashSet<AudioFile>();
 	}
 
-	public void addAudio(File file, double offset) {
+	public AudioFile addAudio(File file, double offset) {
 		AudioFile audio = new AudioFile(file, offset);
 		_audios.add(audio);
+		return audio;
 	}
 
 	public void addAudio(AudioFile audio) {
@@ -228,8 +228,8 @@ public class Project {
 
 		// Iterate over tts objects
 		JSONArray tts = new JSONArray();
-		for (AudioTTS t : _tts) {
-			tts.add(t);
+		for (AudioFile t : _tts) {
+			tts.add(t.toJSON());
 		}
 		json.put(TTS, tts);
 
@@ -272,6 +272,36 @@ public class Project {
 
 	public void setVideo(File file) {
 		_videoFile = file;
+	}
+
+	public String getVideoName() {
+		if (_videoFile == null) {
+			return "No Video";
+		} else {
+			return _videoFile.getName();
+		}
+	}
+
+	/**
+	 * Returns all audio files and temporary tts files ready to be played
+	 *
+	 * @return
+	 */
+	public HashSet<Audible> getAudios() {
+		HashSet<Audible> audios = new HashSet<Audible>();
+		for (Audible a : _audios) {
+			audios.add(a);
+		}
+		for (Audible a : _tts) {
+			audios.add(a);
+		}
+		return audios;
+	}
+
+	public Audible addTTS(String name, String text, double offset) throws VidevoxException {
+		AudioTTS tts = new AudioTTS(name, text, offset);
+		_tts.add(tts);
+		return tts;
 	}
 
 }

@@ -1,5 +1,7 @@
 package nz.ac.auckland.model;
 
+import org.apache.log4j.Logger;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -17,6 +19,10 @@ import org.json.simple.JSONObject;
  *
  */
 public class AudioTTS extends AudioFile {
+	/**
+	* Logger for this class
+	*/
+	private static final Logger logger = Logger.getLogger(AudioTTS.class);
 
 	/**
 	 * Text that should be given to Festival
@@ -43,9 +49,21 @@ public class AudioTTS extends AudioFile {
 		_startOffset = offset;
 		_speech = speech;
 		_audioFile = new File(System.getProperty("java.io.tmpdir") + FILE_SEP + name);
-		ModelHelper.ensureFileExtension(_audioFile, ".mp3");
+		ModelHelper.enforceFileExtension(_audioFile, ".mp3");
 
 		textToMP3(_audioFile, speech);
+	}
+
+	public static boolean preview(String text) throws VidevoxException {
+		String cmd = "echo \"" + text + "\" | festival --tts";
+		logger.debug("command is: " + cmd);
+		ProcessBuilder builder = new ProcessBuilder("/bin/bash", "-c", cmd);
+		try {
+			builder.start().waitFor();
+		} catch (IOException | InterruptedException e) {
+			throw new VidevoxException("Text to speech preview is not working at the moment");
+		}
+		return true;
 	}
 
 	/**
@@ -57,13 +75,13 @@ public class AudioTTS extends AudioFile {
 	 * @return
 	 * @throws VidevoxException
 	 */
-	private boolean textToMP3(File destination, String speech) throws VidevoxException {
+	public static boolean textToMP3(File destination, String speech) throws VidevoxException {
 		// Create a pointer to a temporary wav file
 		File tempWAV = new File(System.getProperty("java.io.tmpdir") + destination.getName());
-		ModelHelper.ensureFileExtension(tempWAV, ".wav");
+		ModelHelper.enforceFileExtension(tempWAV, ".wav");
 
 		// Make sure the destination is a .mp3 file
-		ModelHelper.ensureFileExtension(destination, ".mp3");
+		ModelHelper.enforceFileExtension(destination, ".mp3");
 
 		// Create the audio file at designated location (surround file names
 		// with quotes in case of spaces)
@@ -75,6 +93,7 @@ public class AudioTTS extends AudioFile {
 			if (returnVal != 0) {
 				throw new VidevoxException("Wav file unable to be created: Check that festival is installed correctly");
 			}
+			logger.trace("created mp3 at: " + destination.getAbsolutePath());
 		} catch (IOException e) {
 			throw new VidevoxException("Unknown IO Exception during WAV creation");
 		} catch (InterruptedException e) {

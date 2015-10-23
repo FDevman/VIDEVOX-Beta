@@ -1,6 +1,5 @@
 package nz.ac.auckland.application;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.Optional;
 
@@ -19,7 +18,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-
 import nz.ac.auckland.model.Project;
 import nz.ac.auckland.model.VidevoxException;
 import nz.ac.auckland.view.PlayerViewController;
@@ -39,10 +37,6 @@ public class VidevoxApplication extends Application {
 	 */
 	Project _currentProject = Project.getProject();
 	/**
-	 * The current model instance for the application to work with
-	 */
-	private VidevoxPlayer _player;
-	/**
 	 * The window for the main part of the app to be loaded into
 	 */
 	private Stage _primaryStage;
@@ -54,6 +48,12 @@ public class VidevoxApplication extends Application {
 	 * Controller for the root layout
 	 */
 	private RootLayoutController _controller;
+
+	private ViewType _viewOnShow = ViewType.PREVIEW;
+
+	public enum ViewType {
+		PREVIEW, EDIT
+	}
 
 	/**
 	 *
@@ -85,7 +85,7 @@ public class VidevoxApplication extends Application {
 		try {
 			// Load RootLayout
 			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(VidevoxApplication.class.getResource("/nz/ac/auckland/view/RootLayout.fxml"));
+			loader.setLocation(this.getClass().getClassLoader().getResource("nz/ac/auckland/view/RootLayout.fxml"));
 			_rootLayout = (BorderPane) loader.load();
 
 			// Show on stage
@@ -142,7 +142,7 @@ public class VidevoxApplication extends Application {
 		}
 	}
 
-	private void showExceptionDialog(VidevoxException e) {
+	public static void showExceptionDialog(VidevoxException e) {
 		// Show a generic dialog with the exception message
 	}
 
@@ -173,12 +173,8 @@ public class VidevoxApplication extends Application {
 		// Set a title to appear on the window
 		this._primaryStage.setTitle("VIDEVOX - video editor");
 
-		// Initiate the root layout of the application
-		initRootLayout();
-
-		// Show the player view as default
-		showPlayerView();
-
+		// Set/reset the views
+		reset();
 	}
 
 	public static void main(String[] args) {
@@ -189,17 +185,18 @@ public class VidevoxApplication extends Application {
 	 * Resets the entire GUI, mostly for after a new GUI is loaded
 	 */
 	public void reset() {
+		// Initiate the root layout of the application
+		initRootLayout();
 
-	}
-
-	public void setVideo(File file) {
-		_currentProject.setVideo(file);
-		try {
-			_player.setVideo(file);
-		} catch (VidevoxException e) {
-			showExceptionDialog(e);
-			return;
+		// Decide which view to show
+		switch (_viewOnShow) {
+			case PREVIEW:
+				showPlayerView();
+				break;
+			default:
+				showPlayerView();
+				break;
 		}
-		reset();
 	}
+
 }

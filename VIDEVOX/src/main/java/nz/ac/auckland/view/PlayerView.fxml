@@ -15,24 +15,20 @@
          <children>
             <SplitPane dividerPositions="0.5" VBox.vgrow="ALWAYS">
               <items>
-                  <HBox>
+                  <HBox prefHeight="363.0" style="-fx-background-color: black;">
                      <children>
-                        <Region minWidth="10.0" style="-fx-background-color: black;" HBox.hgrow="NEVER" />
-                        <VBox minWidth="500.0" HBox.hgrow="ALWAYS">
+                        <Region minWidth="10.0" HBox.hgrow="ALWAYS" />
+                        <VBox>
                            <children>
-                              <Region style="-fx-background-color: black;" VBox.vgrow="ALWAYS" />
-                              <HBox style="-fx-background-color: black;">
-                                 <children>
-                                    <MediaView fx:id="_mainPlayerView" fitHeight="200.0" fitWidth="500.0" HBox.hgrow="ALWAYS" />
-                                 </children>
-                              </HBox>
-                              <Region style="-fx-background-color: black;" VBox.vgrow="ALWAYS" />
+                              <Region VBox.vgrow="ALWAYS" />
+                              <MediaView fx:id="_mainPlayerView" fitHeight="200.0" fitWidth="500.0" />
+                              <Region VBox.vgrow="ALWAYS" />
                            </children>
                         </VBox>
-                        <Region minWidth="10.0" style="-fx-background-color: black;" HBox.hgrow="NEVER" />
+                        <Region minWidth="10.0" HBox.hgrow="ALWAYS" />
                      </children>
                   </HBox>
-                  <VBox>
+                  <VBox maxWidth="200.0" minWidth="200.0" prefWidth="200.0">
                      <children>
                         <HBox>
                            <children>
@@ -55,7 +51,7 @@
                               <Region HBox.hgrow="ALWAYS" />
                               <Button minWidth="100.0" mnemonicParsing="false" text="Add Audio File" HBox.hgrow="ALWAYS" />
                               <Region HBox.hgrow="ALWAYS" />
-                              <Button layoutX="10.0" layoutY="10.0" minWidth="100.0" mnemonicParsing="false" text="Text to Speech" HBox.hgrow="ALWAYS" />
+                              <Button layoutX="10.0" layoutY="10.0" minWidth="100.0" mnemonicParsing="false" onAction="#tts" text="Text to Speech" HBox.hgrow="ALWAYS" />
                               <Region HBox.hgrow="ALWAYS" />
                            </children>
                         </HBox>
@@ -63,11 +59,65 @@
                   </VBox>
               </items>
             </SplitPane>
-            <HBox spacing="5.0" VBox.vgrow="NEVER">
+            <HBox fx:id="_mediaControls" spacing="5.0" VBox.vgrow="NEVER">
                <children>
-                  <Button fx:id="_skipBackButton" mnemonicParsing="false" text="Skip Back" />
-                  <Button fx:id="_playPauseButton" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" text="Play/Pause" />
-                  <Button fx:id="_skipForwardButton" layoutX="62.0" layoutY="10.0" mnemonicParsing="false" text="Skip Forward" />
+                  <Button layoutX="75.0" layoutY="15.0" maxHeight="25.0" maxWidth="25.0" minHeight="25.0" minWidth="25.0" mnemonicParsing="false" onAction="#skipBack" prefHeight="25.0" prefWidth="25.0" style="-fx-background-radius: 12.5;">
+                     <graphic>
+                        <ImageView fx:id="_skipBackButton" fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../../../../resources/icons/first-track-icon.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+                  <Button maxHeight="25.0" maxWidth="25.0" minHeight="25.0" minWidth="25.0" mnemonicParsing="false" onAction="#play" prefHeight="25.0" prefWidth="25.0" style="-fx-background-radius: 12.5;">
+                     <graphic>
+                        <ImageView fx:id="_playButton" fitHeight="25.0" fitWidth="25.0" onMouseClicked="#play" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../../../../resources/icons/play-icon.png" />
+                           </image>
+                           <viewport>
+                              <Rectangle2D />
+                           </viewport>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+                  <Button maxHeight="25.0" maxWidth="25.0" minHeight="25.0" minWidth="25.0" mnemonicParsing="false" onAction="#pause" prefHeight="25.0" prefWidth="25.0" style="-fx-background-radius: 12.5;">
+                     <graphic>
+                        <ImageView fx:id="_pauseButton" fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../../../../resources/icons/pause-icon.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+                  <Button layoutX="135.0" layoutY="15.0" maxHeight="25.0" maxWidth="25.0" minHeight="25.0" minWidth="25.0" mnemonicParsing="false" onAction="#skipForward" prefHeight="25.0" prefWidth="25.0" style="-fx-background-radius: 12.5;">
+                     <graphic>
+                        <ImageView fx:id="_skipForwardButton" fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../../../../resources/icons/last-track-icon.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+                  <VBox HBox.hgrow="ALWAYS">
+                     <children>
+                        <Region VBox.vgrow="ALWAYS" />
+                        <HBox spacing="5.0">
+                           <children>
+                              <Slider HBox.hgrow="ALWAYS" />
+                           </children>
+                        </HBox>
+                        <Region layoutX="10.0" layoutY="10.0" VBox.vgrow="ALWAYS" />
+                     </children>
+                  </VBox>
+                  <VBox>
+                     <children>
+                        <Region VBox.vgrow="ALWAYS" />
+                        <Label prefHeight="17.0" prefWidth="103.0" text="00:00.00/00:00.00" />
+                        <Region layoutX="10.0" layoutY="10.0" VBox.vgrow="ALWAYS" />
+                     </children>
+                  </VBox>
                </children>
                <padding>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />

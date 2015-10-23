@@ -1,8 +1,13 @@
 package unit.tests;
 
-import org.apache.commons.io.FileUtils;
-import org.apache.log4j.Logger;
+import static org.junit.Assert.fail;
 
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+
+import org.apache.log4j.Logger;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -10,14 +15,6 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-
-import static org.junit.Assert.*;
-
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
 
 import nz.ac.auckland.model.AudioFile;
 import nz.ac.auckland.model.Project;

@@ -4,18 +4,12 @@ import java.io.File;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-/**
- * <p>
- * This class will handle the synchronizing of play-back between media files so
- * that they behave as if they were all one file.
- * </p>
- */
-import org.apache.log4j.Logger;
-
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaException;
 import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
+import nz.ac.auckland.model.Audible;
+import nz.ac.auckland.model.AudioFile;
 import nz.ac.auckland.model.VidevoxException;
 
 /**
@@ -26,8 +20,6 @@ import nz.ac.auckland.model.VidevoxException;
  *
  */
 public class VidevoxMedia implements Playable {
-
-	private static final Logger logger = Logger.getLogger(VidevoxMedia.class);
 
 	/**
 	 * A MediaPlayer object for the Playable. Should be a JavaFX supported
@@ -53,7 +45,7 @@ public class VidevoxMedia implements Playable {
 	 * @throws VidevoxException
 	 */
 	public VidevoxMedia() throws VidevoxException {
-		this(new File(_defaultAudio), 0.0);
+		this(new AudioFile(new File(_defaultAudio), 0.0));
 	}
 
 	/**
@@ -65,17 +57,33 @@ public class VidevoxMedia implements Playable {
 	 * Makes for one less line of code while using FileChooser which returns a
 	 * File rather than a String
 	 *
-	 * @param mediaFile
+	 * @param Audible
 	 * @throws VidevoxException
 	 */
-	public VidevoxMedia(File mediaFile, double startOffset) throws VidevoxException {
+	public VidevoxMedia(Audible a) throws VidevoxException {
 		try {
-			_media = new MediaPlayer(new Media(mediaFile.toURI().toString()));
+			_media = new MediaPlayer(new Media(a.getFile().toURI().toString()));
 		} catch (MediaException e) {
 			throw new VidevoxException("Invalid file type or format");
 		}
-		_startOffset = new Duration(startOffset);
+		_startOffset = new Duration(a.getStartOffset());
 	}
+
+//	/**
+//	 * Makes for one less line of code while using FileChooser which returns a
+//	 * File rather than a String
+//	 *
+//	 * @param mediaFile
+//	 * @throws VidevoxException
+//	 */
+//	public VidevoxMedia(File mediaFile, double startOffset) throws VidevoxException {
+//		try {
+//			_media = new MediaPlayer(new Media(mediaFile.toURI().toString()));
+//		} catch (MediaException e) {
+//			throw new VidevoxException("Invalid file type or format");
+//		}
+//		_startOffset = new Duration(startOffset);
+//	}
 
 	public Duration getStartOffset() {
 		return _startOffset;
@@ -90,10 +98,6 @@ public class VidevoxMedia implements Playable {
 		// Media will only give you a URI and _uri.toString puts in strange
 		// characters that FFMPEG doesn't like.
 		return (new File(new URI(_media.getMedia().getSource()))).getAbsolutePath();
-	}
-
-	public MediaPlayer getMediaPlayer() {
-		return _media;
 	}
 
 	public void play() {
@@ -124,6 +128,11 @@ public class VidevoxMedia implements Playable {
 			// Go to the relative position this media should be at
 			_media.seek(position.subtract(_startOffset));
 		}
+	}
+
+	@Override
+	public MediaPlayer getMediaPlayer() {
+		return _media;
 	}
 
 }
