@@ -3,7 +3,9 @@ package nz.ac.auckland.view;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
+import nz.ac.auckland.application.VidevoxApplication;
 import nz.ac.auckland.application.VidevoxPlayer;
 
 /**
@@ -29,10 +31,12 @@ public class PlayerViewController extends VIDEVOXController {
 	private VBox _scrollBox;
 
 	@Override
-	public void setModel(VidevoxPlayer model) {
-		super.setModel(model);
-		_model.setVideoView(_mainPlayerView);
-		// Load audio into audio views
+	public void setMainApp(VidevoxApplication app) {
+		super.setMainApp(app);
+		MediaPlayer p = VidevoxPlayer.getPlayer().getMediaPlayer();
+		if (p != null) {
+			_mainPlayerView.setMediaPlayer(p);
+		}
 	}
 
 }

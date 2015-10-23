@@ -15,7 +15,6 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaException;
 import javafx.scene.media.MediaMarkerEvent;
 import javafx.scene.media.MediaPlayer;
-import javafx.scene.media.MediaView;
 import javafx.util.Duration;
 import nz.ac.auckland.model.Audible;
 import nz.ac.auckland.model.AudioFile;
@@ -26,24 +25,44 @@ public class VidevoxPlayer implements Playable {
 
 	private static final Logger logger = Logger.getLogger(VidevoxPlayer.class);
 
+	/**
+	 * The singleton instance of VidevoxPlayer.
+	 */
 	private static VidevoxPlayer INSTANCE;
-
+	/**
+	 * A hash map linking Playables to their human readable names. Names should
+	 * be unique.
+	 */
 	private Map<String, Playable> _audio;
-
+	/**
+	 * List of markers to start audio files, keys should match _audio field.
+	 */
 	private ObservableMap<String, Duration> _markers;
-
+	/**
+	 * The video that is to be played.
+	 */
 	private MediaPlayer _video;
-
+	/**
+	 * The human readable name of the video being played.
+	 */
 	String _videoName;
 
-	public VidevoxPlayer getPlayer() {
+	/**
+	 * Singleton get instance method. Creates one if null.
+	 *
+	 * @return
+	 */
+	public static VidevoxPlayer getPlayer() {
 		if (INSTANCE == null) {
 			INSTANCE = new VidevoxPlayer();
 		}
 		return INSTANCE;
 	}
 
-	public VidevoxPlayer() {
+	/**
+	 * Default constructor to be called if no instance is present.
+	 */
+	private VidevoxPlayer() {
 		Project project = Project.getProject();
 		_videoName = project.getVideoName();
 		File video = project.getVideo();
@@ -173,18 +192,6 @@ public class VidevoxPlayer implements Playable {
 		}
 	}
 
-	public MediaPlayer getMainVideo() {
-		return _video;
-	}
-
-	/**
-	 *
-	 * @param videoView
-	 */
-	public void setVideoView(MediaView videoView) {
-		videoView.setMediaPlayer(_video);
-	}
-
 	@Override
 	public void seek(Duration time) {
 		// Go to required time
@@ -236,6 +243,12 @@ public class VidevoxPlayer implements Playable {
 		return new Duration(-1.0);
 	}
 
+	/**
+	 * Returns the MediaPlayer that contains the video. May be null if no video
+	 * has been loaded yet.
+	 *
+	 * @return
+	 */
 	@Override
 	public MediaPlayer getMediaPlayer() {
 		return _video;
