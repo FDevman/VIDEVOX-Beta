@@ -139,46 +139,7 @@ public class PlayerViewController extends VIDEVOXController {
 
 	@FXML
 	private void tts() {
-		try {
-			logger.trace("entered tts");
-
-			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(this.getClass().getClassLoader().getResource("nz/ac/auckland/view/TTSView.fxml"));
-			logger.debug("location: " + this.getClass().getClassLoader().getResource("nz/ac/auckland/view/TTSView.fxml"));
-			VBox ttsView = (VBox) loader.load();
-
-			logger.trace("Loaded ttsView from fxml");
-
-			Stage stage = new Stage();
-			stage.setTitle("VIDEVOX Text-to-Speech");
-			stage.setScene(new Scene(ttsView));
-			stage.setAlwaysOnTop(true);
-			EventDispatcher ev = _application.getStage().getEventDispatcher();
-
-			_application.getStage().setEventDispatcher(new EventDispatcher() {
-				@Override
-				public Event dispatchEvent(Event event, EventDispatchChain tail) {
-					stage.requestFocus();
-					return null;
-				}
-			});
-
-			logger.trace("Showing ttsView");
-
-			TTSViewController controller = loader.getController();
-			controller.setMainApp(_application);
-
-			
-			stage.showAndWait();
-			_application.getStage().setEventDispatcher(ev);
-			_application.reset();
-
-
-		} catch (IOException e) {
-			logger.debug("error: " + e.getMessage());
-			e.printStackTrace();
-			VidevoxApplication.showExceptionDialog(new VidevoxException(e.getMessage()));
-		}
+		_application.showTTS();
 	}
 
 }

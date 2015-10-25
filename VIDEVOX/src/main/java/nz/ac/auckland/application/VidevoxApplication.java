@@ -8,6 +8,9 @@ import org.apache.log4j.Logger;
 
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.event.Event;
+import javafx.event.EventDispatchChain;
+import javafx.event.EventDispatcher;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -17,6 +20,7 @@ import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
@@ -25,6 +29,7 @@ import nz.ac.auckland.model.Project;
 import nz.ac.auckland.model.VidevoxException;
 import nz.ac.auckland.view.PlayerViewController;
 import nz.ac.auckland.view.RootLayoutController;
+import nz.ac.auckland.view.TTSViewController;
 
 /**
  *
@@ -220,6 +225,53 @@ public class VidevoxApplication extends Application {
 			default:
 				showPlayerView();
 				break;
+		}
+	}
+	
+	public void showTTS() {
+		try {
+			logger.trace("entered showTTS");
+
+			FXMLLoader loader = new FXMLLoader();
+			loader.setLocation(this.getClass().getClassLoader().getResource("nz/ac/auckland/view/TTSView.fxml"));
+			logger.debug("location: " + this.getClass().getClassLoader().getResource("nz/ac/auckland/view/TTSView.fxml"));
+			VBox ttsView = (VBox) loader.load();
+
+			logger.trace("Loaded ttsView from fxml");
+
+			Stage stage = new Stage();
+			stage.setTitle("VIDEVOX Text-to-Speech");
+			stage.setScene(new Scene(ttsView));
+//			stage.setAlwaysOnTop(true);
+			
+			// Keep a pointer to the Primary Stage's Event Dispatcher for later
+			EventDispatcher ev = _primaryStage.getEventDispatcher();
+
+			// Put in a new Event Dispatcher while the TTS view is open
+			_primaryStage.setEventDispatcher(new EventDispatcher() {
+				@Override
+				public Event dispatchEvent(Event event, EventDispatchChain tail) {
+					stage.requestFocus();
+					return null;
+				}
+			});
+
+			logger.trace("Showing ttsView");
+
+			TTSViewController controller = loader.getController();
+			controller.setMainApp(this);
+
+			stage.showAndWait();
+			
+			// Put the Event Dispatcher back and reset the app in case TTS was added
+			_primaryStage.setEventDispatcher(ev);
+			reset();
+
+
+		} catch (IOException e) {
+			logger.debug("error: " + e.getMessage());
+			e.printStackTrace();
+			VidevoxApplication.showExceptionDialog(new VidevoxException(e.getMessage()));
 		}
 	}
 
