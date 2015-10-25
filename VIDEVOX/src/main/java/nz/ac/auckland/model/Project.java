@@ -103,16 +103,19 @@ public class Project {
 		_name = "New Project";
 		_audios = new HashSet<AudioFile>();
 		_tts = new HashSet<AudioFile>();
+		_saved = true;
 	}
 
 	public AudioFile addAudio(File file, double offset) {
 		AudioFile audio = new AudioFile(file, offset);
 		_audios.add(audio);
+		_saved = false;
 		return audio;
 	}
 
 	public void addAudio(AudioFile audio) {
 		_audios.add(audio);
+		_saved = false;
 	}
 
 	/**
@@ -279,6 +282,7 @@ public class Project {
 
 	public void setVideo(File file) {
 		_videoFile = file;
+		_saved = false;
 	}
 
 	public String getVideoName() {
@@ -308,6 +312,7 @@ public class Project {
 	public Audible addTTS(String name, String text, double offset) throws VidevoxException {
 		AudioTTS tts = new AudioTTS(name, text, offset);
 		_tts.add(tts);
+		_saved = false;
 		return tts;
 	}
 

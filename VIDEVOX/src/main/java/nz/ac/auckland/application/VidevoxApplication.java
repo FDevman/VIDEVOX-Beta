@@ -1,5 +1,6 @@
 package nz.ac.auckland.application;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Optional;
 
@@ -16,8 +17,10 @@ import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import nz.ac.auckland.model.ModelHelper;
 import nz.ac.auckland.model.Project;
 import nz.ac.auckland.model.VidevoxException;
 import nz.ac.auckland.view.PlayerViewController;
@@ -147,9 +150,10 @@ public class VidevoxApplication extends Application {
 	}
 
 	public void save() throws IOException {
-		if (_currentProject.getLocation() != null) {
+		Project project = Project.getProject();
+		if (project.getLocation() != null) {
 			try {
-				_currentProject.toFile(_currentProject.getLocation());
+				project.toFile(project.getLocation());
 			} catch (VidevoxException e) {
 				showExceptionDialog(e);
 			}
@@ -159,7 +163,23 @@ public class VidevoxApplication extends Application {
 	}
 
 	public void saveAs() {
-		// Implement
+		FileChooser fileChooser = new FileChooser();
+		fileChooser.setTitle("Save the project");
+		// Set extension filter to only see .vvox project files
+		FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Project file", "*.vvox");
+		fileChooser.getExtensionFilters().add(extFilter);
+		File file = fileChooser.showSaveDialog(_primaryStage);
+		ModelHelper.enforceFileExtension(file, ".vvox");
+		if (file == null) {
+			return;
+		}
+		try {
+			Project.getProject().toFile(file);
+		} catch (VidevoxException e) {
+			VidevoxApplication.showExceptionDialog(e);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public Stage getStage() {

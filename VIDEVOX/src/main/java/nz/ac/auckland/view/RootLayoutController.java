@@ -65,38 +65,44 @@ public class RootLayoutController extends VIDEVOXController {
 	
 	@FXML
 	private void save() {
-		if (Project.getProject().getLocation() == null) {
-			saveAs();
-		} else {
-			try {
-				Project.getProject().toFile(Project.getProject().getLocation());
-			} catch (VidevoxException e) {
-				VidevoxApplication.showExceptionDialog(e);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+		try {
+			_application.save();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
+//		if (Project.getProject().getLocation() == null) {
+//			saveAs();
+//		} else {
+//			try {
+//				Project.getProject().toFile(Project.getProject().getLocation());
+//			} catch (VidevoxException e) {
+//				VidevoxApplication.showExceptionDialog(e);
+//			} catch (IOException e) {
+//				e.printStackTrace();
+//			}
+//		}
 	}
 	
 	@FXML
 	private void saveAs() {
-		FileChooser fileChooser = new FileChooser();
-		fileChooser.setTitle("Save the project");
-		// Set extension filter to only see .vvox project files
-		FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Project file", "*.vvox");
-		fileChooser.getExtensionFilters().add(extFilter);
-		File file = fileChooser.showSaveDialog(_application.getStage());
-		ModelHelper.enforceFileExtension(file, ".vvox");
-		if (file == null) {
-			return;
-		}
-		try {
-			Project.getProject().toFile(file);
-		} catch (VidevoxException e) {
-			VidevoxApplication.showExceptionDialog(e);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		_application.saveAs();
+//		FileChooser fileChooser = new FileChooser();
+//		fileChooser.setTitle("Save the project");
+//		// Set extension filter to only see .vvox project files
+//		FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Project file", "*.vvox");
+//		fileChooser.getExtensionFilters().add(extFilter);
+//		File file = fileChooser.showSaveDialog(_application.getStage());
+//		ModelHelper.enforceFileExtension(file, ".vvox");
+//		if (file == null) {
+//			return;
+//		}
+//		try {
+//			Project.getProject().toFile(file);
+//		} catch (VidevoxException e) {
+//			VidevoxApplication.showExceptionDialog(e);
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
 	}
 
 	@FXML
