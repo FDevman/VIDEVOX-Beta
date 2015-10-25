@@ -205,6 +205,10 @@ public class VidevoxApplication extends Application {
 	 * Resets the entire GUI, mostly for after a new GUI is loaded
 	 */
 	public void reset() {
+		
+		// Reset the player
+		VidevoxPlayer.getPlayer().rebuild();
+		
 		// Initiate the root layout of the application
 		initRootLayout();
 

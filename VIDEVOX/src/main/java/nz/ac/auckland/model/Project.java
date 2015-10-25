@@ -203,7 +203,9 @@ public class Project {
 		p._saved = true;
 
 		// If no exceptions were thrown, return true to signal that the project
-		// has finished building successfully
+		// has finished building successfully and set it as the instance.
+		INSTANCE = p;
+		logger.trace("Built project saved to INSTANCE");
 		return true;
 	}
 

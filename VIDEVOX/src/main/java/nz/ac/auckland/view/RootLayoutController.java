@@ -64,45 +64,42 @@ public class RootLayoutController extends VIDEVOXController {
 	}
 	
 	@FXML
+	private void open() {
+		FileChooser fileChooser = new FileChooser();
+		fileChooser.setTitle("Please select a project file to work on");
+		// Set visible extensions
+		FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Project Files", "*.vvox");
+		fileChooser.getExtensionFilters().add(extFilter);
+		File file = fileChooser.showOpenDialog(_application.getStage());
+		if (file == null) {
+			return;
+		}
+		try {
+			Project.buildProject(file);
+		} catch (VidevoxException e) {
+			VidevoxApplication.showExceptionDialog(e);
+		}
+		_application.reset();
+	}
+	
+	@FXML
+	private void newProject() {
+		Project.reset();
+		_application.reset();
+	}
+	
+	@FXML
 	private void save() {
 		try {
 			_application.save();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-//		if (Project.getProject().getLocation() == null) {
-//			saveAs();
-//		} else {
-//			try {
-//				Project.getProject().toFile(Project.getProject().getLocation());
-//			} catch (VidevoxException e) {
-//				VidevoxApplication.showExceptionDialog(e);
-//			} catch (IOException e) {
-//				e.printStackTrace();
-//			}
-//		}
 	}
 	
 	@FXML
 	private void saveAs() {
 		_application.saveAs();
-//		FileChooser fileChooser = new FileChooser();
-//		fileChooser.setTitle("Save the project");
-//		// Set extension filter to only see .vvox project files
-//		FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Project file", "*.vvox");
-//		fileChooser.getExtensionFilters().add(extFilter);
-//		File file = fileChooser.showSaveDialog(_application.getStage());
-//		ModelHelper.enforceFileExtension(file, ".vvox");
-//		if (file == null) {
-//			return;
-//		}
-//		try {
-//			Project.getProject().toFile(file);
-//		} catch (VidevoxException e) {
-//			VidevoxApplication.showExceptionDialog(e);
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
 	}
 
 	@FXML

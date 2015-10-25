@@ -303,4 +303,8 @@ public class VidevoxPlayer implements Playable {
 		seek(_video.getCurrentTime().subtract(_skipInterval));
 	}
 
+	public void rebuild() {
+		INSTANCE = new VidevoxPlayer();
+	}
+
 }

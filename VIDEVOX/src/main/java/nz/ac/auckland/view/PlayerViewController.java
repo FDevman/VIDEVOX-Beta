@@ -73,6 +73,8 @@ public class PlayerViewController extends VIDEVOXController {
 		MediaPlayer p = VidevoxPlayer.getPlayer().getMediaPlayer();
 		if (p != null) {
 			_mainPlayerView.setMediaPlayer(p);
+			logger.trace("Video in view");
+			_mediaControls.setDisable(false);
 			resize();
 			// Add listeners for window size
 			_application.getStage().heightProperty().addListener(new InvalidationListener() {
