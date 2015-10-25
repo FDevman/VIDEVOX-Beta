@@ -53,7 +53,7 @@
       <HBox spacing="10.0">
          <children>
             <Region HBox.hgrow="ALWAYS" />
-            <HBox fx:id="_buttonBox" disable="true" spacing="10.0">
+            <HBox fx:id="_buttonBox" spacing="10.0">
                <children>
                   <Button fx:id="_previewButton" mnemonicParsing="false" onAction="#preview" text="Preview">
                      <tooltip>

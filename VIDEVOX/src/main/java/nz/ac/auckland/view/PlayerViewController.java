@@ -70,9 +70,9 @@ public class PlayerViewController extends VIDEVOXController {
 				.setImage(new Image(getClass().getClassLoader().getResource("icons/last-track-icon.png").toString()));
 		_skipBackButton
 				.setImage(new Image(getClass().getClassLoader().getResource("icons/first-track-icon.png").toString()));
-		MediaPlayer p = VidevoxPlayer.getPlayer().getMediaPlayer();
-		if (p != null) {
-			_mainPlayerView.setMediaPlayer(p);
+		MediaPlayer player = VidevoxPlayer.getPlayer().getMediaPlayer();
+		if (player != null) {
+			_mainPlayerView.setMediaPlayer(player);
 			logger.trace("Video in view");
 			_mediaControls.setDisable(false);
 			resize();
@@ -89,6 +89,7 @@ public class PlayerViewController extends VIDEVOXController {
 					resize();
 				}
 			});
+			
 		} else {
 			_mediaControls.setDisable(true);
 		}
@@ -167,10 +168,11 @@ public class PlayerViewController extends VIDEVOXController {
 			TTSViewController controller = loader.getController();
 			controller.setMainApp(_application);
 
+			
 			stage.showAndWait();
 			_application.getStage().setEventDispatcher(ev);
-
 			_application.reset();
+
 
 		} catch (IOException e) {
 			logger.debug("error: " + e.getMessage());

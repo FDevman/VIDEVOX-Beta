@@ -115,8 +115,8 @@ public class TTSViewController extends VIDEVOXController {
 		super.setMainApp(app);
 		// Add a change listener to the combined number of chars in the name and
 		// text fields
-		NumberBinding buttonsActive = Bindings.add(_nameField.lengthProperty(), _content.lengthProperty());
-		buttonsActive.addListener(new ChangeListener<Object>() {
+		NumberBinding totalTextLength = Bindings.add(_nameField.lengthProperty(), _content.lengthProperty());
+		ChangeListener<Object> buttonListener = new ChangeListener<Object>() {
 			@Override
 			public void changed(ObservableValue<?> observable, Object oldValue, Object newValue) {
 				// If either field is null, disable the buttons
@@ -126,7 +126,14 @@ public class TTSViewController extends VIDEVOXController {
 					_buttonBox.setDisable(false);
 				}
 			}
-		});
+		};
+		totalTextLength.addListener(buttonListener);
+//		_nameField.setText(" ");
+//		_nameField.setText("");
+//		if (_content.getLength() == 0 || _nameField.getLength() == 0) {
+//			_buttonBox.setDisable(true);
+//		}
+		logger.trace("Binding and listener created");
 		// Enforce offset field to be a valid double
 		_offset.textProperty().addListener(new ChangeListener<String>() {
 			@Override
