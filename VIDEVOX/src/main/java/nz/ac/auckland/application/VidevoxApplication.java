@@ -41,10 +41,6 @@ public class VidevoxApplication extends Application {
 	private static final Logger logger = Logger.getLogger(VidevoxApplication.class);
 
 	/**
-	 * On load, get a new default project
-	 */
-	Project _currentProject = Project.getProject();
-	/**
 	 * The window for the main part of the app to be loaded into
 	 */
 	private Stage _primaryStage;
@@ -107,7 +103,7 @@ public class VidevoxApplication extends Application {
 			// prompting to save if unsaved
 			scene.getWindow().setOnCloseRequest(new EventHandler<WindowEvent>() {
 				public void handle(WindowEvent ev) {
-					if (!_currentProject.isSaved()) {
+					if (!Project.getProject().isSaved()) {
 						ev.consume();
 						saveAndClose();
 					}
@@ -123,7 +119,7 @@ public class VidevoxApplication extends Application {
 	}
 
 	public void saveAndClose() {
-		if (!_currentProject.isSaved()) {
+		if (!Project.getProject().isSaved()) {
 			// Ask to save, exit without saving, or cancel
 			Alert alert = new Alert(AlertType.WARNING);
 			alert.setTitle("Save Changes Before Exit");
