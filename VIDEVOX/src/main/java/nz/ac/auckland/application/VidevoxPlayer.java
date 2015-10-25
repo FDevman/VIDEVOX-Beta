@@ -300,7 +300,7 @@ public class VidevoxPlayer implements Playable {
 	}
 
 	public void skipBack() {
-		seek(_video.getCurrentTime().add(_skipInterval));
+		seek(_video.getCurrentTime().subtract(_skipInterval));
 	}
 
 }
