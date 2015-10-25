@@ -11,6 +11,7 @@ import javafx.scene.control.Label;
 import javafx.stage.FileChooser;
 import nz.ac.auckland.application.VidevoxApplication;
 import nz.ac.auckland.application.VidevoxPlayer;
+import nz.ac.auckland.model.ModelHelper;
 import nz.ac.auckland.model.Project;
 import nz.ac.auckland.model.VidevoxException;
 
@@ -85,6 +86,7 @@ public class RootLayoutController extends VIDEVOXController {
 		FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Project file", "*.vvox");
 		fileChooser.getExtensionFilters().add(extFilter);
 		File file = fileChooser.showSaveDialog(_application.getStage());
+		ModelHelper.enforceFileExtension(file, ".vvox");
 		if (file == null) {
 			return;
 		}
