@@ -37,7 +37,6 @@ public class TestProject {
 			w.write("");
 			w.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -58,7 +57,6 @@ public class TestProject {
 			w.flush();
 			w.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -88,7 +86,6 @@ public class TestProject {
 				fail("Strings were different");
 			}
 		} catch (VidevoxException | IOException | ParseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -114,7 +111,6 @@ public class TestProject {
 				fail("Strings were different");
 			}
 		} catch (VidevoxException | IOException | ParseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

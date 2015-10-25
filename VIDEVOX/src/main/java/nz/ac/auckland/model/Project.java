@@ -170,7 +170,10 @@ public class Project {
 		JSONObject json = (JSONObject) obj;
 
 		// Read off values for fields
-		p._videoFile = new File((String) json.get(VIDEO));
+		String video = (String) json.get(VIDEO);
+		if (video != "none") {
+			p._videoFile = new File(video);
+		}
 		p._videoMuted = (boolean) json.get(MUTED);
 
 		// Retrieve audio objects
@@ -216,7 +219,11 @@ public class Project {
 		JSONObject json = new JSONObject();
 
 		// Insert values
-		json.put(VIDEO, _videoFile.getAbsolutePath());
+		if (_videoFile != null) {
+			json.put(VIDEO, _videoFile.getAbsolutePath());
+		} else {
+			json.put(VIDEO, "none");
+		}
 		json.put(MUTED, _videoMuted);
 
 		// Iterate over audio files to fill json array
