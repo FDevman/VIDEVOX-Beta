@@ -18,11 +18,8 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import nz.ac.auckland.application.VidevoxApplication;
 import nz.ac.auckland.application.VidevoxPlayer;
-import nz.ac.auckland.model.Audible;
-import nz.ac.auckland.model.AudioFile;
 import nz.ac.auckland.model.AudioTTS;
 import nz.ac.auckland.model.ModelHelper;
-import nz.ac.auckland.model.Project;
 import nz.ac.auckland.model.VidevoxException;
 
 public class TTSViewController extends VIDEVOXController {
@@ -89,18 +86,15 @@ public class TTSViewController extends VIDEVOXController {
 			VidevoxApplication.showExceptionDialog(e);
 			return;
 		}
-		AudioFile audio = Project.getProject().addAudio(file, Double.parseDouble(_offset.getText()));
-		VidevoxPlayer.getPlayer().addAudio(audio);
-
+		VidevoxPlayer.getPlayer().addAudio(file, Double.parseDouble(_offset.getText()));
 		cancel();
 	}
 
 	@FXML
 	private void use() {
 		try {
-			Audible audio = Project.getProject().addTTS(_nameField.getText(), _content.getText(),
+			VidevoxPlayer.getPlayer().addTTS(_nameField.getText(), _content.getText(),
 					Double.parseDouble(_offset.getText()));
-			VidevoxPlayer.getPlayer().addAudio(audio);
 		} catch (NumberFormatException e) {
 			logger.error(_offset.getText() + " : not valid double : " + e.getMessage());
 		} catch (VidevoxException e) {
@@ -128,11 +122,11 @@ public class TTSViewController extends VIDEVOXController {
 			}
 		};
 		totalTextLength.addListener(buttonListener);
-//		_nameField.setText(" ");
-//		_nameField.setText("");
-//		if (_content.getLength() == 0 || _nameField.getLength() == 0) {
-//			_buttonBox.setDisable(true);
-//		}
+		// _nameField.setText(" ");
+		// _nameField.setText("");
+		// if (_content.getLength() == 0 || _nameField.getLength() == 0) {
+		// _buttonBox.setDisable(true);
+		// }
 		logger.trace("Binding and listener created");
 		// Enforce offset field to be a valid double
 		_offset.textProperty().addListener(new ChangeListener<String>() {

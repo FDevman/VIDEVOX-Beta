@@ -69,21 +69,22 @@ public class VidevoxMedia implements Playable {
 		_startOffset = new Duration(a.getStartOffset());
 	}
 
-//	/**
-//	 * Makes for one less line of code while using FileChooser which returns a
-//	 * File rather than a String
-//	 *
-//	 * @param mediaFile
-//	 * @throws VidevoxException
-//	 */
-//	public VidevoxMedia(File mediaFile, double startOffset) throws VidevoxException {
-//		try {
-//			_media = new MediaPlayer(new Media(mediaFile.toURI().toString()));
-//		} catch (MediaException e) {
-//			throw new VidevoxException("Invalid file type or format");
-//		}
-//		_startOffset = new Duration(startOffset);
-//	}
+	// /**
+	// * Makes for one less line of code while using FileChooser which returns a
+	// * File rather than a String
+	// *
+	// * @param mediaFile
+	// * @throws VidevoxException
+	// */
+	// public VidevoxMedia(File mediaFile, double startOffset) throws
+	// VidevoxException {
+	// try {
+	// _media = new MediaPlayer(new Media(mediaFile.toURI().toString()));
+	// } catch (MediaException e) {
+	// throw new VidevoxException("Invalid file type or format");
+	// }
+	// _startOffset = new Duration(startOffset);
+	// }
 
 	public Duration getStartOffset() {
 		return _startOffset;
@@ -121,8 +122,7 @@ public class VidevoxMedia implements Playable {
 	public void seek(Duration position) {
 		if (_startOffset.greaterThan(position)) {
 			// Stop the play-back if the new position is before this media
-			// should
-			// start
+			// should start
 			_media.stop();
 		} else {
 			// Go to the relative position this media should be at
@@ -133,6 +133,21 @@ public class VidevoxMedia implements Playable {
 	@Override
 	public MediaPlayer getMediaPlayer() {
 		return _media;
+	}
+
+	@Override
+	public void skipForward() {
+		_media.seek(_media.getCurrentTime().add(VidevoxPlayer.SKIP_INTERVAL));
+	}
+
+	@Override
+	public void skipBack() {
+		_media.seek(_media.getCurrentTime().subtract(VidevoxPlayer.SKIP_INTERVAL));
+	}
+
+	@Override
+	public void setStartOffset(double newOffset) {
+		_startOffset = new Duration(newOffset);
 	}
 
 }
