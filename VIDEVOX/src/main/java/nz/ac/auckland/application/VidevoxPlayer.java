@@ -98,7 +98,7 @@ public class VidevoxPlayer implements Playable {
 				VidevoxApplication.showExceptionDialog(e);
 			}
 		}
-		logger.trace("Done adding audios");
+		logger.trace("Done adding " + (_audio.size() - 1) + " audios");
 
 		if (videoFile != null) {
 			_markers = _video.getMedia().getMarkers();

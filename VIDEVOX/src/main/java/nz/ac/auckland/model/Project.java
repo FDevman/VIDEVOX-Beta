@@ -312,8 +312,11 @@ public class Project {
 	}
 
 	public Audible addTTS(String name, String text, double offset) throws VidevoxException {
+		logger.debug("Project.addTTS entered");
 		AudioTTS tts = new AudioTTS(name, text, offset);
+		logger.debug("TTS created");
 		_tts.add(tts);
+		logger.debug("TTS added to list, now has " + _tts.size() + " entries");
 		_saved = false;
 		return tts;
 	}

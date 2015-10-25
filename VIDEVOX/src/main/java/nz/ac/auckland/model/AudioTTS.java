@@ -51,7 +51,7 @@ public class AudioTTS extends AudioFile {
 		_audioFile = new File(System.getProperty("java.io.tmpdir") + FILE_SEP + name);
 		ModelHelper.enforceFileExtension(_audioFile, ".mp3");
 
-		textToMP3(_audioFile, speech);
+		textToMP3(_audioFile, _speech);
 	}
 
 	public static boolean preview(String text) throws VidevoxException {
@@ -77,7 +77,7 @@ public class AudioTTS extends AudioFile {
 	 */
 	public static boolean textToMP3(File destination, String speech) throws VidevoxException {
 		// Create a pointer to a temporary wav file
-		File tempWAV = new File(System.getProperty("java.io.tmpdir") + destination.getName());
+		File tempWAV = new File(System.getProperty("java.io.tmpdir") + FILE_SEP + destination.getName());
 		ModelHelper.enforceFileExtension(tempWAV, ".wav");
 
 		// Make sure the destination is a .mp3 file
@@ -93,7 +93,7 @@ public class AudioTTS extends AudioFile {
 			if (returnVal != 0) {
 				throw new VidevoxException("Wav file unable to be created: Check that festival is installed correctly");
 			}
-			logger.trace("created mp3 at: " + destination.getAbsolutePath());
+			logger.trace("created wav at: " + tempWAV.getAbsolutePath());
 		} catch (IOException e) {
 			throw new VidevoxException("Unknown IO Exception during WAV creation");
 		} catch (InterruptedException e) {
@@ -102,6 +102,7 @@ public class AudioTTS extends AudioFile {
 		// Convert the wav to mp3
 		cmd = "ffmpeg -i " + "\"" + tempWAV.getAbsolutePath() + "\"" + " -y -f mp3 " + "\""
 				+ destination.getAbsolutePath() + "\"";
+		logger.debug("cmd = " + cmd);
 		builder = new ProcessBuilder("/bin/bash", "-c", cmd);
 		try {
 			Process process = builder.start();
@@ -109,6 +110,7 @@ public class AudioTTS extends AudioFile {
 			if (returnVal != 0) {
 				throw new VidevoxException("Unable to convert to mp3: Check that festival is installed correctly");
 			}
+			logger.debug("Created mp3 at: " + destination.getAbsolutePath());
 		} catch (IOException e) {
 			throw new VidevoxException("Unknown IO Exception during mp3 conversion");
 		} catch (InterruptedException e) {
@@ -116,6 +118,7 @@ public class AudioTTS extends AudioFile {
 		}
 		// Delete the temporary file
 		tempWAV.delete();
+		logger.trace("Done with textToMP3");
 		return true;
 	}
 
