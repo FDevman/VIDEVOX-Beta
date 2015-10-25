@@ -89,7 +89,7 @@ public class RootLayoutController extends VIDEVOXController {
 			return;
 		}
 		try {
-			Project.getProject().toFile(null);
+			Project.getProject().toFile(file);
 		} catch (VidevoxException e) {
 			VidevoxApplication.showExceptionDialog(e);
 		} catch (IOException e) {
