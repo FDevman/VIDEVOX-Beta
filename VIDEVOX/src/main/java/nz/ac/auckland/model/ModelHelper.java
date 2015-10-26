@@ -33,7 +33,6 @@ public class ModelHelper {
 		String path = file.getAbsolutePath();
 		path = FilenameUtils.removeExtension(path);
 		path = path + extension;
-		file.renameTo(new File(path));
 		logger.debug("Changed file to: " + path);
 		return new File(path);
 	}

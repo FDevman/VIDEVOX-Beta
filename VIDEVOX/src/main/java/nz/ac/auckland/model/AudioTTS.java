@@ -48,11 +48,13 @@ public class AudioTTS extends AudioFile {
 		_name = name;
 		_startOffset = offset;
 		_speech = speech;
-		_audioFile = new File(name);
-		_audioFile = ModelHelper.enforceFileExtension(_audioFile, ".mp3");
-		logger.debug("AudioTTS(String, String, double) - New TTS file: " + _audioFile.getAbsolutePath()); 
+		String path = AudioTTS.class.getClassLoader().getResource("temp").toString().substring(5);
+		logger.debug("this(String, String, double) - path found at: " + path);
+		_audioFile = new File(path + "/" + name);
 
 		textToMP3(_audioFile, _speech);
+		_audioFile = ModelHelper.enforceFileExtension(_audioFile, ".mp3");
+		logger.debug("AudioTTS(String, String, double) - New TTS file: " + _audioFile.getAbsolutePath());
 	}
 
 	public static boolean preview(String text) throws VidevoxException {
@@ -78,8 +80,7 @@ public class AudioTTS extends AudioFile {
 	 */
 	public static boolean textToMP3(File destination, String speech) throws VidevoxException {
 		// Create a pointer to a temporary wav file
-		File tempWAV = new File(destination.getName());
-		tempWAV = ModelHelper.enforceFileExtension(tempWAV, ".wav");
+		File tempWAV = ModelHelper.enforceFileExtension(destination, ".wav");
 		logger.debug("File name is actually: " + tempWAV.getAbsolutePath());
 
 		// Make sure the destination is a .mp3 file
@@ -88,6 +89,7 @@ public class AudioTTS extends AudioFile {
 		// Create the audio file at designated location (surround file names
 		// with quotes in case of spaces)
 		String cmd = "echo '" + speech + "' | text2wave " + "-o " + "\"" + tempWAV.getAbsolutePath() + "\"";
+		logger.debug("textToMP3 - cmd = " + cmd);
 		ProcessBuilder builder = new ProcessBuilder("/bin/bash", "-c", cmd);
 		try {
 			Process process = builder.start();
