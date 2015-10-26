@@ -22,7 +22,7 @@
 				<VBox HBox.hgrow="ALWAYS">
 					<children>
 						<Region VBox.vgrow="ALWAYS" />
-						<Slider fx:id="_volSlider" />
+						<Slider fx:id="_volSlider" max="1.0" />
 						<Region VBox.vgrow="ALWAYS" />
 					</children>
 				</VBox>

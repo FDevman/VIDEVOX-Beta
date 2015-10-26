@@ -343,4 +343,15 @@ public class VidevoxPlayer implements Playable {
 		}
 	}
 
+	public void setStartOffset(String name, double offset) {
+		if (name.equals(_videoName)) {
+			return;
+		}
+		Project.getProject().setOffset(name, offset);
+		_audio.get(name).setStartOffset(offset);
+		if (_video != null) {
+			_markers.put(name, new Duration(offset));
+		}
+	}
+
 }

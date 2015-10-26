@@ -325,15 +325,31 @@ public class Project {
 	}
 
 	public void setActive(String name, boolean isActive) {
-		for (Audible a: _audios) {
+		for (Audible a : _audios) {
 			if (a.getName().equals(name)) {
 				a.setActive(isActive);
 				return;
 			}
 		}
-		for (Audible a: _tts) {
+		for (Audible a : _tts) {
 			if (a.getName().equals(name)) {
 				a.setActive(isActive);
+				return;
+			}
+		}
+		_saved = false;
+	}
+
+	public void setOffset(String name, double offset) {
+		for (Audible a : _audios) {
+			if (a.getName().equals(name)) {
+				a.setStartOffset(offset);
+				return;
+			}
+		}
+		for (Audible a : _tts) {
+			if (a.getName().equals(name)) {
+				a.setStartOffset(offset);
 				return;
 			}
 		}
