@@ -97,6 +97,9 @@ public class PlayerViewController extends VIDEVOXController {
 				@Override
 				public void invalidated(Observable observable) {
 					_timeSlider.setValue(player.getCurrentTime().toMillis() / player.getTotalDuration().toMillis());
+					if (player.getCurrentTime().equals(player.getTotalDuration())) {
+						VidevoxPlayer.getPlayer().pause();
+					}
 				}
 			});
 
