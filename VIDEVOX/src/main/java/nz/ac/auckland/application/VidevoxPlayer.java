@@ -363,4 +363,8 @@ public class VidevoxPlayer implements Playable {
 		return _audio;
 	}
 
+	public Object getVideoName() {
+		return _videoName;
+	}
+
 }

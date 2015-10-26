@@ -40,6 +40,8 @@ public class AudioListBoxController extends VIDEVOXController {
 			_activeBox.setSelected(_media.isActive());
 			_volSlider.setValue(_media.getMediaPlayer().getVolume());
 
+			_startOffset.setText(String.format("%1$,.2f", p.getStartOffset().toSeconds()));
+
 			// Set action listener for volume slider
 			_volSlider.valueProperty().addListener(new InvalidationListener() {
 
@@ -48,23 +50,28 @@ public class AudioListBoxController extends VIDEVOXController {
 					_media.getMediaPlayer().setVolume(_volSlider.getValue());
 				}
 			});
-			// Set action listener for start offset
-			_startOffset.textProperty().addListener(new ChangeListener<String>() {
-				@Override
-				public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-					// Check format, if invalid set it back to the old value
-					if (newValue.equals("")) {
-						_startOffset.setText("0");
-						return;
+			if (_name.equals(VidevoxPlayer.getPlayer().getVideoName())) {
+				_startOffset.setDisable(true);
+			} else {
+				// Set action listener for start offset
+				_startOffset.textProperty().addListener(new ChangeListener<String>() {
+					@Override
+					public void changed(ObservableValue<? extends String> observable, String oldValue,
+							String newValue) {
+						// Check format, if invalid set it back to the old value
+						if (newValue.equals("")) {
+							_startOffset.setText("0");
+							return;
+						}
+						try {
+							Double.parseDouble(newValue);
+							VidevoxPlayer.getPlayer().setStartOffset(_name, Double.parseDouble(newValue));
+						} catch (NumberFormatException e) {
+							_startOffset.setText(oldValue);
+						}
 					}
-					try {
-						Double.parseDouble(newValue);
-						VidevoxPlayer.getPlayer().setStartOffset(_name, Double.parseDouble(newValue));
-					} catch (NumberFormatException e) {
-						_startOffset.setText(oldValue);
-					}
-				}
-			});
+				});
+			}
 			// Listen for box checks/unchecks
 			_activeBox.selectedProperty().addListener(new InvalidationListener() {
 
