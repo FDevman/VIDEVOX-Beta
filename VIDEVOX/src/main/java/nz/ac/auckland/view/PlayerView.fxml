@@ -28,12 +28,12 @@
                         <Region minWidth="10.0" HBox.hgrow="ALWAYS" />
                      </children>
                   </HBox>
-                  <VBox maxWidth="200.0" minWidth="200.0" prefWidth="200.0">
+                  <VBox minWidth="-Infinity" prefWidth="252.0">
                      <children>
                         <HBox>
                            <children>
                               <Region HBox.hgrow="ALWAYS" />
-                              <Label text="Audio Files">
+                              <Label text="Audio Tracks">
                                  <font>
                                     <Font name="System Bold" size="20.0" />
                                  </font>
@@ -49,9 +49,9 @@
                         <HBox>
                            <children>
                               <Region HBox.hgrow="ALWAYS" />
-                              <Button minWidth="100.0" mnemonicParsing="false" onAction="#audio" text="Add Audio File" HBox.hgrow="ALWAYS" />
+                              <Button maxWidth="1.7976931348623157E308" minWidth="125.0" mnemonicParsing="false" onAction="#audio" text="Add Audio File" HBox.hgrow="ALWAYS" />
                               <Region HBox.hgrow="ALWAYS" />
-                              <Button layoutX="10.0" layoutY="10.0" minWidth="100.0" mnemonicParsing="false" onAction="#tts" text="Text to Speech" HBox.hgrow="ALWAYS" />
+                              <Button layoutX="10.0" layoutY="10.0" maxWidth="1.7976931348623157E308" minWidth="125.0" mnemonicParsing="false" onAction="#tts" text="Text to Speech" HBox.hgrow="ALWAYS" />
                               <Region HBox.hgrow="ALWAYS" />
                            </children>
                         </HBox>
