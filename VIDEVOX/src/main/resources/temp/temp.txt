@@ -1,0 +1,1 @@
+This is where temporary files live. They can be deleted between sessions. Don't delete this one though!
