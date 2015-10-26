@@ -34,7 +34,7 @@
 				<VBox>
 					<children>
 						<Region VBox.vgrow="ALWAYS" />
-						<CheckBox fx:id="_activeBox" mnemonicParsing="false" text="Active" VBox.vgrow="NEVER" />
+						<CheckBox fx:id="_activeBox" mnemonicParsing="false" onAction="#boxCheck" text="Active" VBox.vgrow="NEVER" />
 						<Region VBox.vgrow="ALWAYS" />
 					</children>
 				</VBox>
