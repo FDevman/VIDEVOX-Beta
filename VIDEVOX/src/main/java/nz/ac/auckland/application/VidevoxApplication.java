@@ -125,8 +125,8 @@ public class VidevoxApplication extends Application {
 			alert.setTitle("Save Changes Before Exit");
 			alert.setHeaderText("You Have Unsaved Changes");
 			alert.setContentText("You have unsaved changes, do you want to save them now?");
-			ButtonType saveButton = new ButtonType("Save Changes");
-			ButtonType discardButton = new ButtonType("Discard Changes");
+			ButtonType saveButton = new ButtonType("Save");
+			ButtonType discardButton = new ButtonType("Discard");
 			ButtonType cancel = new ButtonType("Cancel", ButtonData.CANCEL_CLOSE);
 			alert.getButtonTypes().setAll(saveButton, discardButton, cancel);
 			Optional<ButtonType> result = alert.showAndWait();

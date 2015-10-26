@@ -114,7 +114,7 @@
                   <VBox>
                      <children>
                         <Region VBox.vgrow="ALWAYS" />
-                        <Label prefHeight="17.0" prefWidth="103.0" text="00:00.00/00:00.00" />
+                        <Label fx:id="_timeLabel" prefHeight="17.0" prefWidth="103.0" text="00:00.00/00:00.00" />
                         <Region layoutX="10.0" layoutY="10.0" VBox.vgrow="ALWAYS" />
                      </children>
                   </VBox>

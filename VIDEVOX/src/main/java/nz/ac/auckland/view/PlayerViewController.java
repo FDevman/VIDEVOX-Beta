@@ -10,6 +10,7 @@ import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -58,6 +59,9 @@ public class PlayerViewController extends VIDEVOXController {
 	@FXML
 	private Slider _timeSlider;
 
+	@FXML
+	private Label _timeLabel;
+
 	/**
 	 * At this point, everything else should be ready to go so it can be used as
 	 * trigger for setting up the view.
@@ -97,7 +101,11 @@ public class PlayerViewController extends VIDEVOXController {
 				@Override
 				public void invalidated(Observable observable) {
 					_timeSlider.setValue(player.getCurrentTime().toMillis() / player.getTotalDuration().toMillis());
-					if (player.getCurrentTime().equals(player.getTotalDuration())) {
+					String current = String.format("%1$,.2f", player.getCurrentTime().toSeconds());
+					String total = String.format("%1$,.2f", player.getTotalDuration().toSeconds());
+					_timeLabel.setText(current + "/" + total);
+					if (player.getCurrentTime().greaterThanOrEqualTo(player.getTotalDuration())) {
+						logger.debug("end of video");
 						VidevoxPlayer.getPlayer().pause();
 					}
 				}

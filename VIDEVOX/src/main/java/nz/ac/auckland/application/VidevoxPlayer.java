@@ -251,17 +251,18 @@ public class VidevoxPlayer implements Playable {
 		if (_video == null) {
 			return;
 		}
-		_video.play();
-		for (Entry<String, Playable> e : _audio.entrySet()) {
-			if (!e.getKey().equals(_videoName)) {
-				Playable m = e.getValue();
-				logger.debug("play() - " + e.getKey());
-				if (_video.getCurrentTime().greaterThanOrEqualTo(m.getStartOffset())) {
-					m.seek(_video.getCurrentTime());
-					m.play();
+		if (!_video.getCurrentTime().greaterThanOrEqualTo(_video.getTotalDuration())) {
+			_video.play();
+			for (Entry<String, Playable> e : _audio.entrySet()) {
+				if (!e.getKey().equals(_videoName)) {
+					Playable m = e.getValue();
+					logger.debug("play() - " + e.getKey());
+					if (_video.getCurrentTime().greaterThanOrEqualTo(m.getStartOffset())) {
+						m.seek(_video.getCurrentTime());
+						m.play();
+					}
 				}
 			}
-
 		}
 	}
 
@@ -369,6 +370,11 @@ public class VidevoxPlayer implements Playable {
 
 	public void seek(double percent) {
 		seek(new Double(percent * _video.getTotalDuration().toMillis()));
+	}
+
+	public static void reset() {
+		Project.reset();
+		getPlayer().rebuild();
 	}
 
 }
