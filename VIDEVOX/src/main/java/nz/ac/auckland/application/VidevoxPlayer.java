@@ -367,4 +367,8 @@ public class VidevoxPlayer implements Playable {
 		return _videoName;
 	}
 
+	public void seek(double percent) {
+		seek(new Double(percent * _video.getTotalDuration().toMillis()));
+	}
+
 }

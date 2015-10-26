@@ -105,7 +105,7 @@
                         <Region VBox.vgrow="ALWAYS" />
                         <HBox spacing="5.0">
                            <children>
-                              <Slider fx:id="_timeSlider" max="1.0" HBox.hgrow="ALWAYS" />
+                              <Slider fx:id="_timeSlider" max="1.0" onMousePressed="#seek" onMouseReleased="#seek" HBox.hgrow="ALWAYS" />
                            </children>
                         </HBox>
                         <Region layoutX="10.0" layoutY="10.0" VBox.vgrow="ALWAYS" />

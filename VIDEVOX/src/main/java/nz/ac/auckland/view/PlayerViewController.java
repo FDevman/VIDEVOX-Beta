@@ -17,6 +17,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
+import javafx.util.Duration;
 import nz.ac.auckland.application.Playable;
 import nz.ac.auckland.application.VidevoxApplication;
 import nz.ac.auckland.application.VidevoxPlayer;
@@ -172,6 +173,12 @@ public class PlayerViewController extends VIDEVOXController {
 	@FXML
 	private void audio() {
 		_application.addAudio();
+	}
+
+	@FXML
+	private void seek() {
+		double totalTime = VidevoxPlayer.getPlayer().getMediaPlayer().getTotalDuration().toMillis();
+		VidevoxPlayer.getPlayer().seek(Duration.millis(_timeSlider.getValue() * totalTime));
 	}
 
 }

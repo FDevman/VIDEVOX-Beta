@@ -122,11 +122,6 @@ public class TTSViewController extends VIDEVOXController {
 			}
 		};
 		totalTextLength.addListener(buttonListener);
-		// _nameField.setText(" ");
-		// _nameField.setText("");
-		// if (_content.getLength() == 0 || _nameField.getLength() == 0) {
-		// _buttonBox.setDisable(true);
-		// }
 		logger.trace("Binding and listener created");
 		// Enforce offset field to be a valid double
 		_offset.textProperty().addListener(new ChangeListener<String>() {
