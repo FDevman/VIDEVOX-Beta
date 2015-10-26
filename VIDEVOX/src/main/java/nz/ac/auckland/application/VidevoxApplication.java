@@ -274,4 +274,17 @@ public class VidevoxApplication extends Application {
 		}
 	}
 
+	public void addAudio() {
+		FileChooser fileChooser = new FileChooser();
+		fileChooser.setTitle("Select an Audio file to use");
+		// Set visible extensions
+		FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Audio Files", "*.mp3");
+		fileChooser.getExtensionFilters().add(extFilter);
+		File file = fileChooser.showOpenDialog(_primaryStage);
+		if (file != null) {
+			VidevoxPlayer.getPlayer().addAudio(file);
+			reset();
+		}
+	}
+
 }

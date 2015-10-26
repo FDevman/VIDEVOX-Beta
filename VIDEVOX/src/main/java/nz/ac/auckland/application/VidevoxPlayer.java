@@ -314,4 +314,12 @@ public class VidevoxPlayer implements Playable {
 		return _video;
 	}
 
+	public void addAudio(File file) {
+		if (_video != null) {
+			addAudio(file, _video.getCurrentTime().toMillis());
+		} else {
+			addAudio(file, 0.0);
+		}
+	}
+
 }

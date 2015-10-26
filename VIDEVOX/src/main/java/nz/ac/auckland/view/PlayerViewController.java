@@ -1,27 +1,18 @@
 package nz.ac.auckland.view;
 
-import java.io.IOException;
-
 import org.apache.log4j.Logger;
 
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
-import javafx.event.Event;
-import javafx.event.EventDispatchChain;
-import javafx.event.EventDispatcher;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
-import javafx.stage.Stage;
 import nz.ac.auckland.application.VidevoxApplication;
 import nz.ac.auckland.application.VidevoxPlayer;
-import nz.ac.auckland.model.VidevoxException;
 
 /**
  *
@@ -89,7 +80,7 @@ public class PlayerViewController extends VIDEVOXController {
 					resize();
 				}
 			});
-			
+
 		} else {
 			_mediaControls.setDisable(true);
 		}
@@ -112,7 +103,7 @@ public class PlayerViewController extends VIDEVOXController {
 		logger.debug(
 				"Width scale = " + fitWidth / mediaWidth + ", fitWidth = " + fitWidth + ", mediaWidth" + mediaWidth);
 
-// _mainPlayerView.heigh
+		// _mainPlayerView.heigh
 		_mainPlayerView.setScaleX(scale);
 		_mainPlayerView.setScaleY(scale);
 	}
@@ -140,6 +131,11 @@ public class PlayerViewController extends VIDEVOXController {
 	@FXML
 	private void tts() {
 		_application.showTTS();
+	}
+	
+	@FXML
+	private void audio() {
+		_application.addAudio();
 	}
 
 }
