@@ -1,18 +1,25 @@
 package nz.ac.auckland.view;
 
+import java.io.IOException;
+import java.util.Map;
+import java.util.Map.Entry;
+
 import org.apache.log4j.Logger;
 
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
+import nz.ac.auckland.application.Playable;
 import nz.ac.auckland.application.VidevoxApplication;
 import nz.ac.auckland.application.VidevoxPlayer;
+import nz.ac.auckland.model.VidevoxException;
 
 /**
  *
@@ -84,6 +91,26 @@ public class PlayerViewController extends VIDEVOXController {
 		} else {
 			_mediaControls.setDisable(true);
 		}
+		// Populate audio list
+		Map<String, Playable> media = VidevoxPlayer.getPlayer().getPlayables();
+		for (Entry<String, Playable> e : media.entrySet()) {
+			try {
+				// Load RootLayout
+				FXMLLoader loader = new FXMLLoader();
+				loader.setLocation(
+						this.getClass().getClassLoader().getResource("nz/ac/auckland/view/AudioListBox.fxml"));
+				VBox listItem = (VBox) loader.load();
+				_scrollBox.getChildren().add(listItem);
+				AudioListBoxController controller = loader.getController();
+				controller.setMainApp(_application);
+				controller.setPlayable(e.getKey(), e.getValue());
+			} catch (IOException e1) {
+				e1.printStackTrace();
+				// VidevoxApplication
+				// .showExceptionDialog(new VidevoxException("Could not load " +
+				// e.getKey() + "into audio list"));
+			}
+		}
 	}
 
 	private void resize() {
@@ -132,14 +159,10 @@ public class PlayerViewController extends VIDEVOXController {
 	private void tts() {
 		_application.showTTS();
 	}
-	
+
 	@FXML
 	private void audio() {
 		_application.addAudio();
-	}
-	
-	private void populateList() {
-		
 	}
 
 }

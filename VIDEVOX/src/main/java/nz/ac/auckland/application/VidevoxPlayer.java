@@ -84,6 +84,8 @@ public class VidevoxPlayer implements Playable {
 			setMarkerListener();
 			_videoName = project.getVideoName();
 			_audio.put(_videoName, this);
+			_active = project.isVideoMuted();
+			_video.setMute(!_active);
 		} else {
 			logger.debug("this() - no video found");
 			// Add a null video
@@ -335,10 +337,13 @@ public class VidevoxPlayer implements Playable {
 		Project.getProject().setActive(name, isActive);
 		if (name.equals(_videoName)) {
 			_active = isActive;
+			_video.setMute(!_active);
 		} else {
 			((VidevoxMedia) _audio.get(name)).setActive(isActive);
-			if (_video != null) {
-				_audio.get(name).seek(_video.getCurrentTime());
+			if (_video != null && _video.getStatus().equals(Status.PLAYING)) {
+				play();
+				// _audio.get(name).seek(_video.getCurrentTime());
+				// _audio.get(name).play();
 			}
 		}
 	}
@@ -352,6 +357,10 @@ public class VidevoxPlayer implements Playable {
 		if (_video != null) {
 			_markers.put(name, new Duration(offset));
 		}
+	}
+
+	public Map<String, Playable> getPlayables() {
+		return _audio;
 	}
 
 }

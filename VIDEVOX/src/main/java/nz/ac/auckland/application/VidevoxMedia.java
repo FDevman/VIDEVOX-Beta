@@ -4,13 +4,14 @@ import java.io.File;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import org.apache.log4j.Logger;
+
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaException;
 import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
 import nz.ac.auckland.model.Audible;
 import nz.ac.auckland.model.AudioFile;
-import nz.ac.auckland.model.Project;
 import nz.ac.auckland.model.VidevoxException;
 
 /**
@@ -21,6 +22,8 @@ import nz.ac.auckland.model.VidevoxException;
  *
  */
 public class VidevoxMedia implements Playable {
+
+	private static final Logger logger = Logger.getLogger(VidevoxMedia.class);
 
 	/**
 	 * A MediaPlayer object for the Playable. Should be a JavaFX supported
@@ -103,8 +106,8 @@ public class VidevoxMedia implements Playable {
 	}
 
 	public void play() {
-		if (_active && !_media.getStatus().equals(MediaPlayer.Status.PLAYING)) {
-			// Start playing if not already playing and it is set to active
+		if (_active) {
+			// Start playing if active
 			_media.play();
 		}
 	}
@@ -121,13 +124,15 @@ public class VidevoxMedia implements Playable {
 
 	@Override
 	public void seek(Duration position) {
-		if (_startOffset.greaterThan(position)) {
-			// Stop the play-back if the new position is before this media
-			// should start
-			_media.stop();
-		} else {
-			// Go to the relative position this media should be at
-			_media.seek(position.subtract(_startOffset));
+		if (_active) {
+			if (_startOffset.greaterThan(position)) {
+				// Stop the play-back if the new position is before this media
+				// should start
+				_media.stop();
+			} else {
+				// Go to the relative position this media should be at
+				_media.seek(position.subtract(_startOffset));
+			}
 		}
 	}
 
@@ -158,6 +163,10 @@ public class VidevoxMedia implements Playable {
 
 	void setActive(boolean isActive) {
 		_active = isActive;
+		logger.debug(_media.getMedia().getSource() + " set to " + isActive);
+		if (!isActive) {
+			_media.pause();
+		}
 	}
 
 }

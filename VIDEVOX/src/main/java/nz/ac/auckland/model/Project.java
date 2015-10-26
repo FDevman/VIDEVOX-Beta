@@ -356,4 +356,12 @@ public class Project {
 		_saved = false;
 	}
 
+	public boolean isVideoMuted() {
+		return _videoMuted;
+	}
+
+	public void setVideoMuted(boolean muted) {
+		_videoMuted = muted;
+	}
+
 }
