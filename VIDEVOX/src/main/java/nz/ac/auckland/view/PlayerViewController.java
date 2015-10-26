@@ -10,6 +10,7 @@ import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Slider;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
@@ -53,6 +54,9 @@ public class PlayerViewController extends VIDEVOXController {
 	@FXML
 	private HBox _mediaControls;
 
+	@FXML
+	private Slider _timeSlider;
+
 	/**
 	 * At this point, everything else should be ready to go so it can be used as
 	 * trigger for setting up the view.
@@ -87,6 +91,13 @@ public class PlayerViewController extends VIDEVOXController {
 					resize();
 				}
 			});
+			player.currentTimeProperty().addListener(new InvalidationListener() {
+
+				@Override
+				public void invalidated(Observable observable) {
+					_timeSlider.setValue(player.getCurrentTime().toMillis() / player.getTotalDuration().toMillis());
+				}
+			});
 
 		} else {
 			_mediaControls.setDisable(true);
@@ -105,10 +116,8 @@ public class PlayerViewController extends VIDEVOXController {
 				controller.setMainApp(_application);
 				controller.setPlayable(e.getKey(), e.getValue());
 			} catch (IOException e1) {
-				e1.printStackTrace();
-				// VidevoxApplication
-				// .showExceptionDialog(new VidevoxException("Could not load " +
-				// e.getKey() + "into audio list"));
+				VidevoxApplication
+						.showExceptionDialog(new VidevoxException("Could not load " + e.getKey() + "into audio list"));
 			}
 		}
 	}
