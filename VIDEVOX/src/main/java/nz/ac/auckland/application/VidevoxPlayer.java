@@ -99,7 +99,6 @@ public class VidevoxPlayer implements Playable {
 			try {
 				audioPlayer = new VidevoxMedia(a);
 				_audio.put(name, audioPlayer);
-				logger.debug("Playable added: " + name);
 				logger.debug("Audio added: " + name + ", " + a.getStartOffset() + ", " + a.getFile());
 			} catch (VidevoxException e) {
 				// Do nothing right now can stop crash but can't recover error
@@ -249,7 +248,7 @@ public class VidevoxPlayer implements Playable {
 		for (Entry<String, Playable> e : _audio.entrySet()) {
 			if (!e.getKey().equals(_videoName)) {
 				Playable m = e.getValue();
-				logger.debug(e.getKey());
+				logger.debug("play() - " + e.getKey());
 				if (_video.getCurrentTime().greaterThan(m.getStartOffset())) {
 					m.seek(_video.getCurrentTime());
 					m.play();
