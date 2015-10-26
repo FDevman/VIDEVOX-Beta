@@ -62,11 +62,11 @@ public class Project {
 	/**
 	 * A set of objects representing audio files to be included.
 	 */
-	Set<AudioFile> _audios;
+	Set<Audible> _audios;
 	/**
 	 * A set of objects representing tts files to be created/included.
 	 */
-	Set<AudioFile> _tts;
+	Set<Audible> _tts;
 	/**
 	 * A switch to tell the application whether the video's audio should be
 	 * included
@@ -101,8 +101,8 @@ public class Project {
 	 */
 	private Project() {
 		_name = "New Project";
-		_audios = new HashSet<AudioFile>();
-		_tts = new HashSet<AudioFile>();
+		_audios = new HashSet<Audible>();
+		_tts = new HashSet<Audible>();
 		_saved = true;
 	}
 
@@ -234,14 +234,14 @@ public class Project {
 
 		// Iterate over audio files to fill json array
 		JSONArray audios = new JSONArray();
-		for (AudioFile a : _audios) {
+		for (Audible a : _audios) {
 			audios.add(a.toJSON());
 		}
 		json.put(AUDIOS, audios);
 
 		// Iterate over tts objects
 		JSONArray tts = new JSONArray();
-		for (AudioFile t : _tts) {
+		for (Audible t : _tts) {
 			tts.add(t.toJSON());
 		}
 		json.put(TTS, tts);
@@ -322,6 +322,22 @@ public class Project {
 		logger.debug("TTS added to list, now has " + _tts.size() + " entries");
 		_saved = false;
 		return tts;
+	}
+
+	public void setActive(String name, boolean isActive) {
+		for (Audible a: _audios) {
+			if (a.getName().equals(name)) {
+				a.setActive(isActive);
+				return;
+			}
+		}
+		for (Audible a: _tts) {
+			if (a.getName().equals(name)) {
+				a.setActive(isActive);
+				return;
+			}
+		}
+		_saved = false;
 	}
 
 }

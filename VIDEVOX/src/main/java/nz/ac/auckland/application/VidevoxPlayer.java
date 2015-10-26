@@ -14,6 +14,7 @@ import javafx.event.EventHandler;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaMarkerEvent;
 import javafx.scene.media.MediaPlayer;
+import javafx.scene.media.MediaPlayer.Status;
 import javafx.util.Duration;
 import nz.ac.auckland.model.Audible;
 import nz.ac.auckland.model.Project;
@@ -47,6 +48,8 @@ public class VidevoxPlayer implements Playable {
 	 * The human readable name of the video being played.
 	 */
 	String _videoName;
+
+	private boolean _active;
 
 	private static final String NO_VIDEO = "No Video";
 
@@ -129,7 +132,9 @@ public class VidevoxPlayer implements Playable {
 								// Seek to the current moment
 								e.getValue().seek(event.getMarker().getValue());
 								// Play the audio
-								e.getValue().play();
+								if (_video.getStatus().equals(Status.PLAYING)) {
+									e.getValue().play();
+								}
 							}
 						}
 					}
@@ -249,7 +254,7 @@ public class VidevoxPlayer implements Playable {
 			if (!e.getKey().equals(_videoName)) {
 				Playable m = e.getValue();
 				logger.debug("play() - " + e.getKey());
-				if (_video.getCurrentTime().greaterThan(m.getStartOffset())) {
+				if (_video.getCurrentTime().greaterThanOrEqualTo(m.getStartOffset())) {
 					m.seek(_video.getCurrentTime());
 					m.play();
 				}
@@ -318,6 +323,23 @@ public class VidevoxPlayer implements Playable {
 			addAudio(file, _video.getCurrentTime().toMillis());
 		} else {
 			addAudio(file, 0.0);
+		}
+	}
+
+	@Override
+	public boolean isActive() {
+		return _active;
+	}
+
+	public void setActive(String name, boolean isActive) {
+		Project.getProject().setActive(name, isActive);
+		if (name.equals(_videoName)) {
+			_active = isActive;
+		} else {
+			((VidevoxMedia) _audio.get(name)).setActive(isActive);
+			if (_video != null) {
+				_audio.get(name).seek(_video.getCurrentTime());
+			}
 		}
 	}
 

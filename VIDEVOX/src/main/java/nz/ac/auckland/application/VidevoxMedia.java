@@ -10,6 +10,7 @@ import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
 import nz.ac.auckland.model.Audible;
 import nz.ac.auckland.model.AudioFile;
+import nz.ac.auckland.model.Project;
 import nz.ac.auckland.model.VidevoxException;
 
 /**
@@ -148,6 +149,15 @@ public class VidevoxMedia implements Playable {
 	@Override
 	public void setStartOffset(double newOffset) {
 		_startOffset = new Duration(newOffset);
+	}
+
+	@Override
+	public boolean isActive() {
+		return _active;
+	}
+
+	void setActive(boolean isActive) {
+		_active = isActive;
 	}
 
 }

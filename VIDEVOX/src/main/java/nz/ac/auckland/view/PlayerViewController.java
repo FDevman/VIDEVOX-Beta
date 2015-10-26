@@ -137,5 +137,9 @@ public class PlayerViewController extends VIDEVOXController {
 	private void audio() {
 		_application.addAudio();
 	}
+	
+	private void populateList() {
+		
+	}
 
 }

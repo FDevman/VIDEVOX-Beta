@@ -25,4 +25,6 @@ public interface Playable {
 
 	public MediaPlayer getMediaPlayer();
 
+	public boolean isActive();
+
 }
