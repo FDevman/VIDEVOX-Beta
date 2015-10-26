@@ -12,11 +12,19 @@ public interface Playable {
 	public void pause();
 
 	public void stop();
+	
+	public void skipForward();
+	
+	public void skipBack();
 
 	public void seek(Duration position);
 
 	public Duration getStartOffset();
+	
+	public void setStartOffset(double newOffest);
 
 	public MediaPlayer getMediaPlayer();
+
+	public boolean isActive();
 
 }

@@ -1,24 +1,25 @@
 package nz.ac.auckland.view;
 
 import java.io.IOException;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.apache.log4j.Logger;
 
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
-import javafx.event.Event;
-import javafx.event.EventDispatchChain;
-import javafx.event.EventDispatcher;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
+import javafx.scene.control.Label;
+import javafx.scene.control.Slider;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
-import javafx.stage.Stage;
+import javafx.util.Duration;
+import nz.ac.auckland.application.Playable;
 import nz.ac.auckland.application.VidevoxApplication;
 import nz.ac.auckland.application.VidevoxPlayer;
 import nz.ac.auckland.model.VidevoxException;
@@ -55,6 +56,12 @@ public class PlayerViewController extends VIDEVOXController {
 	@FXML
 	private HBox _mediaControls;
 
+	@FXML
+	private Slider _timeSlider;
+
+	@FXML
+	private Label _timeLabel;
+
 	/**
 	 * At this point, everything else should be ready to go so it can be used as
 	 * trigger for setting up the view.
@@ -70,9 +77,11 @@ public class PlayerViewController extends VIDEVOXController {
 				.setImage(new Image(getClass().getClassLoader().getResource("icons/last-track-icon.png").toString()));
 		_skipBackButton
 				.setImage(new Image(getClass().getClassLoader().getResource("icons/first-track-icon.png").toString()));
-		MediaPlayer p = VidevoxPlayer.getPlayer().getMediaPlayer();
-		if (p != null) {
-			_mainPlayerView.setMediaPlayer(p);
+		MediaPlayer player = VidevoxPlayer.getPlayer().getMediaPlayer();
+		if (player != null) {
+			_mainPlayerView.setMediaPlayer(player);
+			logger.trace("Video in view");
+			_mediaControls.setDisable(false);
 			resize();
 			// Add listeners for window size
 			_application.getStage().heightProperty().addListener(new InvalidationListener() {
@@ -87,8 +96,41 @@ public class PlayerViewController extends VIDEVOXController {
 					resize();
 				}
 			});
+			player.currentTimeProperty().addListener(new InvalidationListener() {
+
+				@Override
+				public void invalidated(Observable observable) {
+					_timeSlider.setValue(player.getCurrentTime().toMillis() / player.getTotalDuration().toMillis());
+					String current = String.format("%1$,.2f", player.getCurrentTime().toSeconds());
+					String total = String.format("%1$,.2f", player.getTotalDuration().toSeconds());
+					_timeLabel.setText(current + "/" + total);
+					if (player.getCurrentTime().greaterThanOrEqualTo(player.getTotalDuration())) {
+						logger.debug("end of video");
+						VidevoxPlayer.getPlayer().pause();
+					}
+				}
+			});
+
 		} else {
 			_mediaControls.setDisable(true);
+		}
+		// Populate audio list
+		Map<String, Playable> media = VidevoxPlayer.getPlayer().getPlayables();
+		for (Entry<String, Playable> e : media.entrySet()) {
+			try {
+				// Load RootLayout
+				FXMLLoader loader = new FXMLLoader();
+				loader.setLocation(
+						this.getClass().getClassLoader().getResource("nz/ac/auckland/view/AudioListBox.fxml"));
+				VBox listItem = (VBox) loader.load();
+				_scrollBox.getChildren().add(listItem);
+				AudioListBoxController controller = loader.getController();
+				controller.setMainApp(_application);
+				controller.setPlayable(e.getKey(), e.getValue());
+			} catch (IOException e1) {
+				VidevoxApplication
+						.showExceptionDialog(new VidevoxException("Could not load " + e.getKey() + "into audio list"));
+			}
 		}
 	}
 
@@ -109,7 +151,7 @@ public class PlayerViewController extends VIDEVOXController {
 		logger.debug(
 				"Width scale = " + fitWidth / mediaWidth + ", fitWidth = " + fitWidth + ", mediaWidth" + mediaWidth);
 
-// _mainPlayerView.heigh
+		// _mainPlayerView.heigh
 		_mainPlayerView.setScaleX(scale);
 		_mainPlayerView.setScaleY(scale);
 	}
@@ -136,45 +178,18 @@ public class PlayerViewController extends VIDEVOXController {
 
 	@FXML
 	private void tts() {
-		try {
-			logger.trace("entered tts");
+		_application.showTTS();
+	}
 
-			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(this.getClass().getClassLoader().getResource("nz/ac/auckland/view/TTSView.fxml"));
-			logger.debug("location: " + this.getClass().getClassLoader().getResource("nz/ac/auckland/view/TTSView.fxml"));
-			VBox ttsView = (VBox) loader.load();
+	@FXML
+	private void audio() {
+		_application.addAudio();
+	}
 
-			logger.trace("Loaded ttsView from fxml");
-
-			Stage stage = new Stage();
-			stage.setTitle("VIDEVOX Text-to-Speech");
-			stage.setScene(new Scene(ttsView));
-			stage.setAlwaysOnTop(true);
-			EventDispatcher ev = _application.getStage().getEventDispatcher();
-
-			_application.getStage().setEventDispatcher(new EventDispatcher() {
-				@Override
-				public Event dispatchEvent(Event event, EventDispatchChain tail) {
-					stage.requestFocus();
-					return null;
-				}
-			});
-
-			logger.trace("Showing ttsView");
-
-			TTSViewController controller = loader.getController();
-			controller.setMainApp(_application);
-
-			stage.showAndWait();
-			_application.getStage().setEventDispatcher(ev);
-
-			_application.reset();
-
-		} catch (IOException e) {
-			logger.debug("error: " + e.getMessage());
-			e.printStackTrace();
-			VidevoxApplication.showExceptionDialog(new VidevoxException(e.getMessage()));
-		}
+	@FXML
+	private void seek() {
+		double totalTime = VidevoxPlayer.getPlayer().getMediaPlayer().getTotalDuration().toMillis();
+		VidevoxPlayer.getPlayer().seek(Duration.millis(_timeSlider.getValue() * totalTime));
 	}
 
 }

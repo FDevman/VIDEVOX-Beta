@@ -38,7 +38,7 @@ public class AudioTTS extends AudioFile {
 	final static String NAME = "NAME";
 
 	public AudioTTS(JSONObject json) throws VidevoxException {
-		//
+		// Build TTS objects
 		this((String) json.get(NAME), (String) json.get(SPEECH), (double) json.get(START));
 		_active = (boolean) json.get(ACTIVE);
 	}
@@ -48,10 +48,13 @@ public class AudioTTS extends AudioFile {
 		_name = name;
 		_startOffset = offset;
 		_speech = speech;
-		_audioFile = new File(System.getProperty("java.io.tmpdir") + FILE_SEP + name);
-		ModelHelper.enforceFileExtension(_audioFile, ".mp3");
+		String path = AudioTTS.class.getClassLoader().getResource("temp").toString().substring(5);
+		logger.debug("this(String, String, double) - path found at: " + path);
+		_audioFile = new File(path + "/" + name);
 
-		textToMP3(_audioFile, speech);
+		textToMP3(_audioFile, _speech);
+		_audioFile = ModelHelper.enforceFileExtension(_audioFile, ".mp3");
+		logger.debug("AudioTTS(String, String, double) - New TTS file: " + _audioFile.getAbsolutePath());
 	}
 
 	public static boolean preview(String text) throws VidevoxException {
@@ -77,15 +80,16 @@ public class AudioTTS extends AudioFile {
 	 */
 	public static boolean textToMP3(File destination, String speech) throws VidevoxException {
 		// Create a pointer to a temporary wav file
-		File tempWAV = new File(System.getProperty("java.io.tmpdir") + destination.getName());
-		ModelHelper.enforceFileExtension(tempWAV, ".wav");
+		File tempWAV = ModelHelper.enforceFileExtension(destination, ".wav");
+		logger.debug("File name is actually: " + tempWAV.getAbsolutePath());
 
 		// Make sure the destination is a .mp3 file
-		ModelHelper.enforceFileExtension(destination, ".mp3");
+		destination = ModelHelper.enforceFileExtension(destination, ".mp3");
 
 		// Create the audio file at designated location (surround file names
 		// with quotes in case of spaces)
 		String cmd = "echo '" + speech + "' | text2wave " + "-o " + "\"" + tempWAV.getAbsolutePath() + "\"";
+		logger.debug("textToMP3 - cmd = " + cmd);
 		ProcessBuilder builder = new ProcessBuilder("/bin/bash", "-c", cmd);
 		try {
 			Process process = builder.start();
@@ -93,7 +97,7 @@ public class AudioTTS extends AudioFile {
 			if (returnVal != 0) {
 				throw new VidevoxException("Wav file unable to be created: Check that festival is installed correctly");
 			}
-			logger.trace("created mp3 at: " + destination.getAbsolutePath());
+			logger.trace("created wav at: " + tempWAV.getAbsolutePath());
 		} catch (IOException e) {
 			throw new VidevoxException("Unknown IO Exception during WAV creation");
 		} catch (InterruptedException e) {
@@ -102,6 +106,7 @@ public class AudioTTS extends AudioFile {
 		// Convert the wav to mp3
 		cmd = "ffmpeg -i " + "\"" + tempWAV.getAbsolutePath() + "\"" + " -y -f mp3 " + "\""
 				+ destination.getAbsolutePath() + "\"";
+		logger.debug("cmd = " + cmd);
 		builder = new ProcessBuilder("/bin/bash", "-c", cmd);
 		try {
 			Process process = builder.start();
@@ -109,13 +114,15 @@ public class AudioTTS extends AudioFile {
 			if (returnVal != 0) {
 				throw new VidevoxException("Unable to convert to mp3: Check that festival is installed correctly");
 			}
+			logger.debug("Created mp3 at: " + destination.getAbsolutePath());
 		} catch (IOException e) {
 			throw new VidevoxException("Unknown IO Exception during mp3 conversion");
 		} catch (InterruptedException e) {
 			throw new VidevoxException("Festival thread interrupted: Unknown source");
 		}
 		// Delete the temporary file
-		tempWAV.delete();
+//		tempWAV.delete();
+		logger.trace("Done with textToMP3");
 		return true;
 	}
 

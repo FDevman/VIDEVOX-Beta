@@ -28,12 +28,12 @@
                         <Region minWidth="10.0" HBox.hgrow="ALWAYS" />
                      </children>
                   </HBox>
-                  <VBox maxWidth="200.0" minWidth="200.0" prefWidth="200.0">
+                  <VBox minWidth="-Infinity" prefWidth="252.0">
                      <children>
                         <HBox>
                            <children>
                               <Region HBox.hgrow="ALWAYS" />
-                              <Label text="Audio Files">
+                              <Label text="Audio Tracks">
                                  <font>
                                     <Font name="System Bold" size="20.0" />
                                  </font>
@@ -49,9 +49,9 @@
                         <HBox>
                            <children>
                               <Region HBox.hgrow="ALWAYS" />
-                              <Button minWidth="100.0" mnemonicParsing="false" text="Add Audio File" HBox.hgrow="ALWAYS" />
+                              <Button maxWidth="1.7976931348623157E308" minWidth="125.0" mnemonicParsing="false" onAction="#audio" text="Add Audio File" HBox.hgrow="ALWAYS" />
                               <Region HBox.hgrow="ALWAYS" />
-                              <Button layoutX="10.0" layoutY="10.0" minWidth="100.0" mnemonicParsing="false" onAction="#tts" text="Text to Speech" HBox.hgrow="ALWAYS" />
+                              <Button layoutX="10.0" layoutY="10.0" maxWidth="1.7976931348623157E308" minWidth="125.0" mnemonicParsing="false" onAction="#tts" text="Text to Speech" HBox.hgrow="ALWAYS" />
                               <Region HBox.hgrow="ALWAYS" />
                            </children>
                         </HBox>
@@ -105,7 +105,7 @@
                         <Region VBox.vgrow="ALWAYS" />
                         <HBox spacing="5.0">
                            <children>
-                              <Slider HBox.hgrow="ALWAYS" />
+                              <Slider fx:id="_timeSlider" max="1.0" onMousePressed="#seek" onMouseReleased="#seek" HBox.hgrow="ALWAYS" />
                            </children>
                         </HBox>
                         <Region layoutX="10.0" layoutY="10.0" VBox.vgrow="ALWAYS" />
@@ -114,7 +114,7 @@
                   <VBox>
                      <children>
                         <Region VBox.vgrow="ALWAYS" />
-                        <Label prefHeight="17.0" prefWidth="103.0" text="00:00.00/00:00.00" />
+                        <Label fx:id="_timeLabel" prefHeight="17.0" prefWidth="103.0" text="00:00.00/00:00.00" />
                         <Region layoutX="10.0" layoutY="10.0" VBox.vgrow="ALWAYS" />
                      </children>
                   </VBox>

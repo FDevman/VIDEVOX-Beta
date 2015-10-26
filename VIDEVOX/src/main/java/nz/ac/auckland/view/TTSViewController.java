@@ -18,11 +18,8 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import nz.ac.auckland.application.VidevoxApplication;
 import nz.ac.auckland.application.VidevoxPlayer;
-import nz.ac.auckland.model.Audible;
-import nz.ac.auckland.model.AudioFile;
 import nz.ac.auckland.model.AudioTTS;
 import nz.ac.auckland.model.ModelHelper;
-import nz.ac.auckland.model.Project;
 import nz.ac.auckland.model.VidevoxException;
 
 public class TTSViewController extends VIDEVOXController {
@@ -89,24 +86,21 @@ public class TTSViewController extends VIDEVOXController {
 			VidevoxApplication.showExceptionDialog(e);
 			return;
 		}
-		AudioFile audio = Project.getProject().addAudio(file, Double.parseDouble(_offset.getText()));
-		VidevoxPlayer.getPlayer().addAudio(audio);
-
+		VidevoxPlayer.getPlayer().addAudio(file, Double.parseDouble(_offset.getText()));
 		cancel();
 	}
 
 	@FXML
 	private void use() {
 		try {
-			Audible audio = Project.getProject().addTTS(_nameField.getText(), _content.getText(),
-					Double.parseDouble(_offset.getText()));
-			VidevoxPlayer.getPlayer().addAudio(audio);
+			VidevoxPlayer.getPlayer().addTTS(_nameField.getText(), _content.getText(),
+					Double.parseDouble(_offset.getText()) * 1000.0);
 		} catch (NumberFormatException e) {
 			logger.error(_offset.getText() + " : not valid double : " + e.getMessage());
 		} catch (VidevoxException e) {
 			VidevoxApplication.showExceptionDialog(e);
 		}
-
+		_application.reset();
 		cancel();
 	}
 
@@ -115,8 +109,8 @@ public class TTSViewController extends VIDEVOXController {
 		super.setMainApp(app);
 		// Add a change listener to the combined number of chars in the name and
 		// text fields
-		NumberBinding buttonsActive = Bindings.add(_nameField.lengthProperty(), _content.lengthProperty());
-		buttonsActive.addListener(new ChangeListener<Object>() {
+		NumberBinding totalTextLength = Bindings.add(_nameField.lengthProperty(), _content.lengthProperty());
+		ChangeListener<Object> buttonListener = new ChangeListener<Object>() {
 			@Override
 			public void changed(ObservableValue<?> observable, Object oldValue, Object newValue) {
 				// If either field is null, disable the buttons
@@ -126,7 +120,9 @@ public class TTSViewController extends VIDEVOXController {
 					_buttonBox.setDisable(false);
 				}
 			}
-		});
+		};
+		totalTextLength.addListener(buttonListener);
+		logger.trace("Binding and listener created");
 		// Enforce offset field to be a valid double
 		_offset.textProperty().addListener(new ChangeListener<String>() {
 			@Override

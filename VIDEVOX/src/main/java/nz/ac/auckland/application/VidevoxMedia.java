@@ -4,6 +4,8 @@ import java.io.File;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import org.apache.log4j.Logger;
+
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaException;
 import javafx.scene.media.MediaPlayer;
@@ -20,6 +22,8 @@ import nz.ac.auckland.model.VidevoxException;
  *
  */
 public class VidevoxMedia implements Playable {
+
+	private static final Logger logger = Logger.getLogger(VidevoxMedia.class);
 
 	/**
 	 * A MediaPlayer object for the Playable. Should be a JavaFX supported
@@ -64,26 +68,27 @@ public class VidevoxMedia implements Playable {
 		try {
 			_media = new MediaPlayer(new Media(a.getFile().toURI().toString()));
 		} catch (MediaException e) {
-			throw new VidevoxException("Invalid file type or format");
+			throw new VidevoxException("Invalid file type or format: " + a.getFile().getAbsolutePath());
 		}
 		_startOffset = new Duration(a.getStartOffset());
 	}
 
-//	/**
-//	 * Makes for one less line of code while using FileChooser which returns a
-//	 * File rather than a String
-//	 *
-//	 * @param mediaFile
-//	 * @throws VidevoxException
-//	 */
-//	public VidevoxMedia(File mediaFile, double startOffset) throws VidevoxException {
-//		try {
-//			_media = new MediaPlayer(new Media(mediaFile.toURI().toString()));
-//		} catch (MediaException e) {
-//			throw new VidevoxException("Invalid file type or format");
-//		}
-//		_startOffset = new Duration(startOffset);
-//	}
+	// /**
+	// * Makes for one less line of code while using FileChooser which returns a
+	// * File rather than a String
+	// *
+	// * @param mediaFile
+	// * @throws VidevoxException
+	// */
+	// public VidevoxMedia(File mediaFile, double startOffset) throws
+	// VidevoxException {
+	// try {
+	// _media = new MediaPlayer(new Media(mediaFile.toURI().toString()));
+	// } catch (MediaException e) {
+	// throw new VidevoxException("Invalid file type or format");
+	// }
+	// _startOffset = new Duration(startOffset);
+	// }
 
 	public Duration getStartOffset() {
 		return _startOffset;
@@ -101,8 +106,8 @@ public class VidevoxMedia implements Playable {
 	}
 
 	public void play() {
-		if (_active && !_media.getStatus().equals(MediaPlayer.Status.PLAYING)) {
-			// Start playing if not already playing and it is set to active
+		if (_active) {
+			// Start playing if active
 			_media.play();
 		}
 	}
@@ -119,20 +124,49 @@ public class VidevoxMedia implements Playable {
 
 	@Override
 	public void seek(Duration position) {
-		if (_startOffset.greaterThan(position)) {
-			// Stop the play-back if the new position is before this media
-			// should
-			// start
-			_media.stop();
-		} else {
-			// Go to the relative position this media should be at
-			_media.seek(position.subtract(_startOffset));
+		if (_active) {
+			if (_startOffset.greaterThan(position)) {
+				// Stop the play-back if the new position is before this media
+				// should start
+				_media.stop();
+			} else {
+				// Go to the relative position this media should be at
+				_media.seek(position.subtract(_startOffset));
+			}
 		}
 	}
 
 	@Override
 	public MediaPlayer getMediaPlayer() {
 		return _media;
+	}
+
+	@Override
+	public void skipForward() {
+		_media.seek(_media.getCurrentTime().add(VidevoxPlayer.SKIP_INTERVAL));
+	}
+
+	@Override
+	public void skipBack() {
+		_media.seek(_media.getCurrentTime().subtract(VidevoxPlayer.SKIP_INTERVAL));
+	}
+
+	@Override
+	public void setStartOffset(double newOffset) {
+		_startOffset = new Duration(newOffset);
+	}
+
+	@Override
+	public boolean isActive() {
+		return _active;
+	}
+
+	void setActive(boolean isActive) {
+		_active = isActive;
+		logger.debug(_media.getMedia().getSource() + " set to " + isActive);
+		if (!isActive) {
+			_media.pause();
+		}
 	}
 
 }

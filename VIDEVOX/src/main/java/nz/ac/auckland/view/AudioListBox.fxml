@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.BorderPane?>
+
+<VBox maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="250.0" spacing="5.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nz.ac.auckland.view.AudioListBoxController">
+	<children>
+      <Region prefHeight="2.0" style="-fx-background-color: black;" VBox.vgrow="NEVER" />
+		<HBox>
+			<children>
+				<Region HBox.hgrow="ALWAYS" />
+				<Label fx:id="_playableName" text="Audio Name" />
+				<Region HBox.hgrow="ALWAYS" />
+			</children>
+		</HBox>
+		<Region VBox.vgrow="ALWAYS" />
+		<HBox spacing="10.0">
+			<children>
+				<Label text="Volume:" HBox.hgrow="NEVER" />
+				<VBox HBox.hgrow="ALWAYS">
+					<children>
+						<Region VBox.vgrow="ALWAYS" />
+						<Slider fx:id="_volSlider" max="1.0" value="1.0" />
+						<Region VBox.vgrow="ALWAYS" />
+					</children>
+				</VBox>
+			</children>
+         <VBox.margin>
+            <Insets left="5.0" right="5.0" />
+         </VBox.margin>
+		</HBox>
+		<Region layoutX="15.0" layoutY="37.0" VBox.vgrow="ALWAYS" />
+		<HBox>
+			<children>
+				<VBox>
+					<children>
+						<Region VBox.vgrow="ALWAYS" />
+						<CheckBox fx:id="_activeBox" mnemonicParsing="false" text="Active" VBox.vgrow="NEVER" />
+						<Region VBox.vgrow="ALWAYS" />
+					</children>
+				</VBox>
+				<Region HBox.hgrow="ALWAYS" />
+				<VBox layoutX="10.0" layoutY="10.0">
+					<children>
+						<Region VBox.vgrow="ALWAYS" />
+						<Label text="Start Offset " VBox.vgrow="NEVER" />
+						<Region VBox.vgrow="ALWAYS" />
+					</children>
+				</VBox>
+				<TextField fx:id="_startOffset" prefWidth="60.0" promptText="00.00" HBox.hgrow="NEVER" />
+			</children>
+         <VBox.margin>
+            <Insets left="5.0" right="5.0" />
+         </VBox.margin>
+		</HBox>
+      <Region layoutX="15.0" layoutY="98.0" prefHeight="2.0" style="-fx-background-color: black;" VBox.vgrow="NEVER" />
+	</children>
+</VBox>
