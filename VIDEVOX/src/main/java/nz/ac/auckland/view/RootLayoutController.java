@@ -42,6 +42,11 @@ public class RootLayoutController extends VIDEVOXController {
 		super.setMainApp(app);
 		_projectName.setText(Project.getProject().getName());
 	}
+	
+	@FXML
+	private void export() {
+		_application.export();
+	}
 
 	@FXML
 	private void selectVideo() {

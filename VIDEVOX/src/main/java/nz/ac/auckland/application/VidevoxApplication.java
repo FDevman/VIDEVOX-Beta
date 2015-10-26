@@ -176,10 +176,10 @@ public class VidevoxApplication extends Application {
 		FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Project file", "*.vvox");
 		fileChooser.getExtensionFilters().add(extFilter);
 		File file = fileChooser.showSaveDialog(_primaryStage);
-		ModelHelper.enforceFileExtension(file, ".vvox");
 		if (file == null) {
 			return;
 		}
+		file = ModelHelper.enforceFileExtension(file, ".vvox");
 		try {
 			Project.getProject().toFile(file);
 		} catch (VidevoxException e) {
@@ -285,6 +285,23 @@ public class VidevoxApplication extends Application {
 			VidevoxPlayer.getPlayer().addAudio(file);
 			reset();
 		}
+	}
+
+	public void export() {
+		FileChooser fileChooser = new FileChooser();
+		fileChooser.setTitle("Export the project to an mp4");
+		// Set extension filter to only see .vvox project files
+		FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("MPEG-4", "*.mp4");
+		fileChooser.getExtensionFilters().add(extFilter);
+		File file = fileChooser.showSaveDialog(_primaryStage);
+		if (file == null) {
+			return;
+		}
+		file = ModelHelper.enforceFileExtension(file, ".mp4");
+		Thread th = new Thread(new VideoCompiler(file));
+		th.setDaemon(true);
+		th.start();
+
 	}
 
 }
