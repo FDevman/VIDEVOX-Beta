@@ -23,8 +23,8 @@
 				</Menu>
 				<Menu mnemonicParsing="false" text="Edit">
 					<items>
-						<MenuItem mnemonicParsing="false" text="Add Audio" />
-						<MenuItem mnemonicParsing="false" text="Text to Speech" />
+						<MenuItem mnemonicParsing="false" onAction="#addAudio" text="Add Audio" />
+						<MenuItem mnemonicParsing="false" onAction="#addTTS" text="Text to Speech" />
 					</items>
 				</Menu>
             <Menu mnemonicParsing="false" text="View">

@@ -138,6 +138,16 @@ public class RootLayoutController extends VIDEVOXController {
 		setViewToggle(PREVIEW);
 	}
 
+	@FXML
+	private void addAudio() {
+		_application.addAudio();
+	}
+
+	@FXML
+	private void addTTS() {
+		_application.showTTS();
+	}
+
 	public void setViewToggle(String option) {
 		// switch (option) {
 		// case PREVIEW:
