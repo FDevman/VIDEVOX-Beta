@@ -6,6 +6,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLDecoder;
 
+import org.apache.commons.io.FilenameUtils;
+import org.apache.log4j.Logger;
+
 /**
  * Class containing static helper methods that are used in multiple locations
  * and don't belong in any other specific class
@@ -14,6 +17,8 @@ import java.net.URLDecoder;
  *
  */
 public class ModelHelper {
+
+	private static final Logger logger = Logger.getLogger(ModelHelper.class);
 
 	/**
 	 * Checks to see if a file name ends with the specified extension, if it
@@ -24,8 +29,13 @@ public class ModelHelper {
 	 * @param extension
 	 *            - The extension you want to enforce e.g. ".mp4"
 	 */
-	public static void enforceFileExtension(File file, String extension) {
-
+	public static File enforceFileExtension(File file, String extension) {
+		String path = file.getAbsolutePath();
+		path = FilenameUtils.removeExtension(path);
+		path = path + extension;
+		file.renameTo(new File(path));
+		logger.debug("Changed file to: " + path);
+		return new File(path);
 	}
 
 	/**
