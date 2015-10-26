@@ -61,7 +61,7 @@ public class RootLayoutController extends VIDEVOXController {
 		}
 		_application.reset();
 	}
-	
+
 	@FXML
 	private void open() {
 		FileChooser fileChooser = new FileChooser();
@@ -73,14 +73,10 @@ public class RootLayoutController extends VIDEVOXController {
 		if (file == null) {
 			return;
 		}
-		try {
-			Project.buildProject(file);
-		} catch (VidevoxException e) {
-			VidevoxApplication.showExceptionDialog(e);
-		}
+		VidevoxPlayer.getPlayer().openProject(file);
 		_application.reset();
 	}
-	
+
 	@FXML
 	private void newProject() {
 		Project.reset();

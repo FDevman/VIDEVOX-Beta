@@ -195,6 +195,7 @@ public class Project {
 			JSONObject next = (JSONObject) iterator.next();
 			AudioTTS a = new AudioTTS(next);
 			p._tts.add(a);
+			logger.debug("TTS added: " + a.getName());
 		}
 
 		// If all went well set the file location
@@ -304,9 +305,11 @@ public class Project {
 		HashSet<Audible> audios = new HashSet<Audible>();
 		for (Audible a : _audios) {
 			audios.add(a);
+			logger.trace("getAudios - Sending Audio" + a.getName());
 		}
 		for (Audible a : _tts) {
 			audios.add(a);
+			logger.trace("getAudios - Sending TTS:" + a.getName());
 		}
 		return audios;
 	}

@@ -38,7 +38,7 @@ public class AudioTTS extends AudioFile {
 	final static String NAME = "NAME";
 
 	public AudioTTS(JSONObject json) throws VidevoxException {
-		//
+		// Build TTS objects
 		this((String) json.get(NAME), (String) json.get(SPEECH), (double) json.get(START));
 		_active = (boolean) json.get(ACTIVE);
 	}
@@ -48,8 +48,9 @@ public class AudioTTS extends AudioFile {
 		_name = name;
 		_startOffset = offset;
 		_speech = speech;
-		_audioFile = new File(System.getProperty("java.io.tmpdir") + FILE_SEP + name);
-		ModelHelper.enforceFileExtension(_audioFile, ".mp3");
+		_audioFile = new File(name);
+		_audioFile = ModelHelper.enforceFileExtension(_audioFile, ".mp3");
+		logger.debug("AudioTTS(String, String, double) - New TTS file: " + _audioFile.getAbsolutePath()); 
 
 		textToMP3(_audioFile, _speech);
 	}
@@ -77,11 +78,12 @@ public class AudioTTS extends AudioFile {
 	 */
 	public static boolean textToMP3(File destination, String speech) throws VidevoxException {
 		// Create a pointer to a temporary wav file
-		File tempWAV = new File(System.getProperty("java.io.tmpdir") + FILE_SEP + destination.getName());
-		ModelHelper.enforceFileExtension(tempWAV, ".wav");
+		File tempWAV = new File(destination.getName());
+		tempWAV = ModelHelper.enforceFileExtension(tempWAV, ".wav");
+		logger.debug("File name is actually: " + tempWAV.getAbsolutePath());
 
 		// Make sure the destination is a .mp3 file
-		ModelHelper.enforceFileExtension(destination, ".mp3");
+		destination = ModelHelper.enforceFileExtension(destination, ".mp3");
 
 		// Create the audio file at designated location (surround file names
 		// with quotes in case of spaces)
@@ -117,7 +119,7 @@ public class AudioTTS extends AudioFile {
 			throw new VidevoxException("Festival thread interrupted: Unknown source");
 		}
 		// Delete the temporary file
-		tempWAV.delete();
+//		tempWAV.delete();
 		logger.trace("Done with textToMP3");
 		return true;
 	}

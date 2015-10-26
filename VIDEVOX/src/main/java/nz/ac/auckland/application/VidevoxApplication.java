@@ -136,6 +136,7 @@ public class VidevoxApplication extends Application {
 				} catch (IOException e) {
 					System.exit(1);
 				}
+				Platform.exit();
 			} else if (result.get() == discardButton) {
 				Platform.exit();
 			} else {
@@ -148,6 +149,11 @@ public class VidevoxApplication extends Application {
 
 	public static void showExceptionDialog(VidevoxException e) {
 		// Show a generic dialog with the exception message
+		Alert alert = new Alert(AlertType.ERROR);
+		alert.setTitle("ERROR");
+		alert.setHeaderText("An Error has Occurred");
+		alert.setContentText(e.getMessage());
+		alert.showAndWait();
 	}
 
 	public void save() throws IOException {
@@ -194,6 +200,9 @@ public class VidevoxApplication extends Application {
 		// Set a title to appear on the window
 		this._primaryStage.setTitle("VIDEVOX - video editor");
 
+		// Initiate the root layout of the application
+		initRootLayout();
+
 		// Set/reset the views
 		reset();
 	}
@@ -203,34 +212,29 @@ public class VidevoxApplication extends Application {
 	}
 
 	/**
-	 * Resets the entire GUI, mostly for after a new GUI is loaded
+	 * Resets the entire GUI from the root layout down, mostly for after a new
+	 * GUI is loaded
 	 */
 	public void reset() {
-		
-		// Reset the player
-		VidevoxPlayer.getPlayer().rebuild();
-		
-		// Initiate the root layout of the application
-		initRootLayout();
-
 		// Decide which view to show
 		switch (_viewOnShow) {
-			case PREVIEW:
-				showPlayerView();
-				break;
-			default:
-				showPlayerView();
-				break;
+		case PREVIEW:
+			showPlayerView();
+			break;
+		default:
+			showPlayerView();
+			break;
 		}
 	}
-	
+
 	public void showTTS() {
 		try {
 			logger.trace("entered showTTS");
 
 			FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(this.getClass().getClassLoader().getResource("nz/ac/auckland/view/TTSView.fxml"));
-			logger.debug("location: " + this.getClass().getClassLoader().getResource("nz/ac/auckland/view/TTSView.fxml"));
+			logger.debug(
+					"location: " + this.getClass().getClassLoader().getResource("nz/ac/auckland/view/TTSView.fxml"));
 			VBox ttsView = (VBox) loader.load();
 
 			logger.trace("Loaded ttsView from fxml");
@@ -238,8 +242,7 @@ public class VidevoxApplication extends Application {
 			Stage stage = new Stage();
 			stage.setTitle("VIDEVOX Text-to-Speech");
 			stage.setScene(new Scene(ttsView));
-//			stage.setAlwaysOnTop(true);
-			
+
 			// Keep a pointer to the Primary Stage's Event Dispatcher for later
 			EventDispatcher ev = _primaryStage.getEventDispatcher();
 
@@ -258,11 +261,11 @@ public class VidevoxApplication extends Application {
 			controller.setMainApp(this);
 
 			stage.showAndWait();
-			
-			// Put the Event Dispatcher back and reset the app in case TTS was added
+
+			// Put the Event Dispatcher back and reset the app in case TTS was
+			// added
 			_primaryStage.setEventDispatcher(ev);
 			reset();
-
 
 		} catch (IOException e) {
 			logger.debug("error: " + e.getMessage());

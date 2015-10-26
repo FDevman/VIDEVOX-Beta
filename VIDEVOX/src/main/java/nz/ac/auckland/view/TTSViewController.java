@@ -94,13 +94,13 @@ public class TTSViewController extends VIDEVOXController {
 	private void use() {
 		try {
 			VidevoxPlayer.getPlayer().addTTS(_nameField.getText(), _content.getText(),
-					Double.parseDouble(_offset.getText()));
+					Double.parseDouble(_offset.getText()) * 1000.0);
 		} catch (NumberFormatException e) {
 			logger.error(_offset.getText() + " : not valid double : " + e.getMessage());
 		} catch (VidevoxException e) {
 			VidevoxApplication.showExceptionDialog(e);
 		}
-
+		_application.reset();
 		cancel();
 	}
 

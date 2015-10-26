@@ -27,7 +27,7 @@ public class VidevoxPlayer implements Playable {
 	 * The singleton instance of VidevoxPlayer.
 	 */
 	private static VidevoxPlayer INSTANCE;
-	
+
 	static final Duration SKIP_INTERVAL = new Duration(3000);
 
 	/**
@@ -71,14 +71,19 @@ public class VidevoxPlayer implements Playable {
 		// Initialize hash map
 		_audio = new HashMap<String, Playable>();
 		File videoFile = project.getVideo();
-
 		if (videoFile != null) {
-			_video = new MediaPlayer(new Media(videoFile.toURI().toString()));
+			logger.debug("this() - video file found at: " + videoFile.getAbsolutePath());
+			try {
+				_video = new MediaPlayer(new Media(videoFile.toURI().toString()));
+			} catch (Exception e) {
+				logger.error("this() - EXCEPTION! " + e.getMessage());
+			}
 			setMarkerListener();
 			_videoName = project.getVideoName();
 			_audio.put(_videoName, this);
 		} else {
-			// Add
+			logger.debug("this() - no video found");
+			// Add a null video
 			_videoName = NO_VIDEO;
 			_audio.put(_videoName, null);
 		}
@@ -89,10 +94,13 @@ public class VidevoxPlayer implements Playable {
 		// Add each audio file to the list of Playables
 		for (Audible a : audios) {
 			String name = a.getName();
+			logger.debug("VidevoxPlayer - unpacking: " + a.getFile());
 			Playable audioPlayer;
 			try {
 				audioPlayer = new VidevoxMedia(a);
 				_audio.put(name, audioPlayer);
+				logger.debug("Playable added: " + name);
+				logger.debug("Audio added: " + name + ", " + a.getStartOffset() + ", " + a.getFile());
 			} catch (VidevoxException e) {
 				// Do nothing right now can stop crash but can't recover error
 				VidevoxApplication.showExceptionDialog(e);
@@ -114,6 +122,7 @@ public class VidevoxPlayer implements Playable {
 				Platform.runLater(new Runnable() {
 					@Override
 					public void run() {
+						logger.debug("Marker triggered: " + event.getMarker().getKey());
 						// Get the key for the audio that should start,
 						String audioKey = event.getMarker().getKey();
 						for (Entry<String, Playable> e : _audio.entrySet()) {
@@ -135,10 +144,11 @@ public class VidevoxPlayer implements Playable {
 		// Set markers to trigger audio play back
 		for (Entry<String, Playable> e : _audio.entrySet()) {
 			String key = e.getKey();
-			logger.debug(key + "added to markers");
+			logger.debug("Marker added: " + key + ", " + e.getValue().getStartOffset().toSeconds());
 			if (!key.equals(_videoName)) {
 				Duration value = e.getValue().getStartOffset();
 				_markers.put(key, value);
+				logger.debug("Marker added: " + key + ", " + value.toSeconds());
 			}
 		}
 	}
@@ -191,13 +201,25 @@ public class VidevoxPlayer implements Playable {
 	 * @throws VidevoxException
 	 */
 	public void addTTS(String name, String text, double offset) throws VidevoxException {
+		logger.trace("addTTS - started");
 		// Update the project
 		Project.getProject().addTTS(name, text, offset);
-		 // Call the constructor to sync
+		logger.trace("addTTS - project updated");
+		// Call the constructor to sync
 		rebuild();
 	}
 
+	public void openProject(File file) {
+		try {
+			Project.buildProject(file);
+			rebuild();
+		} catch (VidevoxException e) {
+			VidevoxApplication.showExceptionDialog(e);
+		}
+	}
+
 	public void rebuild() {
+		logger.trace("reduild() - started");
 		INSTANCE = new VidevoxPlayer();
 	}
 

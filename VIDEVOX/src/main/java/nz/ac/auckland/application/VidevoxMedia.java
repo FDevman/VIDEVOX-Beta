@@ -64,7 +64,7 @@ public class VidevoxMedia implements Playable {
 		try {
 			_media = new MediaPlayer(new Media(a.getFile().toURI().toString()));
 		} catch (MediaException e) {
-			throw new VidevoxException("Invalid file type or format");
+			throw new VidevoxException("Invalid file type or format: " + a.getFile().getAbsolutePath());
 		}
 		_startOffset = new Duration(a.getStartOffset());
 	}
