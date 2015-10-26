@@ -48,7 +48,8 @@ public class AudioTTS extends AudioFile {
 		_name = name;
 		_startOffset = offset;
 		_speech = speech;
-		String path = AudioTTS.class.getClassLoader().getResource("temp").toString().substring(5);
+		String path = "/tmp";
+//		String path = AudioTTS.class.getClassLoader().getResource("temp").toString().substring(5);
 		logger.debug("this(String, String, double) - path found at: " + path);
 		_audioFile = new File(path + "/" + name);
 

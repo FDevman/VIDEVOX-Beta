@@ -356,6 +356,7 @@ public class VidevoxPlayer implements Playable {
 		Project.getProject().setOffset(name, offset);
 		_audio.get(name).setStartOffset(offset);
 		if (_video != null) {
+			_markers.remove(name);
 			_markers.put(name, new Duration(offset));
 		}
 	}

@@ -65,7 +65,7 @@ public class AudioListBoxController extends VIDEVOXController {
 						}
 						try {
 							Double.parseDouble(newValue);
-							VidevoxPlayer.getPlayer().setStartOffset(_name, Double.parseDouble(newValue));
+							VidevoxPlayer.getPlayer().setStartOffset(_name, Double.parseDouble(newValue) * 1000.0);
 						} catch (NumberFormatException e) {
 							_startOffset.setText(oldValue);
 						}
