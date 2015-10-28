@@ -69,9 +69,9 @@ public class PlayerViewController extends VIDEVOXController {
 	@Override
 	public void setMainApp(VidevoxApplication app) {
 		super.setMainApp(app);
-		logger.debug(getClass().getClassLoader().getResource("icons/play-icon.png").toString());
+//		logger.debug(getClass().getClassLoader().getResource("icons/play-icon.png").toString());
 		// Set images for buttons
-		_playButton.setImage(new Image(getClass().getClassLoader().getResource("icons/play-icon.png").toString()));
+		_playButton.setImage(new Image(PlayerViewController.class.getClassLoader().getResource("icons/play-icon.png").toString()));
 		_pauseButton.setImage(new Image(getClass().getClassLoader().getResource("icons/pause-icon.png").toString()));
 		_skipForwardButton
 				.setImage(new Image(getClass().getClassLoader().getResource("icons/last-track-icon.png").toString()));

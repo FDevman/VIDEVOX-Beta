@@ -9,6 +9,7 @@ import org.apache.log4j.Logger;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaException;
 import javafx.scene.media.MediaPlayer;
+import javafx.scene.media.MediaPlayer.Status;
 import javafx.util.Duration;
 import nz.ac.auckland.model.Audible;
 import nz.ac.auckland.model.AudioFile;
@@ -96,6 +97,10 @@ public class VidevoxMedia implements Playable {
 
 	public void setStartOffset(Duration offset) {
 		_startOffset = offset;
+		if (VidevoxPlayer.getPlayer().getMediaPlayer().getCurrentTime().greaterThanOrEqualTo(_startOffset)
+				&& VidevoxPlayer.getPlayer().getMediaPlayer().getStatus().equals(Status.PLAYING)) {
+			play();
+		}
 	}
 
 	public String getAbsolutePath() throws URISyntaxException {
@@ -128,7 +133,8 @@ public class VidevoxMedia implements Playable {
 			if (_startOffset.greaterThan(position)) {
 				// Stop the play-back if the new position is before this media
 				// should start
-				_media.stop();
+				_media.pause();
+				_media.seek(_media.getStartTime());
 			} else {
 				// Go to the relative position this media should be at
 				_media.seek(position.subtract(_startOffset));

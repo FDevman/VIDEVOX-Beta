@@ -1,7 +1,6 @@
 package nz.ac.auckland.model;
 
 import java.io.File;
-import java.io.UnsupportedEncodingException;
 
 import org.json.simple.JSONObject;
 
@@ -21,12 +20,12 @@ public class AudioFile implements Audible {
 	 * Default constructor leaves default values
 	 */
 	public AudioFile() {
-		try {
-			_audioFile = new File(java.net.URLDecoder
-					.decode(this.getClass().getClassLoader().getResource(DEFAULT_AUDIO).getPath(), "UTF-8"));
-		} catch (UnsupportedEncodingException e) {
-
-		}
+//		try {
+//			_audioFile = new File(java.net.URLDecoder
+//					.decode(this.getClass().getClassLoader().getResource(DEFAULT_AUDIO).getPath(), "UTF-8"));
+//		} catch (UnsupportedEncodingException e) {
+//
+//		}
 	}
 
 	/**

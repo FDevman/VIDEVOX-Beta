@@ -29,8 +29,7 @@ public class VideoCompiler extends Task<String> {
 		cmd = "ffmpeg -y ";
 		if (!project.isVideoMuted()) {
 			count++;
-			cmd = "ffmpeg -y -i '" + project.getVideo().getAbsolutePath() + "' -vn "
-					+ VideoCompiler.class.getClassLoader().getResource("").toString() + "/exctacted.mp3";
+			cmd = "ffmpeg -y -i '" + project.getVideo().getAbsolutePath() + "' -vn " + "/tmp/exctacted.mp3";
 			// run command
 			updateMessage("Extracting audio from video file");
 			builder = new ProcessBuilder("/bin/bash", "-c", cmd);
@@ -46,15 +45,14 @@ public class VideoCompiler extends Task<String> {
 			} catch (InterruptedException e) {
 				throw new VidevoxException("Festival thread interrupted: Unknown source");
 			}
-			cmd = "ffmpeg -y -i " + VideoCompiler.class.getClassLoader().getResource("").toString() + "/exctacted.mp3 ";
+			cmd = "ffmpeg -y -i " + "/tmp/exctacted.mp3 ";
 		}
 		HashSet<Audible> audios = project.getAudios();
 		for (Audible a : audios) {
 			count++;
 			cmd += "-i '" + a.getFile().getAbsolutePath() + "' ";
 		}
-		cmd += "-filter_complex amix=inputs=" + count + " "
-				+ VideoCompiler.class.getClassLoader().getResource("").toString() + "/combined.mp3";
+		cmd += "-filter_complex amix=inputs=" + count + " " + "/tmp/combined.mp3";
 		// Run command
 		updateMessage("Merging audio files");
 		builder = new ProcessBuilder("/bin/bash", "-c", cmd);
@@ -69,8 +67,7 @@ public class VideoCompiler extends Task<String> {
 		} catch (InterruptedException e) {
 			throw new VidevoxException("Festival thread interrupted: Unknown source");
 		}
-		cmd = "ffmpeg -y -i '" + project.getVideo().getAbsolutePath() + "' -i "
-				+ VideoCompiler.class.getClassLoader().getResource("").toString() + "/combined.mp3 "
+		cmd = "ffmpeg -y -i '" + project.getVideo().getAbsolutePath() + "' -i " + "/tmp/combined.mp3 "
 				+ "-c copy -map 0:0 -map 1:0 '" + _file.getAbsolutePath() + "'";
 		// run command
 		updateMessage("Compiling final video file");
